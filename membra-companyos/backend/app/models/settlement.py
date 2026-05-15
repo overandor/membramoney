@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, String, DateTime, ForeignKey, Enum, Text, JSON, Numeric
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class SettlementStatus(PyEnum):
@@ -29,12 +28,12 @@ class SettlementRail(PyEnum):
 class SettlementRecord(Base):
     __tablename__ = "settlement_records"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
-    eligibility_id = Column(UUID(as_uuid=True), ForeignKey("settlement_eligibilities.id"), nullable=True)
-    job_id = Column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
+    eligibility_id = Column(GUID(), ForeignKey("settlement_eligibilities.id"), nullable=True)
+    job_id = Column(GUID(), ForeignKey("jobs.id"), nullable=True)
     recipient_type = Column(String(16), nullable=False)
-    recipient_id = Column(UUID(as_uuid=True), nullable=False)
+    recipient_id = Column(GUID(), nullable=False)
     recipient_wallet = Column(String(42), nullable=True)
     amount = Column(Numeric(20, 6), nullable=False)
     currency = Column(String(3), default="USD")
@@ -56,8 +55,8 @@ class SettlementRecord(Base):
 class PayoutInstruction(Base):
     __tablename__ = "payout_instructions"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    settlement_id = Column(UUID(as_uuid=True), ForeignKey("settlement_records.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    settlement_id = Column(GUID(), ForeignKey("settlement_records.id"), nullable=False)
     instruction_type = Column(String(64), nullable=False)
     payload = Column(JSON, default=dict)
     sent_at = Column(DateTime(timezone=True), nullable=True)
@@ -73,8 +72,8 @@ class PayoutInstruction(Base):
 class ExternalRailLog(Base):
     __tablename__ = "external_rail_logs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    settlement_id = Column(UUID(as_uuid=True), ForeignKey("settlement_records.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    settlement_id = Column(GUID(), ForeignKey("settlement_records.id"), nullable=False)
     rail = Column(Enum(SettlementRail), nullable=False)
     event_type = Column(String(64), nullable=False)
     request_payload = Column(JSON, default=dict)

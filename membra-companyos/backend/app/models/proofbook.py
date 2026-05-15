@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, String, DateTime, ForeignKey, Enum, Text, JSON, Boolean
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class ProofEntryType(PyEnum):
@@ -29,19 +28,19 @@ class ProofEntryType(PyEnum):
 class ProofBookEntry(Base):
     __tablename__ = "proofbook_entries"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     entry_type = Column(Enum(ProofEntryType), nullable=False)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     resource_type = Column(String(64), nullable=False)
-    resource_id = Column(UUID(as_uuid=True), nullable=False)
+    resource_id = Column(GUID(), nullable=False)
     actor_type = Column(String(16), nullable=False)
-    actor_id = Column(UUID(as_uuid=True), nullable=False)
+    actor_id = Column(GUID(), nullable=False)
     description = Column(Text, nullable=True)
     data = Column(JSON, default=dict)
     ipfs_cid = Column(String(64), nullable=True)
     proof_hash = Column(String(64), nullable=False, index=True)
     previous_hash = Column(String(64), nullable=True)
-    chain_id = Column(UUID(as_uuid=True), ForeignKey("proof_chains.id"), nullable=True)
+    chain_id = Column(GUID(), ForeignKey("proof_chains.id"), nullable=True)
     block_number = Column(String(64), nullable=True)
     tx_hash = Column(String(66), nullable=True)
     verified = Column(Boolean, default=False)
@@ -54,8 +53,8 @@ class ProofBookEntry(Base):
 class ProofChain(Base):
     __tablename__ = "proof_chains"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     chain_name = Column(String(255), nullable=False)
     chain_type = Column(String(64), default="internal")
     genesis_hash = Column(String(64), nullable=False)
@@ -73,19 +72,19 @@ class ProofChain(Base):
 class DecisionEvent(Base):
     __tablename__ = "decision_events"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     decision_type = Column(String(64), nullable=False)
     subject_type = Column(String(64), nullable=False)
-    subject_id = Column(UUID(as_uuid=True), nullable=False)
+    subject_id = Column(GUID(), nullable=False)
     decision_maker_type = Column(String(16), nullable=False)
-    decision_maker_id = Column(UUID(as_uuid=True), nullable=False)
+    decision_maker_id = Column(GUID(), nullable=False)
     rationale = Column(Text, nullable=True)
     alternatives = Column(JSON, default=list)
     selected_option = Column(String(255), nullable=True)
     confidence_score = Column(String(16), default="0.0")
     human_approved = Column(Boolean, nullable=True)
-    approved_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    approved_by = Column(GUID(), ForeignKey("users.id"), nullable=True)
     approved_at = Column(DateTime(timezone=True), nullable=True)
     proof_hash = Column(String(64), nullable=False)
     metadata_json = Column(JSON, default=dict)
@@ -95,12 +94,12 @@ class DecisionEvent(Base):
 class SettlementEligibility(Base):
     __tablename__ = "settlement_eligibilities"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    job_id = Column(UUID(as_uuid=True), ForeignKey("jobs.id"), nullable=True)
-    work_order_id = Column(UUID(as_uuid=True), ForeignKey("work_orders.id"), nullable=True)
-    bounty_id = Column(UUID(as_uuid=True), ForeignKey("bounties.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    job_id = Column(GUID(), ForeignKey("jobs.id"), nullable=True)
+    work_order_id = Column(GUID(), ForeignKey("work_orders.id"), nullable=True)
+    bounty_id = Column(GUID(), ForeignKey("bounties.id"), nullable=True)
     recipient_wallet = Column(String(42), nullable=True)
-    recipient_user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    recipient_user_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
     eligible_amount = Column(String(64), nullable=False)
     currency = Column(String(3), default="USD")
     criteria_met = Column(JSON, default=list)

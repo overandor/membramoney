@@ -1,4 +1,5 @@
 """MEMBRA CompanyOS — ProofBook service."""
+import json
 from datetime import datetime, timezone
 from typing import Optional, List
 from uuid import UUID
@@ -12,6 +13,11 @@ from app.core.logging import get_logger
 logger = get_logger(__name__)
 
 
+def canonical_json(payload: dict) -> str:
+    """Deterministic canonical JSON: sorted keys, no extra whitespace."""
+    return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+
 class ProofBookService:
     def __init__(self, db: Session):
         self.db = db
@@ -20,8 +26,9 @@ class ProofBookService:
                     actor_type: str, actor_id: UUID, description: Optional[str] = None,
                     data: Optional[dict] = None, ipfs_cid: Optional[str] = None,
                     chain_id: Optional[UUID] = None, block_number: Optional[str] = None,
-                    tx_hash: Optional[str] = None, company_id: Optional[UUID] = None) -> ProofBookEntry:
-        entry_data = {
+                    tx_hash: Optional[str] = None, company_id: Optional[UUID] = None,
+                    source_module: Optional[str] = None, metadata: Optional[dict] = None) -> ProofBookEntry:
+        payload = {
             "entry_type": entry_type,
             "resource_type": resource_type,
             "resource_id": str(resource_id),
@@ -31,8 +38,10 @@ class ProofBookService:
             "data": data or {},
             "ipfs_cid": ipfs_cid or "",
             "timestamp": datetime.now(timezone.utc).isoformat(),
+            "source_module": source_module or "",
+            "metadata": metadata or {},
         }
-        proof_hash = hashlib.sha3_256(str(entry_data).encode()).hexdigest()
+        proof_hash = hashlib.sha3_256(canonical_json(payload).encode()).hexdigest()
 
         previous_hash = None
         if chain_id:
@@ -41,6 +50,13 @@ class ProofBookService:
                 previous_hash = chain.latest_hash
                 chain.latest_hash = proof_hash
                 chain.entry_count = str(int(chain.entry_count) + 1)
+        else:
+            last_entry = self.db.query(ProofBookEntry).filter(
+                ProofBookEntry.resource_type == resource_type,
+                ProofBookEntry.resource_id == resource_id
+            ).order_by(ProofBookEntry.created_at.desc()).first()
+            if last_entry:
+                previous_hash = last_entry.proof_hash
 
         entry = ProofBookEntry(
             entry_type=ProofEntryType(entry_type) if entry_type in [e.value for e in ProofEntryType] else ProofEntryType.TASK_CREATED,
@@ -95,16 +111,19 @@ class ProofBookService:
         ).order_by(ProofBookEntry.created_at).all()
         for i, entry in enumerate(entries):
             entry_data = {
-                "entry_type": entry.entry_type.value,
+                "entry_type": entry.entry_type.value if entry.entry_type else "",
                 "resource_type": entry.resource_type,
                 "resource_id": str(entry.resource_id),
                 "actor_type": entry.actor_type,
                 "actor_id": str(entry.actor_id),
                 "description": entry.description or "",
                 "data": entry.data or {},
-                "timestamp": entry.created_at.isoformat(),
+                "ipfs_cid": entry.ipfs_cid or "",
+                "timestamp": entry.created_at.isoformat() if entry.created_at else "",
+                "source_module": "",
+                "metadata": {},
             }
-            computed = hashlib.sha3_256(str(entry_data).encode()).hexdigest()
+            computed = hashlib.sha3_256(canonical_json(entry_data).encode()).hexdigest()
             if computed != entry.proof_hash:
                 return {"valid": False, "error": f"Hash mismatch at entry {i}", "entry_id": str(entry.id)}
         return {"valid": True, "entry_count": len(entries), "chain_id": chain_id}

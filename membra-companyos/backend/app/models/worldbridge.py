@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, String, DateTime, ForeignKey, Enum, Text, JSON, Numeric, Integer, Boolean
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class AssetType(PyEnum):
@@ -33,8 +32,8 @@ class AssetStatus(PyEnum):
 class WorldAsset(Base):
     __tablename__ = "world_assets"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     owner_wallet = Column(String(42), nullable=False, index=True)
     asset_type = Column(Enum(AssetType), nullable=False)
     name = Column(String(255), nullable=False)
@@ -56,8 +55,8 @@ class WorldAsset(Base):
 class AssetListing(Base):
     __tablename__ = "asset_listings"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("world_assets.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    asset_id = Column(GUID(), ForeignKey("world_assets.id"), nullable=False)
     listing_type = Column(String(64), nullable=False)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
@@ -78,9 +77,9 @@ class AssetListing(Base):
 class AssetReservation(Base):
     __tablename__ = "asset_reservations"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("world_assets.id"), nullable=False)
-    reserved_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    asset_id = Column(GUID(), ForeignKey("world_assets.id"), nullable=False)
+    reserved_by = Column(GUID(), ForeignKey("users.id"), nullable=True)
     reservation_type = Column(String(64), nullable=False)
     status = Column(String(32), default="pending")
     start_time = Column(DateTime(timezone=True), nullable=False)
@@ -95,8 +94,8 @@ class AssetReservation(Base):
 class AssetProof(Base):
     __tablename__ = "asset_proofs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    asset_id = Column(UUID(as_uuid=True), ForeignKey("world_assets.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    asset_id = Column(GUID(), ForeignKey("world_assets.id"), nullable=False)
     proof_type = Column(String(64), nullable=False)
     proof_data = Column(JSON, default=dict)
     ipfs_cid = Column(String(64), nullable=True)
@@ -110,8 +109,8 @@ class AssetProof(Base):
 class Vendor(Base):
     __tablename__ = "vendors"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     name = Column(String(255), nullable=False)
     vendor_type = Column(String(64), nullable=False)
     contact_json = Column(JSON, default=dict)
@@ -128,8 +127,8 @@ class Vendor(Base):
 class Person(Base):
     __tablename__ = "people"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    user_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
     wallet_address = Column(String(42), nullable=True, index=True)
     display_name = Column(String(255), nullable=True)
     skills = Column(JSON, default=list)
@@ -146,13 +145,13 @@ class Person(Base):
 class Route(Base):
     __tablename__ = "routes"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     name = Column(String(255), nullable=False)
     route_type = Column(String(64), nullable=False)
     waypoints = Column(JSON, default=list)
-    vehicle_asset_id = Column(UUID(as_uuid=True), ForeignKey("world_assets.id"), nullable=True)
-    driver_person_id = Column(UUID(as_uuid=True), ForeignKey("people.id"), nullable=True)
+    vehicle_asset_id = Column(GUID(), ForeignKey("world_assets.id"), nullable=True)
+    driver_person_id = Column(GUID(), ForeignKey("people.id"), nullable=True)
     schedule_json = Column(JSON, default=dict)
     estimated_duration_min = Column(Integer, nullable=True)
     status = Column(String(32), default="planned")

@@ -45,7 +45,7 @@ class JobService:
             resource_type="job",
             resource_id=job.id,
             actor_type="system",
-            actor_id=job.assigned_to or UUID(int("0" * 32, 16)),
+            actor_id=job.assigned_to or UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Job created: {data.title}",
             data={"job_type": data.job_type, "budget": str(data.budget) if data.budget else None},
         )
@@ -76,7 +76,7 @@ class JobService:
             resource_type="job",
             resource_id=job.id,
             actor_type="system",
-            actor_id=job.assigned_to or UUID(int("0" * 32, 16)),
+            actor_id=job.assigned_to or UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Job completed: {job.title}",
             data={"proof_hash": proof_hash},
         )
@@ -125,6 +125,42 @@ class JobService:
         self.db.commit()
         self.db.refresh(action)
         return action
+
+    def submit_job_proof(self, data: JobProofCreate) -> JobProof:
+        import hashlib
+        from datetime import datetime, timezone
+        proof_data = data.proof_data or {}
+        canonical = str(sorted(proof_data.items())) if isinstance(proof_data, dict) else str(proof_data)
+        proof_hash = hashlib.sha3_256(canonical.encode()).hexdigest()
+        proof = JobProof(
+            job_id=UUID(data.job_id),
+            proof_type=data.proof_type,
+            proof_data=proof_data,
+            ipfs_cid=data.ipfs_cid,
+            proof_hash=proof_hash,
+        )
+        self.db.add(proof)
+        self.db.commit()
+        self.db.refresh(proof)
+        self.proof.write_entry(
+            entry_type="JOB_COMPLETED",
+            resource_type="job_proof",
+            resource_id=proof.id,
+            actor_type="human",
+            actor_id=UUID(data.submitted_by) if data.submitted_by else UUID("00000000-0000-0000-0000-000000000000"),
+            description=f"Proof submitted for job {data.job_id}: {data.proof_type}",
+            data={"proof_type": data.proof_type, "hash": proof_hash},
+        )
+        job = self.db.query(Job).filter(Job.id == UUID(data.job_id)).first()
+        if job:
+            all_proofs = self.db.query(JobProof).filter(JobProof.job_id == job.id).all()
+            requirements = job.deliverables or []
+            if requirements and len(all_proofs) >= len(requirements):
+                job.status = JobStatus.COMPLETED
+                job.completed_at = datetime.now(timezone.utc)
+                self.db.commit()
+                self.db.refresh(job)
+        return proof
 
     def list_jobs(self, company_id: Optional[str] = None, status: Optional[str] = None, limit: int = 50) -> List[Job]:
         q = self.db.query(Job)

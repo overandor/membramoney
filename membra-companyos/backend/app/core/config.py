@@ -13,8 +13,8 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     LOG_LEVEL: str = "INFO"
 
-    # Database
-    DATABASE_URL: str = Field(default="postgresql://membra:membra@localhost:5432/membra_companyos")
+    # Database (accepts sqlite:///... for local dev, postgresql://... for production)
+    DATABASE_URL: str = Field(default="sqlite:///./membra_companyos.db")
     DATABASE_POOL_SIZE: int = 20
     DATABASE_MAX_OVERFLOW: int = 10
 

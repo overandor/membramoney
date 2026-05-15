@@ -21,7 +21,7 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     logger.info("startup", version=settings.APP_VERSION, environment=settings.ENVIRONMENT)
     Base.metadata.create_all(bind=engine)
-    logger.info("database_tables_created")
+    logger.info("database_tables_created", count=len(Base.metadata.tables))
     yield
     logger.info("shutdown")
 

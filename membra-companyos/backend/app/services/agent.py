@@ -42,7 +42,7 @@ class AgentService:
             resource_type="agent",
             resource_id=agent.id,
             actor_type="system",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Agent registered: {data.name} ({data.agent_type})",
             data={"agent_type": data.agent_type, "permissions": data.permissions},
         )

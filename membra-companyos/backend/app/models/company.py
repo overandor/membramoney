@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, Enum, Text, JSON, Numeric, Integer
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class CompanyStatus(PyEnum):
@@ -40,7 +39,7 @@ class InitiativeStatus(PyEnum):
 class Company(Base):
     __tablename__ = "companies"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     name = Column(String(255), nullable=False)
     slug = Column(String(255), unique=True, nullable=False, index=True)
     description = Column(Text, nullable=True)
@@ -62,12 +61,12 @@ class Company(Base):
 class Department(Base):
     __tablename__ = "departments"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=False)
     name = Column(String(255), nullable=False)
     dept_type = Column(Enum(DepartmentType), nullable=False)
     description = Column(Text, nullable=True)
-    lead_agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=True)
+    lead_agent_id = Column(GUID(), ForeignKey("agents.id"), nullable=True)
     sop_count = Column(Integer, default=0)
     active_task_count = Column(Integer, default=0)
     kpi_json = Column(JSON, default=dict)
@@ -80,9 +79,9 @@ class Department(Base):
 class SOP(Base):
     __tablename__ = "sops"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
-    department_id = Column(UUID(as_uuid=True), ForeignKey("departments.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=False)
+    department_id = Column(GUID(), ForeignKey("departments.id"), nullable=True)
     title = Column(String(255), nullable=False)
     version = Column(String(16), default="1.0")
     content = Column(Text, nullable=False)
@@ -100,13 +99,13 @@ class SOP(Base):
 class CompanyMemory(Base):
     __tablename__ = "company_memories"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=False)
     memory_type = Column(String(64), nullable=False)
     key = Column(String(255), nullable=False)
     value = Column(JSON, default=dict)
     importance_score = Column(Numeric(5, 2), default=0.0)
-    source_agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=True)
+    source_agent_id = Column(GUID(), ForeignKey("agents.id"), nullable=True)
     proof_hash = Column(String(64), nullable=True)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
@@ -116,8 +115,8 @@ class CompanyMemory(Base):
 class Initiative(Base):
     __tablename__ = "initiatives"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=False)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     status = Column(Enum(InitiativeStatus), default=InitiativeStatus.PROPOSED)
@@ -134,8 +133,8 @@ class Initiative(Base):
 class KPIRecord(Base):
     __tablename__ = "kpi_records"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=False)
     kpi_name = Column(String(255), nullable=False)
     kpi_category = Column(String(64), nullable=False)
     value = Column(Numeric(20, 6), nullable=False)

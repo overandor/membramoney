@@ -37,7 +37,7 @@ class WorldBridgeService:
             resource_type="world_asset",
             resource_id=asset.id,
             actor_type="human",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Asset registered: {data.name} ({data.asset_type})",
             data={"asset_type": data.asset_type, "owner": data.owner_wallet},
         )
@@ -83,7 +83,7 @@ class WorldBridgeService:
             resource_type="asset_listing",
             resource_id=listing.id,
             actor_type="system",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Listing approved and published",
             data={"asset_id": str(listing.asset_id)},
         )

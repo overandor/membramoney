@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, String, DateTime, ForeignKey, Enum, Text, JSON
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class IntentStatus(PyEnum):
@@ -27,12 +26,12 @@ class ObjectiveStatus(PyEnum):
 class Intent(Base):
     __tablename__ = "intents"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     raw_text = Column(Text, nullable=False)
     parsed_json = Column(JSON, default=dict)
     structured_objective_json = Column(JSON, default=dict)
     user_wallet = Column(String(42), nullable=True, index=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    user_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
     status = Column(Enum(IntentStatus), default=IntentStatus.RAW)
     confidence_score = Column(String(16), default="0.0")
     llm_provider = Column(String(32), nullable=True)
@@ -47,9 +46,9 @@ class Intent(Base):
 class Objective(Base):
     __tablename__ = "objectives"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    intent_id = Column(UUID(as_uuid=True), ForeignKey("intents.id"), nullable=False)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    intent_id = Column(GUID(), ForeignKey("intents.id"), nullable=False)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     status = Column(Enum(ObjectiveStatus), default=ObjectiveStatus.PENDING)
@@ -68,10 +67,11 @@ class Objective(Base):
 class ObjectiveTaskLink(Base):
     __tablename__ = "objective_task_links"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    objective_id = Column(UUID(as_uuid=True), ForeignKey("objectives.id"), nullable=False)
-    task_id = Column(UUID(as_uuid=True), ForeignKey("tasks.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    objective_id = Column(GUID(), ForeignKey("objectives.id"), nullable=False)
+    task_id = Column(GUID(), ForeignKey("tasks.id"), nullable=False)
     link_type = Column(String(32), default="primary")
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     objective = relationship("Objective", back_populates="task_links")
+    task = relationship("Task", back_populates="objective_links")

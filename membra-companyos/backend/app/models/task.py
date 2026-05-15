@@ -3,9 +3,8 @@ import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
 from sqlalchemy import Column, String, DateTime, ForeignKey, Enum, Text, JSON, Integer
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class TaskStatus(PyEnum):
@@ -32,16 +31,16 @@ class TaskType(PyEnum):
 class Task(Base):
     __tablename__ = "tasks"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    objective_id = Column(UUID(as_uuid=True), ForeignKey("objectives.id"), nullable=True)
-    company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    objective_id = Column(GUID(), ForeignKey("objectives.id"), nullable=True)
+    company_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     task_type = Column(Enum(TaskType), nullable=False)
     status = Column(Enum(TaskStatus), default=TaskStatus.BACKLOG)
     priority = Column(Integer, default=3)
-    owner_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
-    owner_agent_id = Column(UUID(as_uuid=True), ForeignKey("agents.id"), nullable=True)
+    owner_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
+    owner_agent_id = Column(GUID(), ForeignKey("agents.id"), nullable=True)
     estimated_hours = Column(String(16), nullable=True)
     deadline = Column(DateTime(timezone=True), nullable=True)
     proof_requirement = Column(JSON, default=dict)
@@ -61,9 +60,9 @@ class Task(Base):
 class TaskDependency(Base):
     __tablename__ = "task_dependencies"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    task_id = Column(UUID(as_uuid=True), ForeignKey("tasks.id"), nullable=False)
-    depends_on_task_id = Column(UUID(as_uuid=True), ForeignKey("tasks.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    task_id = Column(GUID(), ForeignKey("tasks.id"), nullable=False)
+    depends_on_task_id = Column(GUID(), ForeignKey("tasks.id"), nullable=False)
     dependency_type = Column(String(32), default="blocks")
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
@@ -71,11 +70,11 @@ class TaskDependency(Base):
 class TaskAssignment(Base):
     __tablename__ = "task_assignments"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    task_id = Column(UUID(as_uuid=True), ForeignKey("tasks.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    task_id = Column(GUID(), ForeignKey("tasks.id"), nullable=False)
     assignee_type = Column(String(16), nullable=False)
-    assignee_id = Column(UUID(as_uuid=True), nullable=False)
-    assigned_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    assignee_id = Column(GUID(), nullable=False)
+    assigned_by = Column(GUID(), ForeignKey("users.id"), nullable=True)
     assigned_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     accepted_at = Column(DateTime(timezone=True), nullable=True)
     completed_at = Column(DateTime(timezone=True), nullable=True)
@@ -87,13 +86,13 @@ class TaskAssignment(Base):
 class TaskProof(Base):
     __tablename__ = "task_proofs"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    task_id = Column(UUID(as_uuid=True), ForeignKey("tasks.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    task_id = Column(GUID(), ForeignKey("tasks.id"), nullable=False)
     proof_type = Column(String(64), nullable=False)
     proof_data = Column(JSON, default=dict)
     ipfs_cid = Column(String(64), nullable=True)
     verification_status = Column(String(32), default="pending")
-    verified_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    verified_by = Column(GUID(), ForeignKey("users.id"), nullable=True)
     verified_at = Column(DateTime(timezone=True), nullable=True)
     proof_hash = Column(String(64), nullable=False)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

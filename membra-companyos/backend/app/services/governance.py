@@ -45,7 +45,7 @@ class GovernanceService:
             resource_type="approval_gate",
             resource_id=gate.id,
             actor_type="system",
-            actor_id=gate.requester_id or UUID(int("0" * 32, 16)),
+            actor_id=gate.requester_id or UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Approval gate created: {data.gate_type}",
             data={"resource_type": data.resource_type, "risk": data.risk_level},
         )
@@ -135,7 +135,7 @@ class GovernanceService:
             resource_type="consent",
             resource_id=consent.id,
             actor_type="human",
-            actor_id=UUID(data.granted_by) if data.granted_by else UUID(int("0" * 32, 16)),
+            actor_id=UUID(data.granted_by) if data.granted_by else UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Consent {data.consent_type} for {data.resource_type}",
             data={"granted": data.granted, "owner": data.owner_wallet},
         )
@@ -156,6 +156,31 @@ class GovernanceService:
         self.db.commit()
         self.db.refresh(risk)
         return risk
+
+    def create_escalation_rule(self, data: EscalationRuleCreate) -> EscalationRule:
+        rule = EscalationRule(
+            company_id=UUID(data.company_id) if data.company_id else None,
+            name=data.name,
+            trigger_condition=data.trigger_condition,
+            trigger_rules=data.trigger_rules or [],
+            escalation_path=data.escalation_path or [],
+            notify_wallets=data.notify_wallets or [],
+            auto_action=data.auto_action,
+            is_active=data.is_active if data.is_active is not None else True,
+        )
+        self.db.add(rule)
+        self.db.commit()
+        self.db.refresh(rule)
+        self.proof.write_entry(
+            entry_type="POLICY_APPLIED",
+            resource_type="escalation_rule",
+            resource_id=rule.id,
+            actor_type="system",
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
+            description=f"Escalation rule created: {data.name}",
+            data={"trigger": data.trigger_condition, "auto_action": data.auto_action},
+        )
+        return rule
 
     def list_gates(self, status: Optional[str] = None, limit: int = 50) -> List[ApprovalGate]:
         q = self.db.query(ApprovalGate)

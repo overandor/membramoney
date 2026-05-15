@@ -41,7 +41,7 @@ class TaskService:
             resource_type="task",
             resource_id=task.id,
             actor_type="system",
-            actor_id=task.owner_id or UUID(int("0" * 32, 16)),
+            actor_id=task.owner_id or UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Task created: {data.title}",
             data={"task_type": data.task_type, "priority": data.priority},
         )
@@ -64,7 +64,7 @@ class TaskService:
             resource_type="task",
             resource_id=task.id,
             actor_type="system",
-            actor_id=task.owner_id or UUID(int("0" * 32, 16)),
+            actor_id=task.owner_id or UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Task {task_id} moved from {old_status} to {status}",
             data={"old_status": old_status, "new_status": status, "reason": reason},
         )

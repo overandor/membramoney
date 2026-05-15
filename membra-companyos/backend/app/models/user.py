@@ -2,10 +2,9 @@
 import uuid
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
-from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, Enum, Text, Index, JSON
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, Enum, Text, JSON
 from sqlalchemy.orm import relationship
-from app.db.base import Base
+from app.db.base import Base, GUID
 
 
 class UserRole(PyEnum):
@@ -21,13 +20,13 @@ class UserRole(PyEnum):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     wallet_address = Column(String(42), unique=True, nullable=True, index=True)
     email = Column(String(255), unique=True, nullable=True)
     hashed_password = Column(String(255), nullable=True)
     role = Column(Enum(UserRole), default=UserRole.VIEWER, nullable=False)
     display_name = Column(String(255), nullable=True)
-    organization_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    organization_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     is_active = Column(Boolean, default=True)
     metadata_json = Column(JSON, default=dict)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
@@ -41,8 +40,8 @@ class User(Base):
 class Session(Base):
     __tablename__ = "sessions"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    user_id = Column(GUID(), ForeignKey("users.id"), nullable=False)
     jti = Column(String(64), unique=True, nullable=False, index=True)
     refresh_token = Column(Text, nullable=True)
     ip_address = Column(String(45), nullable=True)
@@ -56,16 +55,12 @@ class Session(Base):
 
 class AuditLog(Base):
     __tablename__ = "audit_logs"
-    __table_args__ = (
-        Index("ix_audit_logs_event_type", "event_type"),
-        Index("ix_audit_logs_created_at", "created_at"),
-    )
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
     event_type = Column(String(64), nullable=False, index=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
+    user_id = Column(GUID(), ForeignKey("users.id"), nullable=True)
     wallet_address = Column(String(42), nullable=True, index=True)
-    organization_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=True)
+    organization_id = Column(GUID(), ForeignKey("companies.id"), nullable=True)
     ip_address = Column(String(45), nullable=True)
     user_agent = Column(Text, nullable=True)
     resource_type = Column(String(64), nullable=True)

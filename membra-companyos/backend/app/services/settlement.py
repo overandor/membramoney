@@ -39,7 +39,7 @@ class SettlementService:
             resource_type="settlement",
             resource_id=record.id,
             actor_type="system",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Settlement triggered: {data.amount} {data.currency} via {data.rail}",
             data={"amount": data.amount, "rail": data.rail, "recipient": data.recipient_wallet},
         )
@@ -77,7 +77,7 @@ class SettlementService:
             resource_type="settlement",
             resource_id=record.id,
             actor_type="system",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Settlement confirmed: {external_tx_id}",
             data={"tx_id": external_tx_id, "status": "settled"},
         )

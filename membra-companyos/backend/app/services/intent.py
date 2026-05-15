@@ -33,7 +33,7 @@ class IntentService:
             resource_type="intent",
             resource_id=intent.id,
             actor_type="human",
-            actor_id=intent.user_id or UUID(int("0" * 32, 16)),
+            actor_id=intent.user_id or UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Intent created: {data.raw_text[:100]}",
             data={"raw_text": data.raw_text},
         )

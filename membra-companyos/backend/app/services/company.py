@@ -34,7 +34,7 @@ class CompanyService:
             resource_type="company",
             resource_id=company.id,
             actor_type="system",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"Company created: {data.name}",
             data={"slug": data.slug, "owner": data.owner_wallet},
         )
@@ -127,7 +127,7 @@ class CompanyService:
             resource_type="kpi",
             resource_id=kpi.id,
             actor_type="system",
-            actor_id=UUID(int("0" * 32, 16)),
+            actor_id=UUID("00000000-0000-0000-0000-000000000000"),
             description=f"KPI recorded: {data.kpi_name} = {data.value}",
             data={"category": data.kpi_category, "value": data.value, "unit": data.unit},
         )

@@ -1,4 +1,4 @@
-from app.db.base import Base
+from app.db.base import Base, GUID
 from app.models.company import Company, Department, SOP, CompanyMemory, Initiative, KPIRecord
 from app.models.intent import Intent, Objective, ObjectiveTaskLink
 from app.models.task import Task, TaskDependency, TaskAssignment, TaskProof
