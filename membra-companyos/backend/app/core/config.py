@@ -2,7 +2,7 @@
 from functools import lru_cache
 from typing import Optional
 from pydantic_settings import BaseSettings
-from pydantic import Field, PostgresDsn, RedisDsn
+from pydantic import Field, RedisDsn
 
 
 class Settings(BaseSettings):
@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     # Database
-    DATABASE_URL: PostgresDsn = Field(default="postgresql://membra:membra@localhost:5432/membra_companyos")
+    DATABASE_URL: str = Field(default="postgresql://membra:membra@localhost:5432/membra_companyos")
     DATABASE_POOL_SIZE: int = 20
     DATABASE_MAX_OVERFLOW: int = 10
 

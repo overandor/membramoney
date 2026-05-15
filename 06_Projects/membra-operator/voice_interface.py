@@ -1,20 +1,34 @@
 """
 MEMBRA Operator Voice Interface
-STT via macOS native speech_recognition + TTS via `say`
+TTS via macOS `say`. STT via speech_recognition (microphone optional).
 """
 import subprocess
 import threading
-import speech_recognition as sr
 import time
 import os
+
+try:
+    import speech_recognition as sr
+    _HAS_SR = True
+except Exception:
+    sr = None  # type: ignore
+    _HAS_SR = False
 
 class VoiceInterface:
     def __init__(self, on_speech_callback=None):
         self.on_speech = on_speech_callback
-        self.recognizer = sr.Recognizer()
-        self.microphone = sr.Microphone()
         self.listening = False
         self._thread = None
+        self._mic_available = False
+        self.recognizer = None
+        self.microphone = None
+        if _HAS_SR:
+            try:
+                self.recognizer = sr.Recognizer()
+                self.microphone = sr.Microphone()
+                self._mic_available = True
+            except Exception as e:
+                print(f"[Voice] Microphone unavailable: {e}")
         # macOS voices: "Samantha", "Alex", "Daniel", "Karen", "Fred"
         self.voice = os.environ.get("MEMBRA_TTS_VOICE", "Samantha")
         self.speech_rate = int(os.environ.get("MEMBRA_TTS_RATE", "180"))
@@ -30,6 +44,8 @@ class VoiceInterface:
 
     def listen_once(self, timeout=5, phrase_time_limit=10) -> str | None:
         """Single STT capture."""
+        if not self._mic_available:
+            return None
         try:
             with self.microphone as source:
                 self.recognizer.adjust_for_ambient_noise(source, duration=0.5)
@@ -46,6 +62,9 @@ class VoiceInterface:
 
     def start_background_listener(self):
         """Continuous background STT."""
+        if not self._mic_available:
+            print("[Voice] Microphone not available; install pyaudio or sox for STT.")
+            return
         self.listening = True
         self._thread = threading.Thread(target=self._listen_loop, daemon=True)
         self._thread.start()
