@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api import auth, intents, tasks, agents, jobs, companies, governance, proofbook, settlements, worldbridge, concierge, health
+from app.api import auth, intents, tasks, agents, jobs, companies, governance, proofbook, settlements, worldbridge, concierge, health, orchestrate, dashboard
 
 api_router = APIRouter(prefix="/v1")
 
@@ -14,4 +14,6 @@ api_router.include_router(proofbook.router, prefix="/proofbook", tags=["ProofBoo
 api_router.include_router(settlements.router, prefix="/settlements", tags=["SettlementOS"])
 api_router.include_router(worldbridge.router, prefix="/worldbridge", tags=["WorldBridge"])
 api_router.include_router(concierge.router, prefix="/concierge", tags=["LLM Concierge"])
+api_router.include_router(orchestrate.router, prefix="/orchestrate", tags=["Orchestration"])
+api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 api_router.include_router(health.router, prefix="/health", tags=["Health"])

@@ -75,3 +75,34 @@ def create_eligibility(data: SettlementEligibilityCreate, db: Session = Depends(
     svc = ProofBookService(db)
     elig = svc.create_eligibility(data)
     return BaseResponse(data={"id": str(elig.id), "amount": elig.eligible_amount, "status": elig.status})
+
+
+@router.get("/subject/{subject_type}/{subject_id}", response_model=PaginatedResponse)
+def get_subject_entries(
+    subject_type: str,
+    subject_id: str,
+    limit: int = Query(50, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    from uuid import UUID as PyUUID
+    from app.models.proofbook import ProofBookEntry
+    entries = db.query(ProofBookEntry).filter(
+        ProofBookEntry.resource_type == subject_type,
+        ProofBookEntry.resource_id == PyUUID(subject_id)
+    ).order_by(ProofBookEntry.created_at.desc()).limit(limit).all()
+    return PaginatedResponse(
+        items=[{
+            "id": str(e.id),
+            "entry_type": e.entry_type.value if e.entry_type else None,
+            "actor_type": e.actor_type,
+            "actor_id": str(e.actor_id) if e.actor_id else None,
+            "proof_hash": e.proof_hash,
+            "previous_hash": e.previous_hash,
+            "description": e.description,
+            "created_at": e.created_at.isoformat() if e.created_at else None,
+        } for e in entries],
+        total=len(entries),
+        page=1,
+        page_size=limit,
+        pages=1,
+    )

@@ -72,5 +72,5 @@ def classify_risk(data: RiskClassificationCreate, db: Session = Depends(get_db))
 @router.post("/escalation-rules", response_model=BaseResponse)
 def create_escalation_rule(data: EscalationRuleCreate, db: Session = Depends(get_db)):
     svc = GovernanceService(db)
-    rule = svc.db.query(svc.db.bind).first()
-    raise HTTPException(status_code=501, detail="Escalation rules not yet implemented")
+    rule = svc.create_escalation_rule(data)
+    return BaseResponse(data={"id": str(rule.id), "name": rule.name, "active": rule.is_active})

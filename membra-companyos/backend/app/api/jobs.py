@@ -37,9 +37,20 @@ def list_jobs(
 
 @router.get("/{job_id}", response_model=BaseResponse)
 def get_job(job_id: str, db: Session = Depends(get_db)):
-    svc = JobService(db)
-    job = svc.db.query(svc.db.bind).first()
-    raise HTTPException(status_code=501, detail="Use list endpoint")
+    from uuid import UUID as PyUUID
+    job = db.query(Job).filter(Job.id == PyUUID(job_id)).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return BaseResponse(data={
+        "id": str(job.id),
+        "title": job.title,
+        "status": job.status.value,
+        "type": job.job_type.value,
+        "description": job.description,
+        "budget": str(job.budget) if job.budget else None,
+        "currency": job.currency,
+        "created_at": job.created_at.isoformat() if job.created_at else None,
+    })
 
 
 @router.patch("/{job_id}", response_model=BaseResponse)
@@ -80,5 +91,5 @@ def create_marketplace_action(data: MarketplaceActionCreate, db: Session = Depen
 @router.post("/proofs", response_model=BaseResponse)
 def submit_job_proof(data: JobProofCreate, db: Session = Depends(get_db)):
     svc = JobService(db)
-    proof = svc.db.query(svc.db.bind).first()
-    raise HTTPException(status_code=501, detail="Job proof submission not yet implemented")
+    proof = svc.submit_job_proof(data)
+    return BaseResponse(data={"id": str(proof.id), "proof_hash": proof.proof_hash, "status": proof.verification_status})
