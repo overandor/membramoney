@@ -1,0 +1,18 @@
+## Core product sentence
+Every verified QR read of a MEMBRA chat can trigger an immediate token allocation event tied to that chat’s pool, proof capsule, and public rules.
+
+## Hard boundary
+A QR read can immediately allocate protocol units, points, credits, claim receipts, or testnet tokens.
+
+A QR read should not automatically transfer valuable mainnet tokens or fiat unless:
+
+```text
+1. the reader accepts terms;
+2. the wallet is connected;
+3. the pool is funded;
+4. anti-sybil checks pass;
+5. token supply exists;
+6. the smart contract/program authorizes the allocation;
+7. compliance/risk rules allow it;
+8. the user signs if required.
+```

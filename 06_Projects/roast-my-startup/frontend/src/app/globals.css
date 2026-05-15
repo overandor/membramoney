@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-primary: #0B0B0D;
+  --background-secondary: #121216;
+  --background-tertiary: #18181D;
+  --background-quaternary: #202027;
+  --orange-primary: #FF6A00;
+  --orange-hot: #FF8A1F;
+  --orange-warning: #E9441F;
+  --text-muted: #A8A29E;
+  --text-main: #F5F2EE;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-primary);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 106, 0, 0.5);
+  }
+  
+  .border-glow {
+    box-shadow: 0 0 40px rgba(255, 106, 0, 0.25);
+  }
+  
+  .glass-card {
+    background: rgba(18, 18, 22, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 106, 0, 0.18);
+  }
+  
+  .gradient-orange {
+    background: linear-gradient(135deg, #FF6A00, #FF8A1F);
+  }
+  
+  .gradient-orange-hover:hover {
+    background: linear-gradient(135deg, #FF8A1F, #FF6A00);
+  }
+}

@@ -1,0 +1,93 @@
+# ============================================================
+# CLEANSTAT INFRASTRUCTURE - DOCKER COMPOSE
+# ============================================================
+# Production-hardened orchestration
+
+version: '3.8'
+
+services:
+  # ============================================================
+  # POSTGRESQL DATABASE
+  # ============================================================
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: cleanstat
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: cleanstat
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cleanstat"]
+      interval: 10s
+
+  # ============================================================
+  # REDIS
+  # ============================================================
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+
+  # ============================================================
+  # API
+  # ============================================================
+  api:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://cleanstat:${DB_PASSWORD}@db:5432/cleanstat
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  # ============================================================
+  # CELERY WORKER
+  # ============================================================
+  celery_worker:
+    build: .
+    command: celery -A app.celery_app worker --loglevel=info
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://cleanstat:${DB_PASSWORD}@db:5432/cleanstat
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+
+  # ============================================================
+  # NGINX
+  # ============================================================
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+  redis_data:

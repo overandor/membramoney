@@ -1,0 +1,14 @@
+{
+  "system": "futures_mm.log",
+  "files": 1,
+  "size_bytes": 95138,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ".log"
+  ],
+  "sample_files": [
+    "futures_mm.log"
+  ]
+}

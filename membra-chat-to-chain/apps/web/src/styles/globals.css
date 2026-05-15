@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: #050505;
+    color: #F7F2E8;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(255, 138, 31, 0.3);
+    color: #F7F2E8;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: linear-gradient(135deg, rgba(17, 19, 24, 0.9), rgba(11, 13, 16, 0.95));
+    border: 1px solid rgba(255, 138, 31, 0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(255, 138, 31, 0.15);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #FF8A1F, #D6A64F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .border-glow {
+    border: 1px solid rgba(255, 138, 31, 0.2);
+    box-shadow: 0 0 20px rgba(255, 138, 31, 0.08);
+  }
+
+  .status-chip {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .status-chip.active {
+    background: rgba(73, 209, 125, 0.1);
+    border: 1px solid rgba(73, 209, 125, 0.3);
+    color: #49D17D;
+  }
+
+  .status-chip.pending {
+    background: rgba(255, 138, 31, 0.1);
+    border: 1px solid rgba(255, 138, 31, 0.3);
+    color: #FF8A1F;
+  }
+
+  .status-chip.locked {
+    background: rgba(216, 74, 50, 0.1);
+    border: 1px solid rgba(216, 74, 50, 0.3);
+    color: #D84A32;
+  }
+
+  .terminal-panel {
+    background: #0B0D10;
+    border: 1px solid rgba(255, 138, 31, 0.1);
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    padding: 16px;
+    color: #9B9489;
+  }
+
+  .terminal-panel .prompt {
+    color: #FF8A1F;
+  }
+
+  .terminal-panel .output {
+    color: #49D17D;
+  }
+
+  .terminal-panel .error {
+    color: #D84A32;
+  }
+
+  .grid-lines {
+    background-image: 
+      linear-gradient(rgba(255, 138, 31, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 138, 31, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 138, 31, 0.2);
+    border-radius: 2px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 138, 31, 0.4);
+  }
+}

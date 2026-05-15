@@ -1,0 +1,32 @@
+{
+  "system": "membra-chat-to-chain",
+  "files": 28,
+  "size_bytes": 62048,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    "",
+    ".tsx",
+    ".css",
+    ".toml",
+    ".txt",
+    ".ts",
+    ".js",
+    ".yml",
+    ".rs",
+    ".py"
+  ],
+  "sample_files": [
+    "membra-chat-to-chain/.gitignore",
+    "membra-chat-to-chain/apps/api/requirements.txt",
+    "membra-chat-to-chain/apps/api/src/server.py",
+    "membra-chat-to-chain/apps/web/next.config.js",
+    "membra-chat-to-chain/apps/web/postcss.config.js",
+    "membra-chat-to-chain/apps/web/src/app/layout.tsx",
+    "membra-chat-to-chain/apps/web/src/app/test-minimal/page.tsx",
+    "membra-chat-to-chain/apps/web/src/components/ui.tsx",
+    "membra-chat-to-chain/apps/web/src/components/wallet/WalletProvider.tsx",
+    "membra-chat-to-chain/apps/web/src/lib/utils.ts"
+  ]
+}

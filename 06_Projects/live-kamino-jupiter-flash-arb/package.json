@@ -1,0 +1,21 @@
+{
+  "name": "live-kamino-jupiter-flash-arb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "once": "tsx app.ts once",
+    "scan": "tsx app.ts scan",
+    "send": "tsx app.ts send"
+  },
+  "dependencies": {
+    "@kamino-finance/klend-sdk": "latest",
+    "@solana/spl-token": "latest",
+    "@solana/web3.js": "latest",
+    "dotenv": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "undici": "latest",
+    "zod": "latest"
+  }
+}

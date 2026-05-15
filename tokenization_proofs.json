@@ -1,0 +1,634 @@
+{
+  "name": "Laptop Asset Token",
+  "symbol": "LAT",
+  "decimals": 6,
+  "total_supply": 9251500000000,
+  "appraisal_value_usd": 9251500,
+  "appraisal_date": "2026-05-11",
+  "appraisal_methodology": "File-Level Complexity-Adjusted Pricing (1,123 files)",
+  "backing_assets": {
+    "total_python_loc": 187832,
+    "total_systems": 100,
+    "total_files": 1123
+  },
+  "verifiable_proofs": {
+    "merkle_root": "7b13fdd3baa82057c96be7989b77f926fd3d96786e936a67ad1952c36758b946",
+    "system_hashes": {
+      "01_Trading_Systems/ENA_Hedging_Project": {
+        "hash": "b9aae8a701a51d252185b0406001dcc8e8668c13b000995097fb343be9bc73d2",
+        "loc": 3134,
+        "files": 7,
+        "timestamp": "2026-05-11T16:37:45.661001"
+      },
+      "01_Trading_Systems/Hedging_Project": {
+        "hash": "156b2ce20621edadaf0024eda1a10175d239ee3814a8165031486aee9f979951",
+        "loc": 6436,
+        "files": 24,
+        "timestamp": "2026-05-11T16:37:45.666581"
+      },
+      "01_Trading_Systems/__pycache__": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.666650"
+      },
+      "01_Trading_Systems/algo_micro_cap_bot": {
+        "hash": "6d776d4307c9aa73331e1eeef8114b0c6ddc6306fae2770932e846584397f45e",
+        "loc": 298,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.667047"
+      },
+      "01_Trading_Systems/arb-execution-engine": {
+        "hash": "be99b88d5a24c644d9b7622cd9dc933956e885124a82b6f25f0b0a6230100ee2",
+        "loc": 2928,
+        "files": 11,
+        "timestamp": "2026-05-11T16:37:45.669385"
+      },
+      "01_Trading_Systems/audio_prediction_system": {
+        "hash": "c73d02db02a742c23e7303f5065bd959d64df8f9b427ad1fa2d4dc2dfec96d47",
+        "loc": 896,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.669728"
+      },
+      "01_Trading_Systems/beast_market_maker": {
+        "hash": "46419270d92db049587731ec27cefb2b57d19cfdaf9c4628c5c9595219b8d60c",
+        "loc": 688,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.670056"
+      },
+      "01_Trading_Systems/binance_trading_systems": {
+        "hash": "39b6e9ccc04b7dafab0f630d63bc99226bcb6e45d273c0b21956fd93a66831da",
+        "loc": 566,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.670658"
+      },
+      "01_Trading_Systems/bitcoin_futures_analysis": {
+        "hash": "3a003e8faca1f7f5d48c4788cbb14c5cbc32ca771d8522540e6d970427b02672",
+        "loc": 670,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.671177"
+      },
+      "01_Trading_Systems/brutalist_market_maker_variants": {
+        "hash": "506b263ee156bd9d3be16b36d8a23ac638c205f5f9426a4d35f7ea325826c2c6",
+        "loc": 6297,
+        "files": 7,
+        "timestamp": "2026-05-11T16:37:45.672954"
+      },
+      "01_Trading_Systems/decentralized-trader": {
+        "hash": "5fa748f6e52c92aebe2e76ac5b977ab8e825d5b6a46b4ecf1da5496782b90211",
+        "loc": 14324,
+        "files": 24,
+        "timestamp": "2026-05-11T16:37:45.679534"
+      },
+      "01_Trading_Systems/ena_hedging_variants": {
+        "hash": "f02b598a6a0ee1617ad96c4ab15351a34b7c315f9e1329deef3991a2626c356b",
+        "loc": 3780,
+        "files": 7,
+        "timestamp": "2026-05-11T16:37:45.681312"
+      },
+      "01_Trading_Systems/gate_hedge_engine": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.681375"
+      },
+      "01_Trading_Systems/gate_market_maker_variants": {
+        "hash": "f150f8c89cf2ccf4626a612156906db64f3591c616e42b5fe1b82110aa3afd7d",
+        "loc": 25850,
+        "files": 26,
+        "timestamp": "2026-05-11T16:37:45.690086"
+      },
+      "01_Trading_Systems/gate_mm_beast": {
+        "hash": "49238d057ab38fcfa565e68151aade127c82cf11513037a4b1f01043f061a2a8",
+        "loc": 15855,
+        "files": 118,
+        "timestamp": "2026-05-11T16:37:45.706481"
+      },
+      "01_Trading_Systems/gate_mm_beast 2": {
+        "hash": "5c811167573685d4beb98425d062a4780f220785f6b423ebfade322ad3f14127",
+        "loc": 1887,
+        "files": 114,
+        "timestamp": "2026-05-11T16:37:45.720253"
+      },
+      "01_Trading_Systems/gate_multi_ticker_mm": {
+        "hash": "79c0b8bc3ce642191fb97f1466d681f18356d03f9e05f5779b4e04f5a838e422",
+        "loc": 1432,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.720731"
+      },
+      "01_Trading_Systems/gateio_market_maker_system": {
+        "hash": "d66d82ba884fbb28fa242f6b3bc082536aaa3205320a30e743d126a2b207d7f6",
+        "loc": 2282,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.721278"
+      },
+      "01_Trading_Systems/godforbit_trading_system": {
+        "hash": "7fd6b49c326dc5c60a0ca0d575b1a4b796d2168ca4948602f79f49ffca7856f6",
+        "loc": 3195,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.722129"
+      },
+      "01_Trading_Systems/hedge_beast_system": {
+        "hash": "6d4a4fa7bf0c2ef773c226a3d6569d1ba97c4d1921c8601db5387c4ff83c10bc",
+        "loc": 1601,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.722748"
+      },
+      "01_Trading_Systems/hypweliquid_llm_trader": {
+        "hash": "42484c06ab060c32328ce05d50f8383530afd418c94bbbfb3daf88c9a456f7b5",
+        "loc": 1280,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.723109"
+      },
+      "01_Trading_Systems/live_trading_systems": {
+        "hash": "2ee756ee19475cb9a97695930eb86a7fe3a1494615e21d8e96800c3983166286",
+        "loc": 691,
+        "files": 3,
+        "timestamp": "2026-05-11T16:37:45.723766"
+      },
+      "01_Trading_Systems/micro_cap_trading_system": {
+        "hash": "30a42bf9bb5589dad92d5fc8d10756175f3842c72509d4fafffdc9f73a5b7e51",
+        "loc": 518,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.723997"
+      },
+      "01_Trading_Systems/micro_coin_market_maker": {
+        "hash": "4b5e9cfeb5abfabc65f8bbc4e223c4370be4e9370c233b3c9565ee08e60b51db",
+        "loc": 541,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.724216"
+      },
+      "01_Trading_Systems/micro_market_maker": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.724263"
+      },
+      "01_Trading_Systems/new_gate_layer": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.724423"
+      },
+      "01_Trading_Systems/profit_executor_system": {
+        "hash": "fee920953ee58b991fd82b6030689689201827ccacaed0e5a3c2f332f151d60f",
+        "loc": 1024,
+        "files": 3,
+        "timestamp": "2026-05-11T16:37:45.725241"
+      },
+      "01_Trading_Systems/second_profit_system": {
+        "hash": "44269e36338a83c5e28ca2894b944a4a5c18bb46d2de01ec31563e57dc7a835f",
+        "loc": 411,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.725522"
+      },
+      "01_Trading_Systems/shorting_systems": {
+        "hash": "135c758250ad6db764d13726247db6909f13677d1075f8d15158b1ab50373e6a",
+        "loc": 1304,
+        "files": 3,
+        "timestamp": "2026-05-11T16:37:45.726637"
+      },
+      "01_Trading_Systems/simple_gateio_trading_bot": {
+        "hash": "03c655a63713d4360c02dae113cd0da1d66b651b0f49844989dfe19782648ce0",
+        "loc": 1342,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.727256"
+      },
+      "01_Trading_Systems/simple_market_maker_system": {
+        "hash": "884a5cf6da7d1d52abe54222e212e398a0b1318ddab40c7c128b2af4852a3953",
+        "loc": 316,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.727594"
+      },
+      "01_Trading_Systems/simple_trading_systems": {
+        "hash": "34838202c3e44f761215648a7ec3a1e6189faa08672fa18ab2f3afa5c895c329",
+        "loc": 546,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.728062"
+      },
+      "01_Trading_Systems/supervisor_ai_247_system": {
+        "hash": "84a6a3ca042790c618ac1dc07b2dd530e3116a60bd4759b21857232fc485b48b",
+        "loc": 613,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.728499"
+      },
+      "01_Trading_Systems/trading_dashboard_systems": {
+        "hash": "daf97ed81c4badc8691a4e6e586ae512a367095065b6820a39771b53e59e8556",
+        "loc": 1087,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.729197"
+      },
+      "01_Trading_Systems/trading_governance_system": {
+        "hash": "c3c54800f159da9287893ba8a2c85543956299a05ca1519d32e1ea699a0f1cd4",
+        "loc": 449,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.729521"
+      },
+      "01_Trading_Systems/universal_maker_system": {
+        "hash": "3be088d97665dcae21daba4d1363ad67c631a346f55c755733d01f3c7ca40274",
+        "loc": 505,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.729722"
+      },
+      "01_Trading_Systems/vanta_trading_system": {
+        "hash": "cb54f61bd1b3a8e44bce110dfb172cce498db5d6196c8148d900245a683b14c4",
+        "loc": 802,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.730221"
+      },
+      "01_Trading_Systems/vaultcore_trading_system": {
+        "hash": "75efb7b18c6707587f08eff006bb8d9457fcfe9ce7b7d5673dee49b7dbb11183",
+        "loc": 1112,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.730740"
+      },
+      "01_Trading_Systems/visual_trading_agent_system": {
+        "hash": "ad7d42e99cffa5c10774a617956218e893aa529d5c78087add293f90413f59a8",
+        "loc": 471,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.731052"
+      },
+      "02_AI_Agents/ai_content_engine": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.731161"
+      },
+      "02_AI_Agents/ai_control_center_systems": {
+        "hash": "de215e8019ed9d8acc12d3447af8d2160175e5384217d9db36cd87557ad06056",
+        "loc": 1881,
+        "files": 4,
+        "timestamp": "2026-05-11T16:37:45.732013"
+      },
+      "02_AI_Agents/aider-trading-bot": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.732077"
+      },
+      "02_AI_Agents/aider_ai_system": {
+        "hash": "ec468820ce32f575cfabeadce6c04b84c4cd4879b930db2ceeee8e5eb773f681",
+        "loc": 483,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.732539"
+      },
+      "02_AI_Agents/chat-provenance-api": {
+        "hash": "a141abfa048714dadf389ac72e41c52a59be2449f8abf8c159ee88979f6b08aa",
+        "loc": 1271,
+        "files": 20,
+        "timestamp": "2026-05-11T16:37:45.736126"
+      },
+      "02_AI_Agents/deepseek_ai_council": {
+        "hash": "d135f2a9fca67b02accb956bdde5ab63877b20b89f7f889a0889f0a073494ad2",
+        "loc": 838,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.736605"
+      },
+      "02_AI_Agents/groq_supervisor_ai": {
+        "hash": "ab1e738efa97ccfb592d34d25a59d8f5d6a25d6df2669f8cd04c88be65f75254",
+        "loc": 1060,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.737088"
+      },
+      "02_AI_Agents/hybrid_ai_supervisor_system": {
+        "hash": "635886f96f4a1d76b39bc9946cfbd14cf5e3b29636e03132dea4a950bfed6203",
+        "loc": 616,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.737298"
+      },
+      "02_AI_Agents/jupyter-distributed-kernel": {
+        "hash": "fccab26a55a899e8579e553d7fd582afe62fdfb3eaf058c4ec066a88d8154dc9",
+        "loc": 8044,
+        "files": 22,
+        "timestamp": "2026-05-11T16:37:45.742697"
+      },
+      "02_AI_Agents/llm_autonomous_agent": {
+        "hash": "093a900260ab95173b62396b29a9c1221fd595e05647aa12fe6edfe082c9aab1",
+        "loc": 943,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.743120"
+      },
+      "02_AI_Agents/local_ollama_trading_bot": {
+        "hash": "17a4525ea739638d5098aa0ea3eb173e89441b6e2aa2dcfb35ca7f09bd784ba1",
+        "loc": 685,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.743532"
+      },
+      "02_AI_Agents/morning-agent": {
+        "hash": "87d1054d58c5d6da070989c8e0d3ff0bcfd674889b0a15d3c01785ac565b846d",
+        "loc": 1030,
+        "files": 17,
+        "timestamp": "2026-05-11T16:37:45.746524"
+      },
+      "02_AI_Agents/openrouter_ai_trading_bot": {
+        "hash": "c6c60e272e2b124243314d434a876406a21a1439b476ee53b2e30d2c4e0a4193",
+        "loc": 255,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.746749"
+      },
+      "02_AI_Agents/retro_terminal_trading_bot": {
+        "hash": "d666fd13f92c783d8652a0cb1b70c775e6383e923f2e930d00f331f7b3575712",
+        "loc": 715,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.747071"
+      },
+      "02_AI_Agents/supervisor_screenshots": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.747121"
+      },
+      "02_AI_Agents/terminal_agent": {
+        "hash": "9957937a77d547c8053177f5dc5f24b31365b69d1a1c75297a4cd5c74bb4adcf",
+        "loc": 6122,
+        "files": 4,
+        "timestamp": "2026-05-11T16:37:45.748338"
+      },
+      "06_Projects/advanced_gateio_systems": {
+        "hash": "bbcac92e89878eb3e2430c45e56b36f1c5d69087d4068258372886922c44670a",
+        "loc": 1412,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.749009"
+      },
+      "06_Projects/api_demo_test_systems": {
+        "hash": "65bc008eb9caee5a4d78d50cd37cfde924217521c1ea0284137fe30b41e94a35",
+        "loc": 1650,
+        "files": 12,
+        "timestamp": "2026-05-11T16:37:45.751413"
+      },
+      "06_Projects/api_integration_system": {
+        "hash": "b20b76af626543bf99dc66542fd9cc0f7d7cb143786c7098a6cef1d2fac84e8b",
+        "loc": 1946,
+        "files": 4,
+        "timestamp": "2026-05-11T16:37:45.752613"
+      },
+      "06_Projects/autogen_gate_mm": {
+        "hash": "010e5df1b571a45cb57e82113c58a03dd4514df2b080b2282c8741302693ba55",
+        "loc": 481,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.753010"
+      },
+      "06_Projects/autonomous-cleanstat-agent": {
+        "hash": "6f3c6789f157ba39cc6b8ba7eebf9e4605a50eba7e5855679e396eb029752963",
+        "loc": 1363,
+        "files": 8,
+        "timestamp": "2026-05-11T16:37:45.754700"
+      },
+      "06_Projects/balance_check_systems": {
+        "hash": "4411bc004cf5b947c4ff485d05e4001ccf30d1f00e7c5f72b28fb5b0eb656814",
+        "loc": 1314,
+        "files": 3,
+        "timestamp": "2026-05-11T16:37:45.755348"
+      },
+      "06_Projects/chatgpt_exports": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.755395"
+      },
+      "06_Projects/check_verification_systems": {
+        "hash": "bbd8454830324d9c0524f128343c61cb066057ae4d5418208e7472754a619bd3",
+        "loc": 586,
+        "files": 4,
+        "timestamp": "2026-05-11T16:37:45.756332"
+      },
+      "06_Projects/cigarette-butt-collection": {
+        "hash": "db5b54acb47d92bf2aac827c10d436ed900bbfe1e9bb5e4c2720a2a89ce1f84f",
+        "loc": 198,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.756611"
+      },
+      "06_Projects/cleanstat-autonomous-agent": {
+        "hash": "d6d21bf4e27fa1ad1745c432a9a79b0047ef94ebc03af0a479e56dee42f8bb34",
+        "loc": 648,
+        "files": 4,
+        "timestamp": "2026-05-11T16:37:45.757300"
+      },
+      "06_Projects/cleanstat-infrastructure": {
+        "hash": "b253bee6b6951862afc5f8cd5fa2ada5ff2004d46063dd3dbf0a5a0e55e88952",
+        "loc": 1877,
+        "files": 38,
+        "timestamp": "2026-05-11T16:37:45.763644"
+      },
+      "06_Projects/complete_wallet_systems": {
+        "hash": "19b74bc335b99a0c4cb79d286ccc917629a97f8ddbc0fbe41ef0c2a8b8a8f8a5",
+        "loc": 960,
+        "files": 3,
+        "timestamp": "2026-05-11T16:37:45.764415"
+      },
+      "06_Projects/config_data_files": {
+        "hash": "97c719a08361e808275ea3ffeb6aace8b43cd5fc2109ff4413a94c87a32c7f90",
+        "loc": 2017,
+        "files": 6,
+        "timestamp": "2026-05-11T16:37:45.765859"
+      },
+      "06_Projects/consolidation_tools": {
+        "hash": "05d0986fa9659e66901b85a2c3f8d03250bbe33533454d9fd6bb593b55d742be",
+        "loc": 516,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.766245"
+      },
+      "06_Projects/copythatpay_data": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.766380"
+      },
+      "06_Projects/copythatpay_survival_data": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.766416"
+      },
+      "06_Projects/copythatpay_system": {
+        "hash": "ade4c12c4d1079f276425dc1ebbead30d17c7a1cee63a8faa2484afdf02cd057",
+        "loc": 6495,
+        "files": 11,
+        "timestamp": "2026-05-11T16:37:45.771799"
+      },
+      "06_Projects/copythatpay_system_clone": {
+        "hash": "daecf200ba72c012c7637968a99aaff0bfa3c22590395d332d6b0ce3cc484dc6",
+        "loc": 5484,
+        "files": 6,
+        "timestamp": "2026-05-11T16:37:45.773430"
+      },
+      "06_Projects/digital_gold_forge": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.773495"
+      },
+      "06_Projects/fart_intelligence_output": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.773640"
+      },
+      "06_Projects/field-triage-app": {
+        "hash": "f88d9a4faaae8e3764288549ecf2d3afa128ddea0fd5bbc2a70f2a6599ceebd8",
+        "loc": 1122,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.773922"
+      },
+      "06_Projects/kamino-flash-executor": {
+        "hash": "5a9349a54d911ef43a40ab4e4f5c52de5ec1ab1dd3e280ed3688c834dbdef46c",
+        "loc": 184954,
+        "files": 549,
+        "timestamp": "2026-05-11T16:37:45.870800"
+      },
+      "06_Projects/live-kamino-jupiter-flash-arb": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.870919"
+      },
+      "06_Projects/marinade_deploy_system": {
+        "hash": "9e404830296c27b12d7f41900b4c1d3827fa98449785689eee05e29e7a40454e",
+        "loc": 540,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.871462"
+      },
+      "06_Projects/marinade_illegal_detector": {
+        "hash": "9f553ecdbb5c69954bfd4b65471cd3cead3c45badda88770989c3f6e0330e30d",
+        "loc": 805,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.872037"
+      },
+      "06_Projects/marinade_online_deployer": {
+        "hash": "1e90197f630c8a37b0ff6c68ee78de89d4daf71d8086e75bbc320a694f43d275",
+        "loc": 717,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.872345"
+      },
+      "06_Projects/marinade_realtime_analyzer": {
+        "hash": "2a0633056c6422ac9ddf74f833d09b9a5c9d653d43fa30827e38f8bce1440b5e",
+        "loc": 783,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.872584"
+      },
+      "06_Projects/marinade_related_systems": {
+        "hash": "833c44c1178c105f0b859c0d4d674d1169f28c5b62547be38a755c19a9018cb2",
+        "loc": 2545,
+        "files": 5,
+        "timestamp": "2026-05-11T16:37:45.874035"
+      },
+      "06_Projects/marinade_wallet_analyzer": {
+        "hash": "68dd00e59e29757ff494206e425a175084ca2c22cda26eb416bae86dd05a67b2",
+        "loc": 342,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.874423"
+      },
+      "06_Projects/metamask-python-bridge": {
+        "hash": "a634dd9298812ebb58995c363e202b4217763e45008d79624450ac0a9aedcbf6",
+        "loc": 189,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.874780"
+      },
+      "06_Projects/nft_marketplace_integration": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.874833"
+      },
+      "06_Projects/roast-my-startup": {
+        "hash": "448d348c26117a9bc78cd1d9978cb25f8ff2df836c873fc7dd5bc82434730e8d",
+        "loc": 345,
+        "files": 6,
+        "timestamp": "2026-05-11T16:37:45.876953"
+      },
+      "06_Projects/setup_installation_systems": {
+        "hash": "18dfc076fb5db62463152d17b575f9e9cbc900a87c089b1ba44d2c960e917ec1",
+        "loc": 730,
+        "files": 7,
+        "timestamp": "2026-05-11T16:37:45.878478"
+      },
+      "06_Projects/solana-staking-tracker": {
+        "hash": "c56ef5d2cd8c3b295d2f1c34d2b2dd49f55ad61f80bb704401103a81e1c8eeb4",
+        "loc": 3558,
+        "files": 6,
+        "timestamp": "2026-05-11T16:37:45.879673"
+      },
+      "06_Projects/solana_wallet_systems": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.879725"
+      },
+      "06_Projects/subscription_systems": {
+        "hash": "a8ec35ee04803891e11ece3e483335043b85dabec55f46eba1aa1c84699d001a",
+        "loc": 228,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.880142"
+      },
+      "06_Projects/system_integration_tools": {
+        "hash": "e6f057e0b1e6bdeee4989707f0dbe47974134ccffa4d69d5fd95008653e05ad0",
+        "loc": 772,
+        "files": 2,
+        "timestamp": "2026-05-11T16:37:45.880551"
+      },
+      "06_Projects/twitter_system": {
+        "hash": "39e0e2c445e7ab4c09c2dad3bb399461df4310845695589281997c8ba35e6865",
+        "loc": 548,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.880865"
+      },
+      "06_Projects/veis": {
+        "hash": "ed893a9ccb937aa4be9373c9d987c5679b40ff75d3108e8f546b4981ce048ce0",
+        "loc": 3018,
+        "files": 45,
+        "timestamp": "2026-05-11T16:37:45.897018"
+      },
+      "06_Projects/veis-cleanstat": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.897292"
+      },
+      "06_Projects/voice_recorder_data": {
+        "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "loc": 0,
+        "files": 0,
+        "timestamp": "2026-05-11T16:37:45.897364"
+      },
+      "06_Projects/voice_recorder_system": {
+        "hash": "44c0e21809414d1751d136d46cd4fc59b21b72353a4e37fd6b19656a76053dd9",
+        "loc": 472,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.897617"
+      },
+      "06_Projects/wallet_analysis_system": {
+        "hash": "5f0cf57761a13c42b4efa795fbcde47f045e38701132955ad825c97a6c85be48",
+        "loc": 162,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.898241"
+      },
+      "06_Projects/winserv_chatgpt_automation": {
+        "hash": "f524dda10c8ee06abffcd17a1b8c4481eb6ed3101d49a0f398ce2407dc7c09fb",
+        "loc": 522,
+        "files": 1,
+        "timestamp": "2026-05-11T16:37:45.898560"
+      },
+      "06_Projects/working_development_systems": {
+        "hash": "ea75bc21e5d33b82f09ca58e0f5711aec5db8250bd23737d54c3d29fb009efc6",
+        "loc": 2103,
+        "files": 6,
+        "timestamp": "2026-05-11T16:37:45.901470"
+      },
+      "root": {
+        "hash": "f65f521c1ae12b877c038ce346bb2d6de83340003edbc3a1aadb824a04bd3dab",
+        "loc": 373957,
+        "files": 1234,
+        "timestamp": "2026-05-11T16:37:46.177109"
+      }
+    },
+    "github_repo": "TO_BE_SET",
+    "appraisal_doc_hash": "e206e2c56bb647797bfba7c2e3b749ba66c149fb31240d04e81e223d20d97e5b"
+  },
+  "tokenomics": {
+    "initial_liquidity_pool": 925150000000,
+    "treasury": 2775450000000,
+    "public_sale": 3700600000000,
+    "team_vested": 1387725000000,
+    "ecosystem": 462575000000
+  }
+}

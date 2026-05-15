@@ -1,0 +1,27 @@
+{
+  "system": "09_Backup",
+  "files": 31,
+  "size_bytes": 2373092,
+  "categories": [
+    "backup"
+  ],
+  "extensions": [
+    "",
+    ".idx",
+    ".sample",
+    ".log",
+    ".rev"
+  ],
+  "sample_files": [
+    "09_Backup/.git/COMMIT_EDITMSG",
+    "09_Backup/.git/HEAD",
+    "09_Backup/.git/config",
+    "09_Backup/.git/description",
+    "09_Backup/.git/hooks/applypatch-msg.sample",
+    "09_Backup/.git/hooks/commit-msg.sample",
+    "09_Backup/.git/hooks/fsmonitor-watchman.sample",
+    "09_Backup/.git/hooks/post-update.sample",
+    "09_Backup/.git/hooks/pre-applypatch.sample",
+    "09_Backup/.git/hooks/pre-commit.sample"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "system": "market_maker.log",
+  "files": 1,
+  "size_bytes": 84094,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ".log"
+  ],
+  "sample_files": [
+    "market_maker.log"
+  ]
+}

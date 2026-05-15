@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Order Fill Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .order-step {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .order-step.active {
+            border-left-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .order-step.completed {
+            border-left-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .order-step.failed {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .processing {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-4">
+                <i class="fas fa-chart-line mr-3"></i>Solana Order Fill Visualizer
+            </h1>
+            <p class="text-xl opacity-90">Watch real-time Solana order execution flow</p>
+        </header>
+
+        <!-- Main Visualizer -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <!-- Order Flow Steps -->
+            <div class="glass-effect rounded-xl p-6">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-tasks mr-2"></i>Order Flow Steps
+                </h2>
+                
+                <div id="order-steps" class="space-y-4">
+                    <div class="order-step" id="step-create">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">1. Create Order</h3>
+                                    <p class="text-sm opacity-70">Generate order with market data</p>
+                                </div>
+                            </div>
+                            <div class="text-sm opacity-60" id="step-create-time">--:--</div>
+                        </div>
+                    </div>
+
+                    <div class="order-step" id="step-bundle">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-cube text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">2. Build Bundle</h3>
+                                    <p class="text-sm opacity-70">Create transaction bundle</p>
+                                </div>
+                            </div>
+                            <div class="text-sm opacity-60" id="step-bundle-time">--:--</div>
+                        </div>
+                    </div>
+
+                    <div class="order-step" id="step-jito">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-rocket text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">3. Submit via Jito</h3>
+                                    <p class="text-sm opacity-70">Send bundle to Jito</p>
+                                </div>
+                            </div>
+                            <div class="text-sm opacity-60" id="step-jito-time">--:--</div>
+                        </div>
+                    </div>
+
+                    <div class="order-step" id="step-monitor">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-eye text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">4. Monitor Fill</h3>
+                                    <p class="text-sm opacity-70">Watch for order execution</p>
+                                </div>
+                            </div>
+                            <div class="text-sm opacity-60" id="step-monitor-time">--:--</div>
+                        </div>
+                    </div>
+
+                    <div class="order-step" id="step-pnl">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-calculator text-sm"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold">5. Calculate PnL</h3>
+                                    <p class="text-sm opacity-70">Compute profit/loss</p>
+                                </div>
+                            </div>
+                            <div class="text-sm opacity-60" id="step-pnl-time">--:--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Details -->
+            <div class="glass-effect rounded-xl p-6">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-info-circle mr-2"></i>Order Details
+                </h2>
+                
+                <div id="order-details" class="space-y-4">
+                    <div class="text-center opacity-60">
+                        <i class="fas fa-clock text-4xl mb-4"></i>
+                        <p>Waiting for order creation...</p>
+                    </div>
+                </div>
+
+                <!-- Real-time Chart -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-bold mb-4">Price Action</h3>
+                    <canvas id="price-chart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-gamepad mr-2"></i>Control Panel
+            </h2>
+            
+            <div class="grid md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Order Type</label>
+                    <select id="order-type" class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                        <option value="bid">Buy (Bid)</option>
+                        <option value="ask">Sell (Ask)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Size (SOL)</label>
+                    <input type="number" id="order-size" value="1.0" step="0.1" min="0.1"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Spread (bps)</label>
+                    <input type="number" id="spread-bps" value="10" step="1" min="1" max="100"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Fill Probability</label>
+                    <input type="number" id="fill-prob" value="30" step="5" min="0" max="100"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-6">
+                <button onclick="startOrderDemo()" 
+                        class="flex-1 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition">
+                    <i class="fas fa-play mr-2"></i>Start Order Demo
+                </button>
+                <button onclick="startBatchDemo()" 
+                        class="flex-1 bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-bold transition">
+                    <i class="fas fa-layer-group mr-2"></i>Batch Demo (10 orders)
+                </button>
+                <button onclick="clearResults()" 
+                        class="flex-1 bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-bold transition">
+                    <i class="fas fa-trash mr-2"></i>Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Table -->
+        <div class="glass-effect rounded-xl p-6">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-table mr-2"></i>Order Results
+            </h2>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-white/20">
+                            <th class="text-left p-2">Order ID</th>
+                            <th class="text-left p-2">Type</th>
+                            <th class="text-left p-2">Price</th>
+                            <th class="text-left p-2">Size</th>
+                            <th class="text-left p-2">Status</th>
+                            <th class="text-left p-2">Fill Time</th>
+                            <th class="text-left p-2">Gas Used</th>
+                            <th class="text-left p-2">PnL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table">
+                        <tr>
+                            <td colspan="8" class="text-center p-4 opacity-60">
+                                No orders executed yet
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="grid md:grid-cols-4 gap-4 mt-6">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400" id="total-orders">0</div>
+                    <div class="text-sm opacity-60">Total Orders</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-400" id="fill-rate">0%</div>
+                    <div class="text-sm opacity-60">Fill Rate</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-400" id="avg-fill-time">0ms</div>
+                    <div class="text-sm opacity-60">Avg Fill Time</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-yellow-400" id="total-pnl">$0.00</div>
+                    <div class="text-sm opacity-60">Total PnL</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentOrder = null;
+        let orderHistory = [];
+        let priceChart = null;
+        let priceData = [];
+
+        // Initialize chart
+        function initChart() {
+            const ctx = document.getElementById('price-chart').getContext('2d');
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Price',
+                        data: [],
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update step status
+        function updateStep(stepId, status, time = null) {
+            const step = document.getElementById(stepId);
+            const icon = step.querySelector('.w-8');
+            const timeEl = document.getElementById(stepId + '-time');
+            
+            // Remove all status classes
+            step.classList.remove('active', 'completed', 'failed');
+            icon.classList.remove('bg-green-600', 'bg-blue-600', 'bg-red-600', 'bg-gray-600', 'processing');
+            
+            if (status === 'active') {
+                step.classList.add('active');
+                icon.classList.add('bg-green-600', 'processing');
+                icon.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i>';
+            } else if (status === 'completed') {
+                step.classList.add('completed');
+                icon.classList.add('bg-blue-600');
+                icon.innerHTML = '<i class="fas fa-check text-sm"></i>';
+            } else if (status === 'failed') {
+                step.classList.add('failed');
+                icon.classList.add('bg-red-600');
+                icon.innerHTML = '<i class="fas fa-times text-sm"></i>';
+            }
+            
+            if (time) {
+                timeEl.textContent = time;
+                timeEl.classList.remove('opacity-60');
+                timeEl.classList.add('text-green-400');
+            }
+        }
+
+        // Reset all steps
+        function resetSteps() {
+            ['create', 'bundle', 'jito', 'monitor', 'pnl'].forEach(step => {
+                const stepEl = document.getElementById(`step-${step}`);
+                const icon = stepEl.querySelector('.w-8');
+                const timeEl = document.getElementById(`step-${step}-time`);
+                
+                stepEl.classList.remove('active', 'completed', 'failed');
+                icon.classList.add('bg-gray-600');
+                icon.innerHTML = '<i class="fas fa-plus text-sm"></i>';
+                timeEl.textContent = '--:--';
+                timeEl.classList.add('opacity-60');
+                timeEl.classList.remove('text-green-400');
+            });
+        }
+
+        // Update order details
+        function updateOrderDetails(order) {
+            const detailsEl = document.getElementById('order-details');
+            
+            detailsEl.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span>Order ID:</span>
+                        <span class="font-mono">${order.orderId}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Type:</span>
+                        <span class="${order.type === 'bid' ? 'text-green-400' : 'text-red-400'}">
+                            ${order.type.toUpperCase()}
+                        </span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Price:</span>
+                        <span>$${order.price.toFixed(2)}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Size:</span>
+                        <span>${order.size.toFixed(3)} SOL</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Status:</span>
+                        <span class="${getStatusColor(order.status)}">${order.status.toUpperCase()}</span>
+                    </div>
+                    ${order.fillPrice ? `
+                    <div class="flex justify-between">
+                        <span>Fill Price:</span>
+                        <span>$${order.fillPrice.toFixed(2)}</span>
+                    </div>
+                    ` : ''}
+                    ${order.fillSize ? `
+                    <div class="flex justify-between">
+                        <span>Fill Size:</span>
+                        <span>${order.fillSize.toFixed(3)} SOL</span>
+                    </div>
+                    ` : ''}
+                    ${order.gasUsed ? `
+                    <div class="flex justify-between">
+                        <span>Gas Used:</span>
+                        <span>${order.gasUsed.toLocaleString()} lamports</span>
+                    </div>
+                    ` : ''}
+                    ${order.pnl !== undefined ? `
+                    <div class="flex justify-between">
+                        <span>PnL:</span>
+                        <span class="${order.pnl >= 0 ? 'text-green-400' : 'text-red-400'}">
+                            $${order.pnl.toFixed(4)}
+                        </span>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'filled': return 'text-green-400';
+                case 'cancelled': return 'text-red-400';
+                case 'submitted': return 'text-blue-400';
+                default: return 'text-gray-400';
+            }
+        }
+
+        // Add result to table
+        function addResult(order) {
+            const tbody = document.getElementById('results-table');
+            
+            // Clear placeholder if first result
+            if (tbody.children.length === 1 && tbody.children[0].children.length === 1) {
+                tbody.innerHTML = '';
+            }
+            
+            const row = document.createElement('tr');
+            row.className = 'border-b border-white/10';
+            row.innerHTML = `
+                <td class="p-2 font-mono text-xs">${order.orderId}</td>
+                <td class="p-2">
+                    <span class="${order.type === 'bid' ? 'text-green-400' : 'text-red-400'}">
+                        ${order.type.toUpperCase()}
+                    </span>
+                </td>
+                <td class="p-2">$${order.price.toFixed(2)}</td>
+                <td class="p-2">${order.size.toFixed(3)}</td>
+                <td class="p-2">${getStatusColor(order.status)}">${order.status.toUpperCase()}</td>
+                <td class="p-2">${order.fillTime ? order.fillTime.toFixed(2) + 's' : '-'}</td>
+                <td class="p-2">${order.gasUsed ? order.gasUsed.toLocaleString() : '-'}</td>
+                <td class="p-2">
+                    ${order.pnl !== undefined ? 
+                        `<span class="${order.pnl >= 0 ? 'text-green-400' : 'text-red-400'}">
+                            $${order.pnl.toFixed(4)}
+                        </span>` : '-'}
+                </td>
+            `;
+            
+            tbody.appendChild(row);
+            updateSummaryStats();
+        }
+
+        // Update summary statistics
+        function updateSummaryStats() {
+            const totalOrders = orderHistory.length;
+            const filledOrders = orderHistory.filter(o => o.status === 'filled').length;
+            const fillRate = totalOrders > 0 ? (filledOrders / totalOrders * 100) : 0;
+            
+            const avgFillTime = filledOrders > 0 ? 
+                orderHistory.filter(o => o.fillTime)
+                    .reduce((sum, o) => sum + o.fillTime, 0) / filledOrders : 0;
+            
+            const totalPnL = orderHistory.reduce((sum, o) => sum + (o.pnl || 0), 0);
+            
+            document.getElementById('total-orders').textContent = totalOrders;
+            document.getElementById('fill-rate').textContent = fillRate.toFixed(1) + '%';
+            document.getElementById('avg-fill-time').textContent = (avgFillTime * 1000).toFixed(0) + 'ms';
+            document.getElementById('total-pnl').textContent = '$' + totalPnL.toFixed(4);
+        }
+
+        // Simulate order execution
+        async function simulateOrder(orderConfig) {
+            const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            const startTime = Date.now();
+            
+            // Create order
+            const order = {
+                orderId,
+                type: orderConfig.type,
+                size: orderConfig.size,
+                price: orderConfig.price,
+                status: 'pending'
+            };
+            
+            currentOrder = order;
+            resetSteps();
+            updateOrderDetails(order);
+            updateStep('step-create', 'active');
+            
+            // Step 1: Create Order
+            await sleep(500);
+            updateStep('step-create', 'completed', formatTime(startTime));
+            
+            // Step 2: Build Bundle
+            updateStep('step-bundle', 'active');
+            await sleep(800);
+            order.bundleId = `bundle_${Date.now()}`;
+            order.gasUsed = 5000 + Math.floor(Math.random() * 2000);
+            updateStep('step-bundle', 'completed', formatTime(startTime + 800));
+            
+            // Step 3: Submit via Jito
+            updateStep('step-jito', 'active');
+            await sleep(600);
+            order.status = 'submitted';
+            order.txSignature = `sig_${Date.now()}`;
+            updateStep('step-jito', 'completed', formatTime(startTime + 1400));
+            
+            // Step 4: Monitor Fill
+            updateStep('step-monitor', 'active');
+            await sleep(1000);
+            
+            // Determine if order fills
+            const fills = Math.random() < (orderConfig.fillProb / 100);
+            
+            if (fills) {
+                order.status = 'filled';
+                order.fillPrice = order.price + (Math.random() - 0.5) * 0.1;
+                order.fillSize = order.size * (0.5 + Math.random() * 0.5);
+                order.fillTime = (Date.now() - startTime) / 1000;
+                
+                // Update price chart
+                updatePriceChart(order.fillPrice);
+                
+                updateStep('step-monitor', 'completed', formatTime(startTime + 2400));
+                
+                // Step 5: Calculate PnL
+                updateStep('step-pnl', 'active');
+                await sleep(400);
+                
+                // Simple PnL calculation
+                const priceMovement = (Math.random() - 0.5) * 0.02;
+                const pnl = priceMovement * order.fillSize - (order.gasUsed / 1e9 * 100);
+                order.pnl = pnl;
+                
+                updateStep('step-pnl', 'completed', formatTime(startTime + 2800));
+            } else {
+                order.status = 'cancelled';
+                updateStep('step-monitor', 'failed', formatTime(startTime + 2400));
+                updateStep('step-pnl', 'completed', formatTime(startTime + 2400));
+            }
+            
+            updateOrderDetails(order);
+            orderHistory.push(order);
+            addResult(order);
+            
+            return order;
+        }
+
+        // Helper functions
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function formatTime(timestamp) {
+            return new Date(timestamp).toLocaleTimeString();
+        }
+
+        function updatePriceChart(price) {
+            const now = new Date().toLocaleTimeString();
+            priceChart.data.labels.push(now);
+            priceChart.data.datasets[0].data.push(price);
+            
+            // Keep only last 20 points
+            if (priceChart.data.labels.length > 20) {
+                priceChart.data.labels.shift();
+                priceChart.data.datasets[0].data.shift();
+            }
+            
+            priceChart.update();
+        }
+
+        // Control functions
+        async function startOrderDemo() {
+            const config = {
+                type: document.getElementById('order-type').value,
+                size: parseFloat(document.getElementById('order-size').value),
+                price: 100 + Math.random() * 2, // Random price around $100
+                fillProb: parseInt(document.getElementById('fill-prob').value)
+            };
+            
+            await simulateOrder(config);
+        }
+
+        async function startBatchDemo() {
+            const batchSize = 10;
+            
+            for (let i = 0; i < batchSize; i++) {
+                const config = {
+                    type: Math.random() > 0.5 ? 'bid' : 'ask',
+                    size: 0.5 + Math.random() * 2,
+                    price: 100 + Math.random() * 2,
+                    fillProb: parseInt(document.getElementById('fill-prob').value)
+                };
+                
+                await simulateOrder(config);
+                await sleep(200); // Small delay between orders
+            }
+        }
+
+        function clearResults() {
+            orderHistory = [];
+            document.getElementById('results-table').innerHTML = `
+                <tr>
+                    <td colspan="8" class="text-center p-4 opacity-60">
+                        No orders executed yet
+                    </td>
+                </tr>
+            `;
+            updateSummaryStats();
+            resetSteps();
+            document.getElementById('order-details').innerHTML = `
+                <div class="text-center opacity-60">
+                    <i class="fas fa-clock text-4xl mb-4"></i>
+                    <p>Waiting for order creation...</p>
+                </div>
+            `;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initChart();
+        });
+    </script>
+</body>
+</html>

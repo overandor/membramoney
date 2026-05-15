@@ -1,0 +1,14 @@
+{
+  "system": "futures_market_maker.log",
+  "files": 1,
+  "size_bytes": 2503,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ".log"
+  ],
+  "sample_files": [
+    "futures_market_maker.log"
+  ]
+}

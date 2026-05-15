@@ -1,0 +1,14 @@
+{
+  "system": "membra_dashboard.py",
+  "files": 1,
+  "size_bytes": 5624,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "membra_dashboard.py"
+  ]
+}

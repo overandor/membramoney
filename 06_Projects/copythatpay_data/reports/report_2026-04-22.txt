@@ -1,0 +1,21 @@
+CopyThatPay Daily Report — 2026-04-22
+==================================================
+Equity:              $5.8707
+Peak Equity:         $5.8707
+Total Realized PnL:  $0.000000
+Trade Count:         0
+Win Rate:            0.0%
+Avg Profit/Trade:    $0.000000
+Sharpe Ratio:        0.000
+Max Drawdown:        0.00%
+Capital Utilization: 3.0%
+
+Risk State:
+  Verdict:           SAFE
+  Margin Ratio:      3.0%
+  Floating PnL:      $0.021490
+  Open Hedges:       0
+  Broken Hedges:     1
+  Symbols Near Limit:0
+
+Session Duration:    42s

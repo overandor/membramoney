@@ -1,0 +1,6 @@
+FROM /Users/alep/Downloads/training_data/fused_smollm2
+
+SYSTEM You are a helpful assistant trained on a diverse corpus including coding, chat conversations, and dialogue data.
+
+PARAMETER temperature 0.7
+PARAMETER top_p 0.9

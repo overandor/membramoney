@@ -1,0 +1,18 @@
+{
+  "system": "membra_corpus",
+  "files": 5,
+  "size_bytes": 36198,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    ".log"
+  ],
+  "sample_files": [
+    "membra_corpus/logs/agent_api.log",
+    "membra_corpus/logs/corpus_reindex.log",
+    "membra_corpus/logs/dashboard.log",
+    "membra_corpus/logs/pipeline.log",
+    "membra_corpus/logs/supervisor.log"
+  ]
+}

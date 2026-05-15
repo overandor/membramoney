@@ -1,0 +1,48 @@
+{
+  "WalletChallenge": {
+    "type": "object",
+    "properties": {
+      "wallet_address": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" }
+    },
+    "required": ["wallet_address"]
+  },
+  "WalletVerify": {
+    "type": "object",
+    "properties": {
+      "wallet_address": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+      "signature": { "type": "string" },
+      "challenge": { "type": "string" }
+    },
+    "required": ["wallet_address", "signature", "challenge"]
+  },
+  "StrategyConfig": {
+    "type": "object",
+    "properties": {
+      "risk_tolerance": { "type": "string", "enum": ["low", "medium", "high"] },
+      "max_position_size": { "type": "number", "minimum": 0 },
+      "min_profit_threshold": { "type": "number", "minimum": 0 }
+    },
+    "required": ["risk_tolerance", "max_position_size", "min_profit_threshold"]
+  },
+  "DeploymentRequest": {
+    "type": "object",
+    "properties": {
+      "contract_name": { "type": "string" },
+      "constructor_args": { "type": "object" }
+    },
+    "required": ["contract_name", "constructor_args"]
+  },
+  "TradeSignal": {
+    "type": "object",
+    "properties": {
+      "action": { "type": "string", "enum": ["buy", "sell", "hold"] },
+      "target_contract": { "type": "string", "pattern": "^0x[a-fA-F0-9]{40}$" },
+      "calldata_params": { "type": "object" },
+      "rationale": { "type": "string" },
+      "estimated_gas": { "type": "integer", "minimum": 0 },
+      "expected_profit": { "type": "number" },
+      "risk_level": { "type": "string", "enum": ["low", "medium", "high"] }
+    },
+    "required": ["action", "target_contract", "calldata_params", "rationale", "estimated_gas", "expected_profit", "risk_level"]
+  }
+}

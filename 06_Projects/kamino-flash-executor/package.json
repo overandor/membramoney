@@ -1,0 +1,11 @@
+{
+  "name": "kamino-flash-executor-bridge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "@kamino-finance/klend-sdk": "latest",
+    "@solana/spl-token": "latest",
+    "@solana/web3.js": "latest"
+  }
+}

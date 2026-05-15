@@ -1,0 +1,3 @@
+exchange,symbol,min_quantity,max_quantity,quantity_step,min_notional,price_step,contract_size,leverage,maker_fee,taker_fee,min_usd_value,total_fee_per_trade,btc_price_used
+Binance Futures,BTCUSDT,0.001,1000.0,0.001,100.0,0.1,1.0,Up to 125x,0.0002,0.0004,65.0,0.03900000000000001,65000
+MEXC Futures,BTCUSDT,0.001,1000.0,0.001,5.0,0.01,1.0,Up to 200x,0.0002,0.0004,65.0,0.03900000000000001,65000

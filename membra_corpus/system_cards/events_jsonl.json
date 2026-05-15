@@ -1,0 +1,14 @@
+{
+  "system": "events.jsonl",
+  "files": 1,
+  "size_bytes": 134441,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ".jsonl"
+  ],
+  "sample_files": [
+    "events.jsonl"
+  ]
+}

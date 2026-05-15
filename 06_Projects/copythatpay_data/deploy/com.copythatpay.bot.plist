@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- CopyThatPay — macOS launchd service (equivalent of systemd on Linux) -->
+    <!-- Install: cp this file ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.copythatpay.bot.plist -->
+    <!-- Uninstall: launchctl unload ~/Library/LaunchAgents/com.copythatpay.bot.plist -->
+
+    <key>Label</key>
+    <string>com.copythatpay.bot</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- UPDATE this path to your python3 binary -->
+        <string>/Users/alep/miniconda3/bin/python</string>
+        <string>/Users/alep/Downloads/copythatpay.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/alep/Downloads</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/alep/Downloads/copythatpay_data/logs/stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/alep/Downloads/copythatpay_data/logs/stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/alep/miniconda3/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <!-- Restart after crash with 10s delay -->
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "name": "solana-staking-tracker",
+  "builds": [
+    {
+      "src": "marinade_deploy.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "marinade_deploy.py"
+    }
+  ]
+}

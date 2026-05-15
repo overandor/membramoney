@@ -1,0 +1,17 @@
+{
+  "system": "tokenization",
+  "files": 3,
+  "size_bytes": 26390,
+  "categories": [
+    "tokenization"
+  ],
+  "extensions": [
+    ".sol",
+    ".py"
+  ],
+  "sample_files": [
+    "tokenization/LAToken.sol",
+    "tokenization/deploy_solana_token.py",
+    "tokenization/laptop_asset_token.py"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "system": "Dockerfile",
+  "files": 1,
+  "size_bytes": 185,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ""
+  ],
+  "sample_files": [
+    "Dockerfile"
+  ]
+}

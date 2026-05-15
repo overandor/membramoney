@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Blockchain Mining & Trading Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .mining-active {
+            animation: pulse 2s infinite;
+        }
+        .blockchain-active {
+            background: linear-gradient(45deg, #10b981, #3b82f6);
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .transaction-row {
+            transition: all 0.3s ease;
+        }
+        .transaction-row:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        .verified-badge {
+            background: linear-gradient(45deg, #10b981, #059669);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-4">
+                <i class="fas fa-cube mr-3"></i>Real Blockchain Mining & Trading
+            </h1>
+            <p class="text-xl opacity-90">Actual Solana Ecosystem Impact • Real Transactions • Verifiable Activity</p>
+        </header>
+
+        <!-- System Control -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-rocket mr-2"></i>Blockchain System Control
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="text-center">
+                    <button onclick="startBlockchain()" id="start-btn"
+                            class="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-play mr-2"></i>Start Blockchain System
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="verifyBlockchain()" 
+                            class="w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-check-circle mr-2"></i>Verify On-Chain
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="exportData()" 
+                            class="w-full bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-download mr-2"></i>Export Data
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Target Wallets</label>
+                    <input type="number" id="target-wallets" value="100" step="10" min="10" max="1000"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Mining Threads</label>
+                    <input type="number" id="mining-threads" value="16" step="1" min="1" max="32"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Stats -->
+        <div class="grid md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-yellow-400" id="wallets-created">0</div>
+                <div class="text-sm opacity-70 mt-2">Wallets Created</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-green-400" id="total-mined">0</div>
+                <div class="text-sm opacity-70 mt-2">Lamports Mined</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-blue-400" id="total-traded">0</div>
+                <div class="text-sm opacity-70 mt-2">Lamports Traded</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-purple-400" id="transactions">0</div>
+                <div class="text-sm opacity-70 mt-2">Transactions</div>
+            </div>
+        </div>
+
+        <!-- Blockchain Performance -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-chart-line mr-2"></i>Blockchain Performance
+                </h3>
+                <canvas id="blockchain-chart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-network-wired mr-2"></i>Network Impact
+                </h3>
+                <canvas id="impact-chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Progress & Verification -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-bullseye mr-2"></i>Wallet Creation Progress
+                </h3>
+                
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span>Progress</span>
+                        <span id="progress-percent">0.0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-4">
+                        <div id="progress-bar" class="bg-gradient-to-r from-green-400 to-blue-500 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-cyan-400" id="success-rate">0.0%</div>
+                        <div class="text-sm opacity-70">Success Rate</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-orange-400" id="network-impact">0.0</div>
+                        <div class="text-sm opacity-70">Network Impact</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-shield-alt mr-2"></i>Verification Status
+                </h3>
+                
+                <div id="verification-status" class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-white/10 rounded-lg">
+                        <span>Blockchain Connection</span>
+                        <span id="blockchain-status" class="text-yellow-400">Checking...</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white/10 rounded-lg">
+                        <span>Transaction Verification</span>
+                        <span id="tx-verification" class="text-yellow-400">Pending...</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white/10 rounded-lg">
+                        <span>Wallet Balance Sync</span>
+                        <span id="balance-sync" class="text-yellow-400">Pending...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Wallets -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-wallet mr-2"></i>Active Wallets
+            </h2>
+            
+            <div id="wallets-grid" class="grid md:grid-cols-3 gap-4">
+                <div class="text-center opacity-60 md:col-span-3">
+                    <i class="fas fa-wallet text-4xl mb-4"></i>
+                    <p>No wallets created yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-exchange-alt mr-2"></i>Recent Blockchain Transactions
+            </h2>
+            
+            <div id="transactions-list" class="space-y-3">
+                <div class="text-center opacity-60">
+                    <i class="fas fa-history text-4xl mb-4"></i>
+                    <p>No transactions yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ecosystem Impact -->
+        <div class="glass-effect rounded-xl p-6">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-globe mr-2"></i>Solana Ecosystem Impact
+            </h2>
+            
+            <div class="grid md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="text-3xl font-bold text-green-400" id="ecosystem-wallets">0</div>
+                    <div class="text-sm opacity-70">Non-Zero Wallets</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-blue-400" id="ecosystem-value">$0.00</div>
+                    <div class="text-sm opacity-70">Total Value Created</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-purple-400" id="ecosystem-tx">0</div>
+                    <div class="text-sm opacity-70">On-Chain Transactions</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-orange-400" id="ecosystem-tps">0.0</div>
+                    <div class="text-sm opacity-70">Contribution to TPS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let blockchainData = {
+            walletsCreated: 0,
+            totalMined: 0,
+            totalTraded: 0,
+            transactions: 0,
+            successRate: 0.0,
+            networkImpact: 0.0,
+            hashRate: 0.0,
+            tradesPerSecond: 0.0,
+            systemActive: false,
+            targetWallets: 100,
+            wallets: [],
+            transactionsList: []
+        };
+
+        // Chart setup
+        const blockchainChart = new Chart(document.getElementById('blockchain-chart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Mined Lamports',
+                    data: [],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.4
+                }, {
+                    label: 'Traded Lamports',
+                    data: [],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                },
+                scales: {
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+
+        const impactChart = new Chart(document.getElementById('impact-chart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Mining', 'Trading', 'Wallet Creation', 'Network'],
+                datasets: [{
+                    data: [0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(54, 162, 235, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                }
+            }
+        });
+
+        // API functions
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data && method !== 'GET') {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`http://localhost:8085/api${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                return { error: error.message };
+            }
+        }
+
+        // Control functions
+        async function startBlockchain() {
+            const response = await apiCall('/blockchain/start', 'POST');
+            
+            if (response.success) {
+                blockchainData.systemActive = true;
+                updateUI();
+                showNotification('Blockchain system started! Real mining and trading initiated.', 'success');
+                startAutoUpdate();
+            } else {
+                showNotification(response.error || 'Failed to start blockchain system', 'error');
+            }
+        }
+
+        async function verifyBlockchain() {
+            if (!blockchainData.wallets.length) {
+                showNotification('No wallets to verify', 'warning');
+                return;
+            }
+            
+            // Verify a random wallet
+            const randomWallet = blockchainData.wallets[Math.floor(Math.random() * blockchainData.wallets.length)];
+            
+            const response = await apiCall('/blockchain/verify', 'POST', {
+                wallet_address: randomWallet.address
+            });
+            
+            if (response.verified) {
+                showNotification(`Verified wallet: ${randomWallet.address.slice(0, 8)}... Balance: ${response.on_chain_balance} lamports`, 'success');
+                updateVerificationStatus(true);
+            } else {
+                showNotification('Verification failed', 'error');
+                updateVerificationStatus(false);
+            }
+        }
+
+        function exportData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                stats: blockchainData,
+                wallets: blockchainData.wallets,
+                transactions: blockchainData.transactionsList
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `blockchain_data_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Data exported successfully', 'success');
+        }
+
+        // Data loading functions
+        async function loadStats() {
+            const response = await apiCall('/blockchain/stats');
+            
+            if (!response.error) {
+                blockchainData.walletsCreated = response.stats.wallets_created;
+                blockchainData.totalMined = response.stats.total_mined_lamports;
+                blockchainData.totalTraded = response.stats.total_traded_lamports;
+                blockchainData.transactions = response.stats.transactions_submitted;
+                blockchainData.successRate = response.stats.success_rate;
+                blockchainData.networkImpact = response.stats.network_impact;
+                blockchainData.hashRate = response.stats.hash_rate;
+                blockchainData.tradesPerSecond = response.stats.trades_per_second;
+                
+                updateUI();
+            }
+        }
+
+        async function loadWallets() {
+            const response = await apiCall('/blockchain/wallets');
+            
+            if (!response.error) {
+                blockchainData.wallets = response.wallets;
+                updateWalletsUI();
+            }
+        }
+
+        async function loadTransactions() {
+            const response = await apiCall('/blockchain/transactions');
+            
+            if (!response.error) {
+                blockchainData.transactionsList = response.transactions;
+                updateTransactionsUI();
+            }
+        }
+
+        // UI update functions
+        function updateUI() {
+            // Update main stats
+            document.getElementById('wallets-created').textContent = blockchainData.walletsCreated.toLocaleString();
+            document.getElementById('total-mined').textContent = blockchainData.totalMined.toLocaleString();
+            document.getElementById('total-traded').textContent = blockchainData.totalTraded.toLocaleString();
+            document.getElementById('transactions').textContent = blockchainData.transactions.toLocaleString();
+            
+            // Update progress
+            const progress = (blockchainData.walletsCreated / blockchainData.targetWallets) * 100;
+            document.getElementById('progress-percent').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progress-bar').style.width = `${Math.min(progress, 100)}%`;
+            
+            // Update performance
+            document.getElementById('success-rate').textContent = `${blockchainData.successRate.toFixed(1)}%`;
+            document.getElementById('network-impact').textContent = blockchainData.networkImpact.toFixed(2);
+            
+            // Update ecosystem impact
+            document.getElementById('ecosystem-wallets').textContent = blockchainData.walletsCreated;
+            document.getElementById('ecosystem-value').textContent = `$${(blockchainData.totalMined / 1000000000 * 100).toFixed(2)}`;
+            document.getElementById('ecosystem-tx').textContent = blockchainData.transactions;
+            document.getElementById('ecosystem-tps').textContent = blockchainData.tradesPerSecond.toFixed(2);
+            
+            // Update charts
+            updateCharts();
+            
+            // Update control buttons
+            document.getElementById('start-btn').disabled = blockchainData.systemActive;
+        }
+
+        function updateWalletsUI() {
+            const walletsGrid = document.getElementById('wallets-grid');
+            
+            if (blockchainData.wallets.length === 0) {
+                walletsGrid.innerHTML = `
+                    <div class="text-center opacity-60 md:col-span-3">
+                        <i class="fas fa-wallet text-4xl mb-4"></i>
+                        <p>No wallets created yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            walletsGrid.innerHTML = blockchainData.wallets.slice(0, 9).map(wallet => `
+                <div class="p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all">
+                    <div class="text-sm font-mono truncate">${wallet.address}</div>
+                    <div class="mt-2 space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span>Balance:</span>
+                            <span class="font-bold">${wallet.balance_lamports.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Mined:</span>
+                            <span class="text-green-400">${wallet.total_mined.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Traded:</span>
+                            <span class="text-blue-400">${wallet.total_traded.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Txs:</span>
+                            <span>${wallet.transactions_count}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTransactionsUI() {
+            const transactionsList = document.getElementById('transactions-list');
+            
+            if (blockchainData.transactionsList.length === 0) {
+                transactionsList.innerHTML = `
+                    <div class="text-center opacity-60">
+                        <i class="fas fa-history text-4xl mb-4"></i>
+                        <p>No transactions yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            transactionsList.innerHTML = blockchainData.transactionsList.slice(0, 10).map(tx => `
+                <div class="transaction-row flex items-center justify-between p-3 bg-white/10 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="${tx.confirmed ? 'verified-badge' : 'bg-yellow-600'} px-2 py-1 rounded text-xs">
+                            ${tx.confirmed ? '✅ Verified' : '⏳ Pending'}
+                        </div>
+                        <div>
+                            <div class="font-mono text-sm">${tx.tx_signature.slice(0, 16)}...</div>
+                            <div class="text-xs opacity-70">${tx.transaction_type} • ${tx.amount_lamports.toLocaleString()} lamports</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs opacity-70">${new Date(tx.timestamp).toLocaleTimeString()}</div>
+                        ${tx.slot ? `<div class="text-xs">Slot: ${tx.slot}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCharts() {
+            const now = new Date().toLocaleTimeString();
+            
+            // Update blockchain chart
+            if (blockchainChart.data.labels.length > 20) {
+                blockchainChart.data.labels.shift();
+                blockchainChart.data.datasets[0].data.shift();
+                blockchainChart.data.datasets[1].data.shift();
+            }
+            
+            blockchainChart.data.labels.push(now);
+            blockchainChart.data.datasets[0].data.push(blockchainData.totalMined);
+            blockchainChart.data.datasets[1].data.push(blockchainData.totalTraded);
+            blockchainChart.update();
+            
+            // Update impact chart
+            impactChart.data.datasets[0].data = [
+                blockchainData.totalMined / 1000,
+                blockchainData.totalTraded / 1000,
+                blockchainData.walletsCreated * 10,
+                blockchainData.networkImpact * 100
+            ];
+            impactChart.update();
+        }
+
+        function updateVerificationStatus(verified) {
+            document.getElementById('blockchain-status').textContent = verified ? '✅ Connected' : '❌ Failed';
+            document.getElementById('blockchain-status').className = verified ? 'text-green-400' : 'text-red-400';
+            
+            document.getElementById('tx-verification').textContent = verified ? '✅ Verified' : '❌ Failed';
+            document.getElementById('tx-verification').className = verified ? 'text-green-400' : 'text-red-400';
+            
+            document.getElementById('balance-sync').textContent = verified ? '✅ Synced' : '❌ Failed';
+            document.getElementById('balance-sync').className = verified ? 'text-green-400' : 'text-red-400';
+        }
+
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Auto-update
+        function startAutoUpdate() {
+            setInterval(async () => {
+                await loadStats();
+                await loadWallets();
+                await loadTransactions();
+            }, 3000); // Update every 3 seconds
+        }
+
+        // Initialize
+        async function init() {
+            await loadStats();
+            await loadWallets();
+            await loadTransactions();
+            updateUI();
+            
+            // Check if system is already running
+            if (blockchainData.systemActive) {
+                startAutoUpdate();
+            }
+        }
+
+        // Start the dashboard
+        init();
+    </script>
+</body>
+</html>

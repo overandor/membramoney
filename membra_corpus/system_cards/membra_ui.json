@@ -1,0 +1,19 @@
+{
+  "system": "membra_ui",
+  "files": 4,
+  "size_bytes": 20754,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    ".html",
+    ".css",
+    ".py"
+  ],
+  "sample_files": [
+    "membra_ui/dashboard.html",
+    "membra_ui/gen_ui.py",
+    "membra_ui/landing.html",
+    "membra_ui/membra.css"
+  ]
+}

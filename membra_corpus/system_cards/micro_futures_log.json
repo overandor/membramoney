@@ -1,0 +1,14 @@
+{
+  "system": "micro_futures.log",
+  "files": 1,
+  "size_bytes": 4375,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ".log"
+  ],
+  "sample_files": [
+    "micro_futures.log"
+  ]
+}

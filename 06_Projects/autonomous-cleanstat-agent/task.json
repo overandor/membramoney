@@ -1,0 +1,9 @@
+{
+  "observation_id": "test_obs_001",
+  "image_path": "data/images/test_obs.jpg",
+  "timestamp": "2026-04-19T12:00:00Z",
+  "location": {
+    "lat": 40.7128,
+    "lng": -74.006
+  }
+}

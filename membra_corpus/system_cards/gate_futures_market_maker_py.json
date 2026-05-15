@@ -1,0 +1,14 @@
+{
+  "system": "gate_futures_market_maker.py",
+  "files": 1,
+  "size_bytes": 9037,
+  "categories": [
+    "python"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "gate_futures_market_maker.py"
+  ]
+}

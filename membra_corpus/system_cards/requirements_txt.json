@@ -1,0 +1,14 @@
+{
+  "system": "requirements.txt",
+  "files": 1,
+  "size_bytes": 36,
+  "categories": [
+    "text"
+  ],
+  "extensions": [
+    ".txt"
+  ],
+  "sample_files": [
+    "requirements.txt"
+  ]
+}

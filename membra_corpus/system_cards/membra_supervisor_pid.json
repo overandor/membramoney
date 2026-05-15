@@ -1,0 +1,14 @@
+{
+  "system": "membra_supervisor.pid",
+  "files": 1,
+  "size_bytes": 4,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    ".pid"
+  ],
+  "sample_files": [
+    "membra_supervisor.pid"
+  ]
+}

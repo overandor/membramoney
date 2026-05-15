@@ -1,0 +1,14 @@
+{
+  "system": "debug_futures.py",
+  "files": 1,
+  "size_bytes": 1898,
+  "categories": [
+    "python"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "debug_futures.py"
+  ]
+}

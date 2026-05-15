@@ -1,0 +1,14 @@
+{
+  "system": "membra_corpus_engine.py",
+  "files": 1,
+  "size_bytes": 32380,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "membra_corpus_engine.py"
+  ]
+}

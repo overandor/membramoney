@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-04-06T11:30:06.127198",
+  "basic_statistics": {
+    "total_wallets": 10,
+    "total_sol_staked": 7124.07687012528,
+    "total_usd_value": 248876.48795566178,
+    "avg_sol_per_wallet": 712.407687012528,
+    "avg_usd_per_wallet": 24887.64879556618,
+    "median_sol": 265.63755947976,
+    "median_usd": 24887.64879556618,
+    "max_single_wallet": 2591.2151845632,
+    "min_wallet": 41.9365278384,
+    "wallets_over_100_sol": 8,
+    "wallets_over_1000_sol": 3,
+    "wallets_over_10000_sol": 0
+  },
+  "performance_analysis": {
+    "avg_roi_30d": -23.677149297927862,
+    "median_roi_30d": -10.149559157105355,
+    "positive_roi_wallets": 0,
+    "negative_roi_wallets": 10,
+    "avg_efficiency": 0.12095181254205409,
+    "avg_score": 85.79722667002166,
+    "top_performers": 0,
+    "underperformers": 1
+  },
+  "risk_analysis": {
+    "avg_volatility": 53.31770061612563,
+    "high_volatility_wallets": 4,
+    "low_volatility_wallets": 1,
+    "avg_days_active": 73.0,
+    "veteran_wallets": 0,
+    "new_wallets": 0
+  },
+  "concentration_analysis": {
+    "top_1_percent_share": 0.0,
+    "top_5_percent_share": 0.0,
+    "top_10_percent_share": 36.37264493073376,
+    "top_20_percent_share": 62.69381154368169,
+    "top_wallet_share": 36.37264493073376,
+    "gini_coefficient": 0.5665490901967247
+  },
+  "top_wallets": [
+    {
+      "address": "DGpGRkvzY1gEX1VrPEPTzj3Dw7k1LuBqC8sUcS8MNeYg",
+      "amount_sol": 2591.2151845632,
+      "usd_value": 68035.16650615056,
+      "avg_balance": 2525.608514162023,
+      "volatility": 28.73840750035806,
+      "max_balance": 252.42574591537067,
+      "days_active": 75.0,
+      "roi_30d": -1.551687602725292,
+      "efficiency": 0.1138489554468545,
+      "score": 26.49035422201413,
+      "additional_metric": 7.0,
+      "category": "WHALE"
+    },
+    {
+      "address": "ENDA9v65gmYJfyCK8xqtiDpuQc9DxvDD67JFwxjvek2M",
+      "amount_sol": 1875.14014262016,
+      "usd_value": 43786.14197730096,
+      "avg_balance": 2235.0863747238623,
+      "volatility": 118.02508378871448,
+      "max_balance": 1044.2387168474556,
+      "days_active": 75.0,
+      "roi_30d": -85.9095681528761,
+      "efficiency": 0.1130250026976885,
+      "score": 2.634956381863044,
+      "additional_metric": 5.0,
+      "category": "WHALE"
+    },
+    {
+      "address": "9jeP3f1mKanTpJYuqwY3EjasUAjC7Rei44aRaJoaELNu",
+      "amount_sol": 1216.85396817504,
+      "usd_value": 60094.13610719088,
+      "avg_balance": 4838.483801578609,
+      "volatility": 28.944896652621665,
+      "max_balance": 243.13969381203648,
+      "days_active": 75.0,
+      "roi_30d": -1.837126772156883,
+      "efficiency": 0.119046364658985,
+      "score": 23.89745829280871,
+      "additional_metric": 8.5,
+      "category": "WHALE"
+    }
+  ],
+  "top_performers": []
+}

@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  # Solana RPC Rotator Service
+  solana-rpc-rotator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solana_rpc_rotator
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    environment:
+      - LOG_LEVEL=INFO
+      - SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+      - HEALTH_CHECK_INTERVAL=30
+      - LOAD_BALANCING_STRATEGY=health_based
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./config:/app/config
+    networks:
+      - solana-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/api/rotator_status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Main Trading Application
+  solana-trader:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: solana_trader
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+    environment:
+      - LOG_LEVEL=INFO
+      - RPC_ROTATOR_URL=http://solana-rpc-rotator:8083
+      - DATABASE_URL=sqlite:///app/data/trading.db
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./config:/app/config
+    depends_on:
+      - solana-rpc-rotator
+      - redis
+    networks:
+      - solana-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/system_status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: solana_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - solana-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy (Optional)
+  nginx:
+    image: nginx:alpine
+    container_name: solana_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - solana-trader
+      - solana-rpc-rotator
+    networks:
+      - solana-network
+
+  # Monitoring with Prometheus (Optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: solana_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    networks:
+      - solana-network
+
+  # Grafana Dashboard (Optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: solana_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - solana-network
+
+# Networks
+networks:
+  solana-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volumes
+volumes:
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local

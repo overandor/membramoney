@@ -1,0 +1,13 @@
+Unified Multi-Exchange Trading Bot Suite (Gate.io core + Binance/OKX/Bybit/XT balance integration)
+
+Delivering a consolidated, transfer-ready algo trading package with:
+- Market-making engine (paper/live/replay)
+- Unified exchange balance aggregation endpoint + UI
+- Persistent runtime state (orders/fills/positions/snapshots)
+- Single-file consolidated handoff artifact + hash manifest
+
+Ideal for: prop traders, quant devs, and teams needing a customizable multi-exchange baseline with immediate demo value.
+
+Includes documentation and sale-ready handoff assets.
+
+Disclaimer: Use at your own risk. Live trading can result in losses.

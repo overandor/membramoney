@@ -1,0 +1,8 @@
+{
+  "proof_type": "MEMBRA_CORPUS_PROOF_V1",
+  "generated_at": "2026-05-12T00:03:33.092619+00:00",
+  "merkle_root": "1cf8dfa041780421c0e55699718ff7975c4d1810f0904300f2f3c01a5d25b4ff",
+  "file_count": 47312,
+  "verification": "All files SHA-256 hashed. Merkle root commits to entire corpus state.",
+  "instructions": "Verify: python3 -c 'import json,hashlib; ...' and compare merkle_root"
+}

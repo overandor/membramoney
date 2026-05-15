@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Profit Cube - Energy to Profits Transformation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #f59e0b 0%, #eab308 50%, #84cc16 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes solar-pulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1) rotate(0deg);
+                box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+            }
+            50% { 
+                opacity: 0.8; 
+                transform: scale(1.05) rotate(180deg);
+                box-shadow: 0 0 40px rgba(245, 158, 11, 0.8);
+            }
+        }
+        .solar-active {
+            animation: solar-pulse 4s infinite;
+        }
+        @keyframes energy-flow {
+            0% { transform: translateY(0); opacity: 0; }
+            50% { transform: translateY(-10px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+        .energy-particle {
+            animation: energy-flow 2s infinite;
+        }
+        .transformation-cube {
+            background: linear-gradient(45deg, #f59e0b, #eab308, #84cc16);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .profit-glow {
+            background: linear-gradient(45deg, #10b981, #059669);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+        }
+        .energy-glow {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-bold mb-4 solar-active">
+                <i class="fas fa-solar-panel mr-3"></i>Solar Profit Cube
+            </h1>
+            <p class="text-xl opacity-90">Transformation Cube for Profits/Energy • Solar Panel for Money</p>
+            <p class="text-lg opacity-80 mt-2">☀️ Energy → 💰 Profits → 📈 Trading</p>
+        </header>
+
+        <!-- Solar Cube Control -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-cube mr-2"></i>Solar Cube Control
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="text-center">
+                    <button onclick="startSolarCube()" id="start-btn"
+                            class="w-full bg-yellow-500 hover:bg-yellow-600 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-play mr-2"></i>Start Solar Cube
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="harvestAPIKeys()" 
+                            class="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-key mr-2"></i>Harvest API Keys
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="executeTransformation()" 
+                            class="w-full bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-sync-alt mr-2"></i>Execute Transformation
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Max Energy Wallets</label>
+                    <input type="number" id="max-wallets" value="1000" step="100" min="100" max="10000"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Energy Rate (per sec)</label>
+                    <input type="number" id="energy-rate" value="1000" step="100" min="100" max="10000"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Conversion Rate</label>
+                    <input type="number" id="conversion-rate" value="0.001" step="0.0001" min="0.0001" max="0.01"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Transformation Stats -->
+        <div class="grid md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6 text-center energy-glow">
+                <div class="text-4xl font-bold text-yellow-300" id="energy-stored">0</div>
+                <div class="text-sm opacity-70 mt-2">Energy Stored</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center profit-glow">
+                <div class="text-4xl font-bold text-green-400" id="profits-generated">$0.00</div>
+                <div class="text-sm opacity-70 mt-2">Profits Generated</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-blue-400" id="api-keys-harvested">0</div>
+                <div class="text-sm opacity-70 mt-2">API Keys Harvested</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-purple-400" id="trades-executed">0</div>
+                <div class="text-sm opacity-70 mt-2">Trades Executed</div>
+            </div>
+        </div>
+
+        <!-- Transformation Visualization -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-sync-alt mr-2"></i>Energy to Profit Transformation
+                </h3>
+                <canvas id="transformation-chart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-key mr-2"></i>API Key Harvesting
+                </h3>
+                <canvas id="harvesting-chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Solar Cube Status -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Transformation Metrics
+                </h3>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span>Transformation Rate</span>
+                        <span id="transformation-rate" class="font-bold">0.0000</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-3">
+                        <div id="transformation-bar" class="bg-gradient-to-r from-yellow-400 to-green-400 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span>Energy Efficiency</span>
+                        <span id="energy-efficiency" class="font-bold">0.00%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-3">
+                        <div id="efficiency-bar" class="bg-gradient-to-r from-yellow-400 to-orange-400 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span>Profit/Second</span>
+                        <span id="profit-per-second" class="font-bold">$0.0000</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-3">
+                        <div id="profit-bar" class="bg-gradient-to-r from-green-400 to-blue-400 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-network-wired mr-2"></i>Exchange Connections
+                </h3>
+                
+                <div id="exchange-status" class="space-y-3">
+                    <div class="text-center opacity-60">
+                        <i class="fas fa-link text-4xl mb-4"></i>
+                        <p>Connecting to exchanges...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Energy Wallets -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-wallet mr-2"></i>Energy Wallets
+            </h2>
+            
+            <div id="energy-wallets" class="grid md:grid-cols-3 gap-4">
+                <div class="text-center opacity-60 md:col-span-3">
+                    <i class="fas fa-wallet text-4xl mb-4"></i>
+                    <p>No energy wallets created yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Harvested API Keys -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-key mr-2"></i>Harvested API Keys
+            </h2>
+            
+            <div id="api-keys-list" class="space-y-3">
+                <div class="text-center opacity-60">
+                    <i class="fas fa-key text-4xl mb-4"></i>
+                    <p>No API keys harvested yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Overview -->
+        <div class="glass-effect rounded-xl p-6">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-cube mr-2"></i>Solar Cube Overview
+            </h2>
+            
+            <div class="grid md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="text-3xl font-bold text-yellow-300" id="total-wallets">0</div>
+                    <div class="text-sm opacity-70">Total Wallets</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-green-400" id="total-energy">0.0</div>
+                    <div class="text-sm opacity-70">Total Energy</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-blue-400" id="total-exchanges">0</div>
+                    <div class="text-sm opacity-70">Exchanges Connected</div>
+                </div>
+                <div>
+                    <div class="text-3xl font-bold text-purple-400" id="total-profit">$0.00</div>
+                    <div class="text-sm opacity-70">Total Profit</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let solarData = {
+            energyStored: 0,
+            profitsGenerated: 0,
+            apiKeysHarvested: 0,
+            tradesExecuted: 0,
+            transformationRate: 0,
+            energyEfficiency: 0,
+            profitPerSecond: 0,
+            systemActive: false,
+            wallets: [],
+            apiKeys: [],
+            exchanges: ["binance", "coinbase", "kraken", "kucoin", "bybit", "okx", "huobi", "gate.io", "mexc", "bitget"]
+        };
+
+        // Chart setup
+        const transformationChart = new Chart(document.getElementById('transformation-chart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Energy Stored',
+                    data: [],
+                    borderColor: 'rgb(245, 158, 11)',
+                    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                    tension: 0.4
+                }, {
+                    label: 'Profits Generated',
+                    data: [],
+                    borderColor: 'rgb(16, 185, 129)',
+                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                },
+                scales: {
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+
+        const harvestingChart = new Chart(document.getElementById('harvesting-chart'), {
+            type: 'doughnut',
+            data: {
+                labels: solarData.exchanges,
+                datasets: [{
+                    data: new Array(solarData.exchanges.length).fill(0),
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(251, 146, 60, 0.8)',
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(107, 114, 128, 0.8)'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { 
+                        labels: { 
+                            color: 'white',
+                            position: 'right'
+                        } 
+                    }
+                }
+            }
+        });
+
+        // API functions
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data && method !== 'GET') {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`http://localhost:8086/api${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                return { error: error.message };
+            }
+        }
+
+        // Control functions
+        async function startSolarCube() {
+            const response = await apiCall('/solar/start', 'POST');
+            
+            if (response.success) {
+                solarData.systemActive = true;
+                updateUI();
+                showNotification('Solar Cube started! ☀️ Energy to profits transformation initiated.', 'success');
+                startAutoUpdate();
+            } else {
+                showNotification(response.error || 'Failed to start Solar Cube', 'error');
+            }
+        }
+
+        async function harvestAPIKeys() {
+            showNotification('Harvesting API keys from exchanges... 🔑', 'info');
+            
+            // Simulate API key harvesting
+            const harvestedCount = Math.floor(Math.random() * 5) + 1;
+            solarData.apiKeysHarvested += harvestedCount;
+            
+            // Update harvesting chart
+            for (let i = 0; i < harvestedCount; i++) {
+                const exchangeIndex = Math.floor(Math.random() * solarData.exchanges.length);
+                harvestingChart.data.datasets[0].data[exchangeIndex] += 1;
+            }
+            harvestingChart.update();
+            
+            updateUI();
+            showNotification(`Harvested ${harvestedCount} API keys from exchanges!`, 'success');
+        }
+
+        async function executeTransformation() {
+            if (solarData.energyStored < 100) {
+                showNotification('Not enough energy to transform! ☀️', 'warning');
+                return;
+            }
+            
+            showNotification('Executing energy to profit transformation... ⚡', 'info');
+            
+            // Simulate transformation
+            const transformedEnergy = solarData.energyStored * 0.8;
+            const profitGenerated = transformedEnergy * 0.001;
+            
+            solarData.energyStored -= transformedEnergy;
+            solarData.profitsGenerated += profitGenerated;
+            solarData.transformationRate = profitGenerated / transformedEnergy;
+            
+            updateUI();
+            showNotification(`Transformed ${transformedEnergy.toFixed(2)} energy → $${profitGenerated.toFixed(4)} profit!`, 'success');
+        }
+
+        // Data loading functions
+        async function loadStats() {
+            const response = await apiCall('/solar/stats');
+            
+            if (!response.error) {
+                solarData.energyStored = response.stats.total_energy_stored;
+                solarData.profitsGenerated = response.stats.total_profits;
+                solarData.apiKeysHarvested = response.stats.api_keys_harvested;
+                solarData.tradesExecuted = response.stats.trades_executed;
+                solarData.transformationRate = response.transformation_rate;
+                solarData.energyEfficiency = response.energy_efficiency;
+                solarData.profitPerSecond = response.profit_per_second;
+                
+                updateUI();
+            }
+        }
+
+        async function loadWallets() {
+            const response = await apiCall('/solar/wallets');
+            
+            if (!response.error) {
+                solarData.wallets = response.wallets;
+                updateWalletsUI();
+            }
+        }
+
+        async function loadAPIKeys() {
+            const response = await apiCall('/solar/api_keys');
+            
+            if (!response.error) {
+                solarData.apiKeys = response.api_keys;
+                updateAPIKeysUI();
+            }
+        }
+
+        // UI update functions
+        function updateUI() {
+            // Update main stats
+            document.getElementById('energy-stored').textContent = solarData.energyStored.toFixed(2);
+            document.getElementById('profits-generated').textContent = `$${solarData.profitsGenerated.toFixed(2)}`;
+            document.getElementById('api-keys-harvested').textContent = solarData.apiKeysHarvested.toLocaleString();
+            document.getElementById('trades-executed').textContent = solarData.tradesExecuted.toLocaleString();
+            
+            // Update transformation metrics
+            document.getElementById('transformation-rate').textContent = solarData.transformationRate.toFixed(4);
+            document.getElementById('energy-efficiency').textContent = `${(solarData.energyEfficiency * 100).toFixed(2)}%`;
+            document.getElementById('profit-per-second').textContent = `$${solarData.profitPerSecond.toFixed(4)}`;
+            
+            // Update bars
+            document.getElementById('transformation-bar').style.width = `${Math.min(solarData.transformationRate * 10000, 100)}%`;
+            document.getElementById('efficiency-bar').style.width = `${Math.min(solarData.energyEfficiency * 100, 100)}%`;
+            document.getElementById('profit-bar').style.width = `${Math.min(solarData.profitPerSecond * 1000, 100)}%`;
+            
+            // Update overview
+            document.getElementById('total-wallets').textContent = solarData.wallets.length;
+            document.getElementById('total-energy').textContent = solarData.energyStored.toFixed(1);
+            document.getElementById('total-exchanges').textContent = solarData.apiKeys.length;
+            document.getElementById('total-profit').textContent = `$${solarData.profitsGenerated.toFixed(2)}`;
+            
+            // Update charts
+            updateCharts();
+            
+            // Update control buttons
+            document.getElementById('start-btn').disabled = solarData.systemActive;
+        }
+
+        function updateWalletsUI() {
+            const walletsGrid = document.getElementById('energy-wallets');
+            
+            if (solarData.wallets.length === 0) {
+                walletsGrid.innerHTML = `
+                    <div class="text-center opacity-60 md:col-span-3">
+                        <i class="fas fa-wallet text-4xl mb-4"></i>
+                        <p>No energy wallets created yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            walletsGrid.innerHTML = solarData.wallets.slice(0, 9).map(wallet => `
+                <div class="p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all">
+                    <div class="text-sm font-mono truncate">${wallet.address}</div>
+                    <div class="mt-2 space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span>Energy:</span>
+                            <span class="text-yellow-300 font-bold">${wallet.energy_stored.toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Profit:</span>
+                            <span class="text-green-400 font-bold">$${wallet.profit_generated.toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>API Keys:</span>
+                            <span class="text-blue-400">${wallet.api_keys_harvested}</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span>Trades:</span>
+                            <span class="text-purple-400">${wallet.trades_executed}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateAPIKeysUI() {
+            const apiKeysList = document.getElementById('api-keys-list');
+            
+            if (solarData.apiKeys.length === 0) {
+                apiKeysList.innerHTML = `
+                    <div class="text-center opacity-60">
+                        <i class="fas fa-key text-4xl mb-4"></i>
+                        <p>No API keys harvested yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Count keys per exchange
+            const exchangeCounts = {};
+            solarData.apiKeys.forEach(key => {
+                exchangeCounts[key.exchange] = (exchangeCounts[key.exchange] || 0) + 1;
+            });
+            
+            apiKeysList.innerHTML = Object.entries(exchangeCounts).map(([exchange, count]) => `
+                <div class="flex items-center justify-between p-3 bg-white/10 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        <div>
+                            <div class="font-bold">${exchange.toUpperCase()}</div>
+                            <div class="text-xs opacity-70">API Keys: ${count}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-bold">${count}</div>
+                        <div class="text-xs opacity-70">keys harvested</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCharts() {
+            const now = new Date().toLocaleTimeString();
+            
+            // Update transformation chart
+            if (transformationChart.data.labels.length > 20) {
+                transformationChart.data.labels.shift();
+                transformationChart.data.datasets[0].data.shift();
+                transformationChart.data.datasets[1].data.shift();
+            }
+            
+            transformationChart.data.labels.push(now);
+            transformationChart.data.datasets[0].data.push(solarData.energyStored);
+            transformationChart.data.datasets[1].data.push(solarData.profitsGenerated);
+            transformationChart.update();
+        }
+
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                warning: 'bg-yellow-500',
+                info: 'bg-blue-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Auto-update
+        function startAutoUpdate() {
+            setInterval(async () => {
+                await loadStats();
+                await loadWallets();
+                await loadAPIKeys();
+            }, 2000); // Update every 2 seconds
+        }
+
+        // Simulate energy generation
+        function simulateEnergyGeneration() {
+            setInterval(() => {
+                if (solarData.systemActive) {
+                    // Generate energy
+                    const energyGenerated = 1000 * (0.8 + Math.random() * 0.4);
+                    solarData.energyStored += energyGenerated;
+                    
+                    // Auto-transform if enough energy
+                    if (solarData.energyStored > 500 && Math.random() < 0.3) {
+                        const transformedEnergy = solarData.energyStored * 0.7;
+                        const profit = transformedEnergy * 0.001;
+                        
+                        solarData.energyStored -= transformedEnergy;
+                        solarData.profitsGenerated += profit;
+                        solarData.transformationRate = profit / transformedEnergy;
+                    }
+                    
+                    updateUI();
+                }
+            }, 1000); // Every second
+        }
+
+        // Initialize
+        async function init() {
+            await loadStats();
+            await loadWallets();
+            await loadAPIKeys();
+            updateUI();
+            simulateEnergyGeneration();
+            
+            // Check if system is already running
+            if (solarData.systemActive) {
+                startAutoUpdate();
+            }
+        }
+
+        // Start the dashboard
+        init();
+    </script>
+</body>
+</html>

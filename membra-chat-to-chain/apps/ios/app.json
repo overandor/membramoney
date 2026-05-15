@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Membra KPIs",
+    "slug": "membra-kpi-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.membra.kpi"
+    },
+    "android": {
+      "package": "com.membra.kpi"
+    }
+  }
+}

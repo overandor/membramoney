@@ -1,0 +1,14 @@
+{
+  "system": "micro_notional_spot_trader.py",
+  "files": 1,
+  "size_bytes": 8813,
+  "categories": [
+    "python"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "micro_notional_spot_trader.py"
+  ]
+}

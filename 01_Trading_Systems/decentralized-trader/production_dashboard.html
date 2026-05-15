@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Mining Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .mining-active {
+            animation: pulse 2s infinite;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .cpu-gauge {
+            background: conic-gradient(from 0deg, #10b981 0deg, #10b981 var(--cpu-percent), rgba(255,255,255,0.2) var(--cpu-percent));
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-4">
+                <i class="fas fa-industry mr-3"></i>Production Mining Dashboard
+            </h1>
+            <p class="text-xl opacity-90">Flawless Lamports Generation System</p>
+        </header>
+
+        <!-- Control Panel -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-gamepad mr-2"></i>Mining Control
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="text-center">
+                    <button onclick="startMining()" id="start-btn" 
+                            class="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-play mr-2"></i>Start Mining
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="stopMining()" id="stop-btn"
+                            class="w-full bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-bold transition" disabled>
+                        <i class="fas fa-stop mr-2"></i>Stop Mining
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="createWallet()" 
+                            class="w-full bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-bold transition">
+                        <i class="fas fa-wallet mr-2"></i>Create Wallet
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Target USD</label>
+                    <input type="number" id="target-usd" value="12.00" step="0.01" min="1"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">CPU Threads</label>
+                    <input type="number" id="cpu-threads" value="8" step="1" min="1" max="32"
+                           class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Stats -->
+        <div class="grid md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-yellow-400" id="lamports-generated">0</div>
+                <div class="text-sm opacity-70 mt-2">Lamports Generated</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-green-400" id="usd-value">$0.0000</div>
+                <div class="text-sm opacity-70 mt-2">USD Value</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-blue-400" id="hash-rate">0</div>
+                <div class="text-sm opacity-70 mt-2">Hash Rate (H/s)</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-purple-400" id="solutions">0</div>
+                <div class="text-sm opacity-70 mt-2">Solutions Found</div>
+            </div>
+        </div>
+
+        <!-- CPU & Performance -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-microchip mr-2"></i>CPU Performance
+                </h3>
+                
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span>CPU Usage</span>
+                        <span id="cpu-usage">0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-4">
+                        <div id="cpu-bar" class="bg-gradient-to-r from-blue-400 to-blue-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span>Memory Usage</span>
+                        <span id="memory-usage">0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-4">
+                        <div id="memory-bar" class="bg-gradient-to-r from-purple-400 to-purple-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-cyan-400" id="uptime">0s</div>
+                        <div class="text-sm opacity-70">Uptime</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-orange-400" id="efficiency">0.00</div>
+                        <div class="text-sm opacity-70">Efficiency</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-chart-line mr-2"></i>Real-time Performance
+                </h3>
+                <canvas id="performance-chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-bullseye mr-2"></i>Target Progress
+            </h2>
+            
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <div class="text-3xl font-bold" id="progress-percent">0.0%</div>
+                    <div class="text-sm opacity-70">of $<span id="target-display">12.00</span> target</div>
+                </div>
+                <div class="relative">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle cx="60" cy="60" r="54" stroke="rgba(255,255,255,0.2)" stroke-width="8" fill="none"/>
+                        <circle id="progress-circle" cx="60" cy="60" r="54" stroke="#10b981" stroke-width="8" fill="none"
+                                stroke-dasharray="339.292" stroke-dashoffset="339.292" stroke-linecap="round"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-trophy text-2xl text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="w-full bg-white/20 rounded-full h-4">
+                <div id="progress-bar" class="bg-gradient-to-r from-green-400 to-blue-500 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Wallet Management -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-wallet mr-2"></i>Wallet Management
+            </h2>
+            
+            <div id="current-wallet" class="mb-6 p-4 bg-white/10 rounded-lg">
+                <div class="text-center opacity-60">
+                    <i class="fas fa-wallet text-4xl mb-4"></i>
+                    <p>No wallet created yet</p>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-lg font-bold mb-4">All Wallets</h3>
+                <div id="wallets-list" class="space-y-3">
+                    <div class="text-center opacity-60">
+                        <i class="fas fa-inbox text-4xl mb-4"></i>
+                        <p>No wallets created yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="glass-effect rounded-xl p-6">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-server mr-2"></i>System Information
+            </h2>
+            
+            <div id="system-info" class="grid md:grid-cols-3 gap-6">
+                <div class="text-center opacity-60">
+                    <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+                    <p>Loading system info...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let miningData = {
+            lamports: 0,
+            usdValue: 0,
+            hashRate: 0,
+            solutions: 0,
+            cpuUsage: 0,
+            memoryUsage: 0,
+            uptime: 0,
+            efficiency: 0,
+            difficulty: 1,
+            targetUSD: 12.00,
+            miningActive: false,
+            currentWallet: null,
+            wallets: []
+        };
+
+        // Chart setup
+        const performanceChart = new Chart(document.getElementById('performance-chart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Hash Rate (H/s)',
+                    data: [],
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.4
+                }, {
+                    label: 'CPU Usage (%)',
+                    data: [],
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                },
+                scales: {
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+
+        // API functions
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data && method !== 'GET') {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`http://localhost:8084/api${endpoint}`, options);
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                return { error: error.message };
+            }
+        }
+
+        // Mining control functions
+        async function startMining() {
+            const response = await apiCall('/miner/start', 'POST');
+            
+            if (response.success) {
+                miningData.miningActive = true;
+                updateUI();
+                showNotification('Mining started!', 'success');
+            } else {
+                showNotification(response.error || 'Failed to start mining', 'error');
+            }
+        }
+
+        async function stopMining() {
+            const response = await apiCall('/miner/stop', 'POST');
+            
+            if (response.success) {
+                miningData.miningActive = false;
+                updateUI();
+                showNotification('Mining stopped', 'info');
+            } else {
+                showNotification(response.error || 'Failed to stop mining', 'error');
+            }
+        }
+
+        async function createWallet() {
+            const response = await apiCall('/wallets/create', 'POST');
+            
+            if (response.success) {
+                showNotification('Wallet created successfully!', 'success');
+                await loadWallets();
+            } else {
+                showNotification(response.error || 'Failed to create wallet', 'error');
+            }
+        }
+
+        async function loadStats() {
+            const response = await apiCall('/miner/stats');
+            
+            if (!response.error) {
+                miningData.lamports = response.stats.stats.lamports_generated;
+                miningData.usdValue = response.stats.stats.usd_value;
+                miningData.hashRate = response.stats.stats.hashes_per_second;
+                miningData.solutions = response.stats.stats.solutions_found;
+                miningData.cpuUsage = response.stats.stats.cpu_usage;
+                miningData.memoryUsage = response.stats.stats.memory_usage;
+                miningData.uptime = response.stats.stats.uptime;
+                miningData.efficiency = response.stats.stats.efficiency;
+                miningData.difficulty = response.stats.stats.difficulty;
+                miningData.currentWallet = response.stats.current_wallet;
+                miningData.targetUSD = response.stats.target_usd;
+                
+                updateUI();
+            }
+        }
+
+        async function loadWallets() {
+            const response = await apiCall('/wallets');
+            
+            if (!response.error) {
+                miningData.wallets = response.wallets;
+                updateWalletsUI();
+            }
+        }
+
+        async function loadSystemInfo() {
+            const response = await apiCall('/system/info');
+            
+            if (!response.error) {
+                updateSystemInfoUI(response);
+            }
+        }
+
+        // UI update functions
+        function updateUI() {
+            // Update main stats
+            document.getElementById('lamports-generated').textContent = miningData.lamports.toLocaleString();
+            document.getElementById('usd-value').textContent = `$${miningData.usdValue.toFixed(4)}`;
+            document.getElementById('hash-rate').textContent = miningData.hashRate.toLocaleString();
+            document.getElementById('solutions').textContent = miningData.solutions.toLocaleString();
+            
+            // Update CPU and memory
+            document.getElementById('cpu-usage').textContent = `${miningData.cpuUsage.toFixed(1)}%`;
+            document.getElementById('cpu-bar').style.width = `${miningData.cpuUsage}%`;
+            document.getElementById('memory-usage').textContent = `${miningData.memoryUsage.toFixed(1)}%`;
+            document.getElementById('memory-bar').style.width = `${miningData.memoryUsage}%`;
+            
+            // Update performance metrics
+            document.getElementById('uptime').textContent = formatUptime(miningData.uptime);
+            document.getElementById('efficiency').textContent = miningData.efficiency.toFixed(4);
+            
+            // Update progress
+            const progress = (miningData.usdValue / miningData.targetUSD) * 100;
+            document.getElementById('progress-percent').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progress-bar').style.width = `${Math.min(progress, 100)}%`;
+            document.getElementById('target-display').textContent = miningData.targetUSD.toFixed(2);
+            
+            // Update progress circle
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (progress / 100) * circumference;
+            document.getElementById('progress-circle').style.strokeDashoffset = offset;
+            
+            // Update control buttons
+            document.getElementById('start-btn').disabled = miningData.miningActive;
+            document.getElementById('stop-btn').disabled = !miningData.miningActive;
+            
+            // Update chart
+            updateChart();
+            
+            // Check target reached
+            if (miningData.usdValue >= miningData.targetUSD) {
+                celebrateTarget();
+            }
+        }
+
+        function updateWalletsUI() {
+            // Update current wallet
+            const currentWalletDiv = document.getElementById('current-wallet');
+            if (miningData.currentWallet) {
+                currentWalletDiv.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-sm opacity-70">Address</div>
+                            <div class="font-mono text-sm">${miningData.currentWallet.address}</div>
+                        </div>
+                        <div>
+                            <div class="text-sm opacity-70">Balance</div>
+                            <div class="font-bold">${miningData.currentWallet.balance_lamports.toLocaleString()} lamports</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update all wallets
+            const walletsListDiv = document.getElementById('wallets-list');
+            if (miningData.wallets.length > 0) {
+                walletsListDiv.innerHTML = miningData.wallets.map(wallet => `
+                    <div class="p-4 bg-white/10 rounded-lg">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-mono text-sm">${wallet.address}</div>
+                                <div class="text-xs opacity-70">Created: ${new Date(wallet.created_at).toLocaleString()}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">${wallet.balance_lamports.toLocaleString()} lamports</div>
+                                <div class="text-xs opacity-70">$${wallet.usd_value.toFixed(4)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function updateSystemInfoUI(systemInfo) {
+            const systemInfoDiv = document.getElementById('system-info');
+            systemInfoDiv.innerHTML = `
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-cyan-400">${systemInfo.cpu_count}</div>
+                    <div class="text-sm opacity-70">CPU Cores</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-400">${(systemInfo.memory_total / 1024 / 1024 / 1024).toFixed(1)}GB</div>
+                    <div class="text-sm opacity-70">Total RAM</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-400">${systemInfo.platform}</div>
+                    <div class="text-sm opacity-70">Platform</div>
+                </div>
+            `;
+        }
+
+        function updateChart() {
+            const now = new Date().toLocaleTimeString();
+            
+            // Keep only last 20 data points
+            if (performanceChart.data.labels.length > 20) {
+                performanceChart.data.labels.shift();
+                performanceChart.data.datasets[0].data.shift();
+                performanceChart.data.datasets[1].data.shift();
+            }
+            
+            performanceChart.data.labels.push(now);
+            performanceChart.data.datasets[0].data.push(miningData.hashRate);
+            performanceChart.data.datasets[1].data.push(miningData.cpuUsage);
+            performanceChart.update();
+        }
+
+        function formatUptime(seconds) {
+            if (seconds < 60) return `${seconds.toFixed(0)}s`;
+            if (seconds < 3600) return `${(seconds / 60).toFixed(1)}m`;
+            return `${(seconds / 3600).toFixed(1)}h`;
+        }
+
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function celebrateTarget() {
+            document.body.innerHTML = `
+                <div class="min-h-screen flex items-center justify-center gradient-bg">
+                    <div class="text-center">
+                        <div class="text-6xl mb-6">🎉</div>
+                        <h1 class="text-4xl font-bold mb-4">TARGET REACHED!</h1>
+                        <p class="text-2xl mb-6">Successfully generated ${miningData.usdValue.toFixed(4)} USD!</p>
+                        <div class="text-lg">
+                            <div>Total Lamports: ${miningData.lamports.toLocaleString()}</div>
+                            <div>Solutions Found: ${miningData.solutions}</div>
+                            <div>Final Hash Rate: ${miningData.hashRate.toLocaleString()} H/s</div>
+                            <div>Efficiency: ${miningData.efficiency.toFixed(4)}</div>
+                        </div>
+                        <button onclick="location.reload()" class="mt-6 bg-blue-500 hover:bg-blue-600 px-6 py-3 rounded-lg">
+                            Start New Session
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Auto-update data
+        function startAutoUpdate() {
+            setInterval(async () => {
+                await loadStats();
+                await loadWallets();
+            }, 2000); // Update every 2 seconds
+        }
+
+        // Initialize
+        async function init() {
+            await loadSystemInfo();
+            await loadWallets();
+            startAutoUpdate();
+            updateUI();
+        }
+
+        // Start the dashboard
+        init();
+    </script>
+</body>
+</html>

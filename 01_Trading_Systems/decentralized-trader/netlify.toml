@@ -1,0 +1,14 @@
+[build]
+  command = "echo 'Building Real Solana Miner for Netlify'"
+  functions = "netlify/"
+
+[build.environment]
+  PYTHON_VERSION = "3.9"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/netlify_function"
+  status = 200
+
+[functions]
+  directory = "netlify/"

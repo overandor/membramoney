@@ -1,0 +1,181 @@
+# API Keys and Credentials
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+service_account.json
+
+# Database Files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# LLM Memory Files
+llm_trade_memory.jsonl
+llm_error_memory.jsonl
+llm_policy.json
+
+# Log Files
+*.log
+logs/
+*log/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Output and Temporary Files
+digital_gold_output/
+digital_gold_logs/
+temp/
+tmp/
+*.tmp
+
+# Large Binary Files
+*.dmg
+*.exe
+*.zip
+*.tar.gz
+*.rar
+*.iso
+*.img
+*.sh (installers only)
+Miniconda*.sh
+TeamViewer*.exe
+Cursor*.dmg
+Codex.dmg
+Claude*.dmg
+ChatGPT.dmg
+Windsurf*.dmg
+Telegram.dmg
+ollama (binary file)
+ollama
+ollama (1)
+
+# Sensitive Data
+wallets.db
+real_wallets.db
+complete_wallets.db
+gate_hedge_v2.db
+marinade_*.db
+solana_wallets.db
+
+# API Keys in files
+export_gate_keys.sh
+export_openrouter_key.sh
+fix_gate_env_keys.py
+fix_all_env_keys.py
+update_gate_api_keys.py
+
+# Sensitive Configuration
+config.json
+state.json
+bot_state.json
+ai_state.json
+agent_state.json
+session_state.json
+hedge_state.json
+gate_mm_state.json
+subscription_status.json
+users.json
+token.json
+
+# Trading Data (optional - uncomment if you want to exclude)
+# trades.jsonl
+# events.jsonl
+# gate_mm_events.jsonl
+# hl_events.jsonl
+
+# Analysis Results (optional - uncomment if you want to exclude)
+# backtest_results.json
+# marinade_analysis.json
+# marinade_scale_export.json
+
+# Screenshots and Images (optional - uncomment if you want to exclude)
+# screenshots/
+# supervisor_screenshots/
+# *.png
+# *.jpg
+# *.jpeg
+
+# Voice Recorder Data
+voice_recorder_data/
+
+# CopyThatPay Data
+copythatpay_data/
+
+# Fart Intelligence Output
+fart_intelligence_output/
+
+# Cache
+cache/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Node (if any)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Replit
+.replit/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup Files
+*.bak
+*.backup
+*~
+
+# History
+windsurf.history.txt
+
+# PDFs (optional - uncomment if you want to exclude)
+# *.pdf
+
+# CSV files with sensitive data (optional - uncomment if you want to exclude)
+# OKX*.csv
+# Filtered_Immortal_Wallets.csv

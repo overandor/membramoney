@@ -1,0 +1,50 @@
+# Aider Configuration File
+# Place this in your project directory or ~/.aider.conf.yml
+
+# =============================================================================
+# OPTION 1: GROQ API (Fast, Cloud-based)
+# =============================================================================
+# Uncomment below to use Groq:
+#
+# openai-api-key: your_groq_api_key_here
+# openai-api-base: https://api.groq.com/openai/v1
+# model: groq/llama-3.3-70b-versatile
+
+# =============================================================================
+# OPTION 2: LOCAL OLLAMA (Private, Free)
+# =============================================================================
+# Make sure Ollama is running: ollama serve
+model: ollama/llama3.2:1b
+
+# =============================================================================
+# GENERAL SETTINGS
+# =============================================================================
+# Auto-commit changes
+git-commit: true
+
+# Dark mode
+dark-mode: true
+
+# Show model warnings
+show-model-warnings: true
+
+# Stream responses
+stream: true
+
+# Edit format
+edit-format: diff
+
+# Cache prompts
+cache-prompts: true
+
+# Suggest shell commands
+suggest-shell-commands: true
+
+# Auto-lint
+auto-lint: true
+
+# Auto-test
+auto-test: false
+
+# Verbose
+verbose: false

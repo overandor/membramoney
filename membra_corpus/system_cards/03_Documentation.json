@@ -1,0 +1,23 @@
+{
+  "system": "03_Documentation",
+  "files": 51,
+  "size_bytes": 415220,
+  "categories": [
+    "documentation"
+  ],
+  "extensions": [
+    ".md"
+  ],
+  "sample_files": [
+    "03_Documentation/AGENT_AST_SETUP.md",
+    "03_Documentation/AGENT_AST_SUMMARY.md",
+    "03_Documentation/AGENT_COMPARISON.md",
+    "03_Documentation/AGENT_MIGRATION.md",
+    "03_Documentation/AGENT_PATCH_SETUP.md",
+    "03_Documentation/AGENT_PATCH_SUMMARY.md",
+    "03_Documentation/AGENT_SAFE_BUNDLE_SUMMARY.md",
+    "03_Documentation/AGENT_SAFE_PIPELINE_SUMMARY.md",
+    "03_Documentation/AGENT_SAFE_SANDBOX_SUMMARY.md",
+    "03_Documentation/AGENT_SAFE_SETUP.md"
+  ]
+}

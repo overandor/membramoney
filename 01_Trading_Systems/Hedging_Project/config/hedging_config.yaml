@@ -1,0 +1,47 @@
+# Hedging Project Configuration
+# Professional Gate.io Futures Hedging System
+
+# API Configuration
+api:
+  gate_api_key: "${GATE_API_KEY}"
+  gate_api_secret: "${GATE_API_SECRET}"
+  base_url: "https://api.gateio.ws/api/v4"
+  settle: "usdt"
+
+# Trading Configuration
+trading:
+  symbol: "ENA_USDT"
+  nominal_value_range:
+    min: 0.01  # $0.01 minimum
+    max: 0.10  # $0.10 maximum
+  target_spread: 0.001  # 0.1% spread
+  order_refresh_interval: 5  # seconds
+  max_position_size: 1000  # USDT
+  
+# Hedging Strategy
+hedging:
+  mode: "best_bid_ask"
+  auto_sell_profit: true
+  profit_threshold: 0.002  # 0.2% profit threshold
+  position_limit: 500  # USDT
+  rebalance_interval: 10  # seconds
+
+# Risk Management
+risk:
+  max_daily_loss: 50  # USDT
+  max_position_ratio: 0.1  # 10% of account
+  stop_loss_enabled: true
+  stop_loss_threshold: -0.01  # -1% stop loss
+
+# Monitoring
+monitoring:
+  enable_alerts: true
+  log_level: "INFO"
+  metrics_interval: 30  # seconds
+  
+# Execution
+execution:
+  order_type: "limit"
+  time_in_force: "ioc"  # Immediate or Cancel
+  retry_attempts: 3
+  retry_delay: 1  # second

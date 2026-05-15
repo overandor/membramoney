@@ -1,0 +1,14 @@
+{
+  "system": "micro_futures_trader.py",
+  "files": 1,
+  "size_bytes": 9280,
+  "categories": [
+    "python"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "micro_futures_trader.py"
+  ]
+}

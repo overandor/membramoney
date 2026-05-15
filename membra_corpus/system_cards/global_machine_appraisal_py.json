@@ -1,0 +1,14 @@
+{
+  "system": "global_machine_appraisal.py",
+  "files": 1,
+  "size_bytes": 14787,
+  "categories": [
+    "python"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "global_machine_appraisal.py"
+  ]
+}

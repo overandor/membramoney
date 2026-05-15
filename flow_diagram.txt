@@ -1,0 +1,32 @@
+
+MEMBRA Early-Risk Curve / QR Tokenomics Flow
+
+[QR Created]
+      ↓
+[Buyer Scans QR]
+      ↓
+[Terms + Risk Disclosure Displayed]
+      ↓
+[Wallet Connected]
+      ↓
+[Contribution Sent: SOL or USDC]
+      ↓
+[Bonding Curve Calculates Base Tokens]
+      ↓
+[Decay Formula Calculates Early Bonus]
+      ↓
+[Contribution Split]
+      ├─ 80% Treasury / Liquidity / Project Reserve
+      ├─ 10% Protocol / Builder
+      ├─ 5% Validator / Proof Pool
+      └─ 5% Capped Early Reward Pool
+      ↓
+[Buyer Receipt Recorded On-chain]
+      ↓
+[Earlier Eligible Buyers May Claim Capped Rebate]
+      ↓
+[Sale Finalized / Liquidity Migrated / Claims Enabled]
+
+Core Guardrail:
+No guaranteed profit. No infinite passive rewards.
+Cashback is capped, disclosed, pool-limited, and claimable only if funded.

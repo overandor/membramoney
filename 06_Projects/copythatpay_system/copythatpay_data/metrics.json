@@ -1,0 +1,12 @@
+{
+  "total_realized_pnl": 0,
+  "trade_count": 0,
+  "win_rate": 0,
+  "avg_profit_per_trade": 0,
+  "sharpe_ratio": 0,
+  "max_drawdown": 0.09657400679451056,
+  "peak_equity": 5.483220961793,
+  "current_equity": 4.970922832173,
+  "capital_utilization": 0.15207344589425953,
+  "session_duration_s": 16905.558484077454
+}

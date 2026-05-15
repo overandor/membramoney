@@ -1,0 +1,14 @@
+{
+  "system": "README.md",
+  "files": 1,
+  "size_bytes": 1805,
+  "categories": [
+    "text"
+  ],
+  "extensions": [
+    ".md"
+  ],
+  "sample_files": [
+    "README.md"
+  ]
+}

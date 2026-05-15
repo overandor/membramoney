@@ -1,0 +1,38 @@
+{
+  "system": "01_Trading_Systems",
+  "files": 482,
+  "size_bytes": 4854618,
+  "categories": [
+    "trading_systems"
+  ],
+  "extensions": [
+    "",
+    ".toml",
+    ".service",
+    ".py ",
+    ".md",
+    ".yml",
+    ".txt",
+    ".ts",
+    ".log",
+    ".js",
+    ".html",
+    ".yaml",
+    ".csv",
+    ".sh",
+    ".tag",
+    ".py"
+  ],
+  "sample_files": [
+    "01_Trading_Systems/ENA_Hedging_Project/README.md",
+    "01_Trading_Systems/ENA_Hedging_Project/config/ena_config.py",
+    "01_Trading_Systems/ENA_Hedging_Project/logs/ena_hedging.log",
+    "01_Trading_Systems/ENA_Hedging_Project/requirements.txt",
+    "01_Trading_Systems/ENA_Hedging_Project/run_ena_hedging.py",
+    "01_Trading_Systems/ENA_Hedging_Project/src/ena_hedging_market_maker.py",
+    "01_Trading_Systems/ENA_Hedging_Project/src/ena_hedging_market_maker_complete.py",
+    "01_Trading_Systems/ENA_Hedging_Project/src/trading_engine.py",
+    "01_Trading_Systems/ENA_Hedging_Project/src/ui_components.py",
+    "01_Trading_Systems/ENA_Hedging_Project/src/websocket_client.py"
+  ]
+}

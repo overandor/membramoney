@@ -1,0 +1,14 @@
+{
+  "system": "push_to_github.sh",
+  "files": 1,
+  "size_bytes": 4215,
+  "categories": [
+    "shell"
+  ],
+  "extensions": [
+    ".sh"
+  ],
+  "sample_files": [
+    "push_to_github.sh"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "system": "membra_human_chain",
+  "files": 9030,
+  "size_bytes": 78097329,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    "",
+    ".node",
+    ".sample",
+    ".css",
+    ".1",
+    ".cjs",
+    ".flow",
+    ".map",
+    ".md",
+    ".cts",
+    ".js",
+    ".html",
+    ".mjs",
+    ".rev",
+    ".markdown",
+    ".ts",
+    ".coffee",
+    ".applescript",
+    ".mts",
+    ".idx",
+    ".bnf",
+    ".txt",
+    ".yml",
+    ".jsx"
+  ],
+  "sample_files": [
+    "membra_human_chain/%",
+    "membra_human_chain/.git/COMMIT_EDITMSG",
+    "membra_human_chain/.git/HEAD",
+    "membra_human_chain/.git/config",
+    "membra_human_chain/.git/description",
+    "membra_human_chain/.git/hooks/applypatch-msg.sample",
+    "membra_human_chain/.git/hooks/commit-msg.sample",
+    "membra_human_chain/.git/hooks/fsmonitor-watchman.sample",
+    "membra_human_chain/.git/hooks/post-update.sample",
+    "membra_human_chain/.git/hooks/pre-applypatch.sample"
+  ]
+}

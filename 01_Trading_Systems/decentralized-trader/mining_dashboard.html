@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lamports Mining Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .mining-active {
+            animation: pulse 2s infinite;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-4">
+                <i class="fas fa-coins mr-3"></i>Lamports Mining Dashboard
+            </h1>
+            <p class="text-xl opacity-90">Generating $12 from computational work</p>
+        </header>
+
+        <!-- Main Stats -->
+        <div class="grid md:grid-cols-4 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-yellow-400" id="lamports-generated">0</div>
+                <div class="text-sm opacity-70 mt-2">Lamports Generated</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-green-400" id="usd-value">$0.0000</div>
+                <div class="text-sm opacity-70 mt-2">USD Value</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-blue-400" id="hash-rate">0</div>
+                <div class="text-sm opacity-70 mt-2">Hash Rate (H/s)</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-4xl font-bold text-purple-400" id="solutions">0</div>
+                <div class="text-sm opacity-70 mt-2">Solutions Found</div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-bullseye mr-2"></i>Target Progress
+            </h2>
+            
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <div class="text-3xl font-bold" id="progress-percent">0.0%</div>
+                    <div class="text-sm opacity-70">of $12.00 target</div>
+                </div>
+                <div class="relative">
+                    <svg class="progress-ring" width="120" height="120">
+                        <circle cx="60" cy="60" r="54" stroke="rgba(255,255,255,0.2)" stroke-width="8" fill="none"/>
+                        <circle id="progress-circle" cx="60" cy="60" r="54" stroke="#10b981" stroke-width="8" fill="none"
+                                stroke-dasharray="339.292" stroke-dashoffset="339.292" stroke-linecap="round"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <i class="fas fa-trophy text-2xl text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="w-full bg-white/20 rounded-full h-4">
+                <div id="progress-bar" class="bg-gradient-to-r from-green-400 to-blue-500 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Performance Charts -->
+        <div class="grid md:grid-cols-2 gap-6 mb-10">
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-chart-line mr-2"></i>Hash Rate Over Time
+                </h3>
+                <canvas id="hash-rate-chart" width="400" height="200"></canvas>
+            </div>
+            
+            <div class="glass-effect rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4">
+                    <i class="fas fa-chart-area mr-2"></i>Lamports Generation
+                </h3>
+                <canvas id="lamports-chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- System Info -->
+        <div class="glass-effect rounded-xl p-6 mb-10">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-server mr-2"></i>System Information
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span>CPU Usage</span>
+                        <span id="cpu-usage">0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-2">
+                        <div id="cpu-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span>Mining Status</span>
+                        <span id="mining-status" class="text-green-400">Active</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-2">
+                        <div id="mining-bar" class="bg-green-500 h-2 rounded-full transition-all duration-500 mining-active" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span>Difficulty</span>
+                        <span id="difficulty">1</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-2">
+                        <div id="difficulty-bar" class="bg-purple-500 h-2 rounded-full transition-all duration-500" style="width: 5%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Solutions -->
+        <div class="glass-effect rounded-xl p-6">
+            <h2 class="text-2xl font-bold mb-6">
+                <i class="fas fa-history mr-2"></i>Recent Solutions
+            </h2>
+            
+            <div id="solutions-list" class="space-y-3">
+                <div class="text-center opacity-60">
+                    <i class="fas fa-search text-4xl mb-4"></i>
+                    <p>Waiting for solutions...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let miningData = {
+            lamports: 0,
+            usdValue: 0,
+            hashRate: 0,
+            solutions: 0,
+            cpuUsage: 0,
+            difficulty: 1,
+            targetUSD: 12.00,
+            recentSolutions: []
+        };
+
+        // Chart data
+        let hashRateData = [];
+        let lamportsData = [];
+        let timeLabels = [];
+
+        // Initialize charts
+        const hashRateChart = new Chart(document.getElementById('hash-rate-chart'), {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Hash Rate (H/s)',
+                    data: hashRateData,
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                },
+                scales: {
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+
+        const lamportsChart = new Chart(document.getElementById('lamports-chart'), {
+            type: 'line',
+            data: {
+                labels: timeLabels,
+                datasets: [{
+                    label: 'Lamports Generated',
+                    data: lamportsData,
+                    borderColor: 'rgb(255, 206, 86)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                },
+                scales: {
+                    x: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                    y: { ticks: { color: 'white' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                }
+            }
+        });
+
+        // Update functions
+        function updateDisplay() {
+            // Update main stats
+            document.getElementById('lamports-generated').textContent = miningData.lamports.toLocaleString();
+            document.getElementById('usd-value').textContent = `$${miningData.usdValue.toFixed(4)}`;
+            document.getElementById('hash-rate').textContent = miningData.hashRate.toLocaleString();
+            document.getElementById('solutions').textContent = miningData.solutions.toLocaleString();
+            
+            // Update progress
+            const progress = (miningData.usdValue / miningData.targetUSD) * 100;
+            document.getElementById('progress-percent').textContent = `${progress.toFixed(1)}%`;
+            document.getElementById('progress-bar').style.width = `${Math.min(progress, 100)}%`;
+            
+            // Update progress circle
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (progress / 100) * circumference;
+            document.getElementById('progress-circle').style.strokeDashoffset = offset;
+            
+            // Update system info
+            document.getElementById('cpu-usage').textContent = `${miningData.cpuUsage.toFixed(1)}%`;
+            document.getElementById('cpu-bar').style.width = `${miningData.cpuUsage}%`;
+            document.getElementById('difficulty').textContent = miningData.difficulty;
+            document.getElementById('difficulty-bar').style.width = `${(miningData.difficulty / 20) * 100}%`;
+            
+            // Update charts
+            const now = new Date().toLocaleTimeString();
+            if (timeLabels.length > 20) {
+                timeLabels.shift();
+                hashRateData.shift();
+                lamportsData.shift();
+            }
+            timeLabels.push(now);
+            hashRateData.push(miningData.hashRate);
+            lamportsData.push(miningData.lamports);
+            
+            hashRateChart.update();
+            lamportsChart.update();
+            
+            // Update solutions list
+            updateSolutionsList();
+        }
+
+        function updateSolutionsList() {
+            const solutionsList = document.getElementById('solutions-list');
+            
+            if (miningData.recentSolutions.length === 0) {
+                solutionsList.innerHTML = `
+                    <div class="text-center opacity-60">
+                        <i class="fas fa-search text-4xl mb-4"></i>
+                        <p>Waiting for solutions...</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            solutionsList.innerHTML = miningData.recentSolutions.slice(-5).reverse().map(solution => `
+                <div class="flex items-center justify-between p-3 bg-white/10 rounded-lg">
+                    <div>
+                        <div class="font-bold">Solution Found!</div>
+                        <div class="text-sm opacity-70">Difficulty: ${solution.difficulty} | Reward: ${solution.reward.toLocaleString()} lamports</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-green-400">+${solution.reward.toLocaleString()}</div>
+                        <div class="text-xs opacity-60">${solution.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addSolution(difficulty, reward) {
+            miningData.recentSolutions.push({
+                difficulty: difficulty,
+                reward: reward,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            if (miningData.recentSolutions.length > 10) {
+                miningData.recentSolutions.shift();
+            }
+        }
+
+        // Simulate mining data (replace with real data from backend)
+        function simulateMiningData() {
+            // Simulate hash rate variations
+            miningData.hashRate = Math.max(1000, miningData.hashRate + (Math.random() - 0.5) * 50000);
+            
+            // Simulate CPU usage
+            miningData.cpuUsage = Math.max(10, Math.min(95, miningData.cpuUsage + (Math.random() - 0.5) * 10));
+            
+            // Simulate solutions (random chance)
+            if (Math.random() < 0.02) { // 2% chance per update
+                const difficulty = Math.max(1, miningData.difficulty + Math.floor(Math.random() * 3) - 1);
+                const reward = 1000 * difficulty;
+                
+                miningData.solutions++;
+                miningData.lamports += reward;
+                miningData.usdValue = (miningData.lamports / 1_000_000_000) * 100; // $100 per SOL
+                
+                addSolution(difficulty, reward);
+                
+                // Auto-adjust difficulty
+                if (miningData.solutions % 5 === 0) {
+                    miningData.difficulty = Math.max(1, Math.min(20, miningData.difficulty + (Math.random() > 0.5 ? 1 : -1)));
+                }
+            }
+            
+            updateDisplay();
+        }
+
+        // Start updates
+        setInterval(simulateMiningData, 1000); // Update every second
+        
+        // Initial display
+        updateDisplay();
+
+        // Celebration when target reached
+        function checkTarget() {
+            if (miningData.usdValue >= miningData.targetUSD) {
+                document.body.innerHTML = `
+                    <div class="min-h-screen flex items-center justify-center gradient-bg">
+                        <div class="text-center">
+                            <div class="text-6xl mb-6">🎉</div>
+                            <h1 class="text-4xl font-bold mb-4">TARGET REACHED!</h1>
+                            <p class="text-2xl mb-6">Successfully generated ${miningData.usdValue.toFixed(4)} USD from computational work!</p>
+                            <div class="text-lg">
+                                <div>Total Lamports: ${miningData.lamports.toLocaleString()}</div>
+                                <div>Solutions Found: ${miningData.solutions}</div>
+                                <div>Final Hash Rate: ${miningData.hashRate.toLocaleString()} H/s</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                setTimeout(checkTarget, 1000);
+            }
+        }
+        
+        checkTarget();
+    </script>
+</body>
+</html>

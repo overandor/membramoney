@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "example_task": {
+      "command": "echo 'Hello from Collaborative Terminal Agent'",
+      "schedule": "every 1 minute",
+      "enabled": false,
+      "description": "Example task"
+    }
+  }
+}

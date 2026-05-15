@@ -1,0 +1,14 @@
+{
+  "system": "05_Config_Files",
+  "files": 1,
+  "size_bytes": 2309,
+  "categories": [
+    "configuration"
+  ],
+  "extensions": [
+    ""
+  ],
+  "sample_files": [
+    "05_Config_Files/.gitignore"
+  ]
+}

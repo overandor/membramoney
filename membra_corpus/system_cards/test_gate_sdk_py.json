@@ -1,0 +1,14 @@
+{
+  "system": "test_gate_sdk.py",
+  "files": 1,
+  "size_bytes": 2196,
+  "categories": [
+    "python"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "test_gate_sdk.py"
+  ]
+}

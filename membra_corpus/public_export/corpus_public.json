@@ -1,0 +1,173 @@
+{
+  "app": "MEMBRA",
+  "version": "1.0.0",
+  "generated_at": "2026-05-12T00:03:32.979519+00:00",
+  "totals": {
+    "files_discovered": 47312,
+    "files_hashed": 47312,
+    "files_indexed": 33329,
+    "chunks": 371397,
+    "embeddings": 325509,
+    "total_size_bytes": 491418248,
+    "categories": 17
+  },
+  "categories": {
+    "ai_agents": {
+      "files": 170,
+      "size_bytes": 6813345,
+      "size_mb": 6.5
+    },
+    "backup": {
+      "files": 31,
+      "size_bytes": 2373092,
+      "size_mb": 2.26
+    },
+    "config": {
+      "files": 33,
+      "size_bytes": 102235,
+      "size_mb": 0.1
+    },
+    "configuration": {
+      "files": 1,
+      "size_bytes": 2309,
+      "size_mb": 0.0
+    },
+    "data_files": {
+      "files": 4,
+      "size_bytes": 394299,
+      "size_mb": 0.38
+    },
+    "documentation": {
+      "files": 51,
+      "size_bytes": 415220,
+      "size_mb": 0.4
+    },
+    "javascript": {
+      "files": 9,
+      "size_bytes": 187183,
+      "size_mb": 0.18
+    },
+    "membra_core": {
+      "files": 9072,
+      "size_bytes": 78305791,
+      "size_mb": 74.68
+    },
+    "other": {
+      "files": 14683,
+      "size_bytes": 151486250,
+      "size_mb": 144.47
+    },
+    "projects": {
+      "files": 21273,
+      "size_bytes": 229299974,
+      "size_mb": 218.68
+    },
+    "python": {
+      "files": 31,
+      "size_bytes": 200705,
+      "size_mb": 0.19
+    },
+    "scripts": {
+      "files": 6,
+      "size_bytes": 1877413,
+      "size_mb": 1.79
+    },
+    "shell": {
+      "files": 30,
+      "size_bytes": 109495,
+      "size_mb": 0.1
+    },
+    "text": {
+      "files": 1414,
+      "size_bytes": 11957725,
+      "size_mb": 11.4
+    },
+    "tokenization": {
+      "files": 3,
+      "size_bytes": 26390,
+      "size_mb": 0.03
+    },
+    "trading_systems": {
+      "files": 482,
+      "size_bytes": 4854618,
+      "size_mb": 4.63
+    },
+    "web": {
+      "files": 19,
+      "size_bytes": 3012204,
+      "size_mb": 2.87
+    }
+  },
+  "indexing_stats": {
+    "files_indexed": 33329,
+    "chunks": 371397,
+    "embeddings": 325509,
+    "categories": [
+      {
+        "name": "projects",
+        "count": 13131
+      },
+      {
+        "name": "other",
+        "count": 11224
+      },
+      {
+        "name": "membra_core",
+        "count": 6741
+      },
+      {
+        "name": "text",
+        "count": 1414
+      },
+      {
+        "name": "trading_systems",
+        "count": 470
+      },
+      {
+        "name": "ai_agents",
+        "count": 161
+      },
+      {
+        "name": "documentation",
+        "count": 51
+      },
+      {
+        "name": "config",
+        "count": 33
+      },
+      {
+        "name": "python",
+        "count": 31
+      },
+      {
+        "name": "shell",
+        "count": 30
+      },
+      {
+        "name": "web",
+        "count": 19
+      },
+      {
+        "name": "javascript",
+        "count": 9
+      },
+      {
+        "name": "scripts",
+        "count": 6
+      },
+      {
+        "name": "backup",
+        "count": 3
+      },
+      {
+        "name": "data_files",
+        "count": 3
+      },
+      {
+        "name": "tokenization",
+        "count": 3
+      }
+    ]
+  },
+  "note": "Public export \u2014 no file paths or hashes included. Full proof available on request."
+}

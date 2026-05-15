@@ -1,0 +1,21 @@
+{
+  "system": "07_Scripts",
+  "files": 6,
+  "size_bytes": 1877413,
+  "categories": [
+    "scripts"
+  ],
+  "extensions": [
+    ".sh",
+    ".js",
+    ".py"
+  ],
+  "sample_files": [
+    "07_Scripts/ChatGPT Exporter-2.30.0.user.js",
+    "07_Scripts/copythatpay_micro.py",
+    "07_Scripts/create_live_flash_arb.sh",
+    "07_Scripts/create_live_flash_arb_v2.sh",
+    "07_Scripts/gptbridge-provenance.user.js",
+    "07_Scripts/gptbridge.js"
+  ]
+}

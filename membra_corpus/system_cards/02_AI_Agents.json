@@ -1,0 +1,41 @@
+{
+  "system": "02_AI_Agents",
+  "files": 170,
+  "size_bytes": 6813345,
+  "categories": [
+    "ai_agents"
+  ],
+  "extensions": [
+    "",
+    ".swift",
+    ".css",
+    ".mako",
+    ".db-wal",
+    ".md",
+    ".js",
+    ".html",
+    ".service",
+    ".toml",
+    ".ts",
+    ".pid",
+    ".py",
+    ".txt",
+    ".log",
+    ".ini",
+    ".yml",
+    ".db-shm",
+    ".sh"
+  ],
+  "sample_files": [
+    "02_AI_Agents/agent.py",
+    "02_AI_Agents/agent_ast.py",
+    "02_AI_Agents/agent_patch.py",
+    "02_AI_Agents/agent_requirements.txt",
+    "02_AI_Agents/agent_safe.py",
+    "02_AI_Agents/ai_control_center_systems/ai_control_center.py",
+    "02_AI_Agents/ai_control_center_systems/ai_dev_system_247.py",
+    "02_AI_Agents/ai_control_center_systems/hybrid_ai_simple.py",
+    "02_AI_Agents/ai_control_center_systems/master_control.py",
+    "02_AI_Agents/aider-trading-bot/.gitignore"
+  ]
+}

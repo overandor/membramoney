@@ -1,0 +1,28 @@
+{
+  "name": "membra-chat-to-chain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MEMBRA — Chat-to-Chain Human Value Infrastructure",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "anchor:build": "cd programs/membra_qr_gateway && anchor build",
+    "anchor:test": "cd programs/membra_qr_gateway && anchor test",
+    "anchor:deploy": "cd programs/membra_qr_gateway && anchor deploy",
+    "setup:devnet": "bash scripts/setup-devnet.sh",
+    "deploy:devnet": "bash scripts/deploy-devnet.sh"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  }
+}

@@ -1,0 +1,300 @@
+{
+  "appraisal_date": "2026-05-11T15:50:29.886526",
+  "methodology": "File-level complexity-adjusted pricing",
+  "rate_sources": [
+    "U.S. Bureau of Labor Statistics OEWS May 2024",
+    "Stack Overflow Developer Survey 2025",
+    "Consensys Smart Contract Developer Rates 2025",
+    "GitHub Octoverse 2025"
+  ],
+  "totals": {
+    "files": 1123,
+    "loc": 427227,
+    "low": 6894107,
+    "mid": 9246131,
+    "high": 11716305
+  },
+  "grand_total_mid": 9249631,
+  "grand_total_low": 6896907,
+  "grand_total_high": 11720605,
+  "hardware_mid": 3500,
+  "tiers": {
+    ".md": {
+      "files": 182,
+      "loc": 37556,
+      "low": 37556,
+      "mid": 75112,
+      "high": 112668
+    },
+    "ADVANCED": {
+      "files": 218,
+      "loc": 156639,
+      "low": 5482365,
+      "mid": 7048755,
+      "high": 8615145
+    },
+    ".json": {
+      "files": 166,
+      "loc": 128162,
+      "low": 128162,
+      "mid": 256324,
+      "high": 512648
+    },
+    "COMPLEX": {
+      "files": 214,
+      "loc": 26090,
+      "low": 521800,
+      "mid": 730520,
+      "high": 913150
+    },
+    ".html": {
+      "files": 14,
+      "loc": 7827,
+      "low": 23481,
+      "mid": 39135,
+      "high": 62616
+    },
+    ".sh": {
+      "files": 34,
+      "loc": 4486,
+      "low": 35888,
+      "mid": 53832,
+      "high": 71776
+    },
+    ".js": {
+      "files": 16,
+      "loc": 49528,
+      "low": 495280,
+      "mid": 792448,
+      "high": 1089616
+    },
+    ".css": {
+      "files": 5,
+      "loc": 562,
+      "low": 1686,
+      "mid": 2810,
+      "high": 4496
+    },
+    ".jsx": {
+      "files": 2,
+      "loc": 2646,
+      "low": 26460,
+      "mid": 42336,
+      "high": 58212
+    },
+    ".txt": {
+      "files": 44,
+      "loc": 2349,
+      "low": 2349,
+      "mid": 2349,
+      "high": 4698
+    },
+    "MODERATE": {
+      "files": 98,
+      "loc": 3905,
+      "low": 39050,
+      "mid": 58575,
+      "high": 78100
+    },
+    "SIMPLE": {
+      "files": 76,
+      "loc": 1198,
+      "low": 5990,
+      "mid": 9584,
+      "high": 11980
+    },
+    ".yml": {
+      "files": 8,
+      "loc": 459,
+      "low": 918,
+      "mid": 1377,
+      "high": 2295
+    },
+    ".toml": {
+      "files": 5,
+      "loc": 105,
+      "low": 210,
+      "mid": 315,
+      "high": 525
+    },
+    ".ts": {
+      "files": 16,
+      "loc": 3285,
+      "low": 49275,
+      "mid": 72270,
+      "high": 98550
+    },
+    ".sol": {
+      "files": 1,
+      "loc": 173,
+      "low": 7785,
+      "mid": 9515,
+      "high": 12110
+    },
+    ".rs": {
+      "files": 8,
+      "loc": 433,
+      "low": 12990,
+      "mid": 17320,
+      "high": 21650
+    },
+    ".tsx": {
+      "files": 14,
+      "loc": 1478,
+      "low": 22170,
+      "mid": 32516,
+      "high": 44340
+    },
+    ".yaml": {
+      "files": 2,
+      "loc": 346,
+      "low": 692,
+      "mid": 1038,
+      "high": 1730
+    }
+  },
+  "top_systems": {
+    "01_Trading_Systems/gate_market_maker_variants": {
+      "files": 28,
+      "loc": 26604,
+      "low": 897310,
+      "mid": 1158588,
+      "high": 1419370
+    },
+    "07_Scripts": {
+      "files": 6,
+      "loc": 51345,
+      "low": 556209,
+      "mid": 868419,
+      "high": 1180629
+    },
+    "01_Trading_Systems/gate_mm_beast": {
+      "files": 93,
+      "loc": 16152,
+      "low": 529841,
+      "mid": 684184,
+      "high": 837579
+    },
+    "01_Trading_Systems/decentralized-trader": {
+      "files": 40,
+      "loc": 20337,
+      "low": 522538,
+      "mid": 680627,
+      "high": 842641
+    },
+    "02_AI_Agents/jupyter-distributed-kernel": {
+      "files": 37,
+      "loc": 11768,
+      "low": 280215,
+      "mid": 368174,
+      "high": 457524
+    },
+    "06_Projects/marinade_related_systems": {
+      "files": 8,
+      "loc": 105819,
+      "low": 182059,
+      "mid": 309411,
+      "high": 539351
+    },
+    "02_AI_Agents/terminal_agent": {
+      "files": 27,
+      "loc": 16877,
+      "low": 225744,
+      "mid": 298030,
+      "high": 377497
+    },
+    "06_Projects/copythatpay_system": {
+      "files": 20,
+      "loc": 7170,
+      "low": 218985,
+      "mid": 283396,
+      "high": 347282
+    },
+    "01_Trading_Systems/brutalist_market_maker_variants": {
+      "files": 7,
+      "loc": 6297,
+      "low": 218685,
+      "mid": 281427,
+      "high": 344055
+    },
+    "01_Trading_Systems/Hedging_Project": {
+      "files": 32,
+      "loc": 6970,
+      "low": 192679,
+      "mid": 253942,
+      "high": 312873
+    },
+    "06_Projects/copythatpay_system_clone": {
+      "files": 12,
+      "loc": 6104,
+      "low": 188165,
+      "mid": 243027,
+      "high": 297608
+    },
+    "06_Projects/solana-staking-tracker": {
+      "files": 12,
+      "loc": 3728,
+      "low": 120622,
+      "mid": 155821,
+      "high": 190848
+    },
+    "01_Trading_Systems/godforbit_trading_system": {
+      "files": 8,
+      "loc": 3755,
+      "low": 112385,
+      "mid": 144895,
+      "high": 177736
+    },
+    "01_Trading_Systems/ena_hedging_variants": {
+      "files": 9,
+      "loc": 3877,
+      "low": 108722,
+      "mid": 143114,
+      "high": 176314
+    },
+    "01_Trading_Systems/arb-execution-engine": {
+      "files": 14,
+      "loc": 3558,
+      "low": 100724,
+      "mid": 130208,
+      "high": 159880
+    },
+    "01_Trading_Systems/ENA_Hedging_Project": {
+      "files": 9,
+      "loc": 3373,
+      "low": 85269,
+      "mid": 113046,
+      "high": 139693
+    },
+    "01_Trading_Systems/gateio_market_maker_system": {
+      "files": 8,
+      "loc": 2842,
+      "low": 80430,
+      "mid": 103810,
+      "high": 127521
+    },
+    "root": {
+      "files": 26,
+      "loc": 4146,
+      "low": 74713,
+      "mid": 98889,
+      "high": 123747
+    },
+    "06_Projects/veis": {
+      "files": 45,
+      "loc": 3572,
+      "low": 72159,
+      "mid": 97474,
+      "high": 121299
+    },
+    "06_Projects/config_data_files": {
+      "files": 27,
+      "loc": 3414,
+      "low": 71718,
+      "mid": 94106,
+      "high": 116881
+    }
+  },
+  "file_count": 1123,
+  "merkle_root": "1e514765f7f849a18fcbcceeb78d1f41b33472bd436e7080da48b20b22bbcf6f"
+}

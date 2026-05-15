@@ -1,0 +1,27 @@
+{
+  "system": "mac_compute_node",
+  "files": 15,
+  "size_bytes": 67128,
+  "categories": [
+    "text",
+    "python",
+    "config"
+  ],
+  "extensions": [
+    ".yaml",
+    ".txt",
+    ".py"
+  ],
+  "sample_files": [
+    "mac_compute_node/config.yaml",
+    "mac_compute_node/core/__init__.py",
+    "mac_compute_node/core/container_manager.py",
+    "mac_compute_node/core/engine.py",
+    "mac_compute_node/core/file_miner.py",
+    "mac_compute_node/core/model_runner.py",
+    "mac_compute_node/dashboard/__init__.py",
+    "mac_compute_node/dashboard/app.py",
+    "mac_compute_node/l2/__init__.py",
+    "mac_compute_node/l2/rollup.py"
+  ]
+}

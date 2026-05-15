@@ -1,0 +1,92 @@
+# MAC COMPUTE NODE CONFIGURATION
+# Ollama + Docker + Solana L2 Compute Marketplace
+
+node:
+  name: "mac-compute-node"
+  region: "local"
+  # Max percentage of resources to rent out
+  max_cpu_percent: 80
+  max_memory_percent: 75
+  max_disk_percent: 60
+
+ollama:
+  host: "http://localhost:11434"
+  default_model: "llama3.2"
+  embedding_model: "nomic-embed-text"
+  # Models available for compute tasks
+  models:
+    - "llama3.2"
+    - "mistral"
+    - "codellama"
+    - "nomic-embed-text"
+
+containers:
+  engine: "docker"  # docker | podman | mock
+  # Base images for compute workloads
+  images:
+    python: "python:3.11-slim"
+    node: "node:20-alpine"
+    rust: "rust:1.75-slim"
+  # Default resource limits per container
+  limits:
+    cpu_shares: 512
+    memory: "512m"
+    max_pids: 64
+
+l2:
+  # Rollup configuration
+  chain_id: 900001
+  name: "MacComputeL2"
+  symbol: "MCL2"
+  # Batching for high throughput
+  batch_size: 5000
+  batch_interval_ms: 100
+  # Target: 1M TPS via parallel batching
+  max_parallel_batches: 20
+  # Settlement
+  solana_rpc: "https://api.devnet.solana.com"
+  solana_network: "devnet"
+  settlement_interval_sec: 60
+
+marketplace:
+  # Compute pricing (per hour)
+  pricing:
+    cpu_per_core: 0.05
+    memory_per_gb: 0.02
+    gpu_per_hour: 2.00
+    storage_per_gb: 0.001
+  # Token settings
+  token_name: "Compute Token"
+  token_symbol: "COMPUTE"
+  token_decimals: 9
+
+mining:
+  # File scanning for compute tasks
+  scan_paths:
+    - "~/Documents"
+    - "~/Downloads"
+    - "~/Desktop"
+  # File types that generate compute tasks
+  task_extensions:
+    - ".pdf"      # OCR + embedding
+    - ".txt"      # NLP tasks
+    - ".py"       # Code analysis
+    - ".js"       # Code analysis
+    - ".md"       # Doc embedding
+    - ".jpg"      # Vision tasks
+    - ".png"      # Vision tasks
+    - ".csv"      # Data processing
+    - ".json"     # Data processing
+  # Task types and rewards
+  task_rewards:
+    embed: 0.001
+    ocr: 0.005
+    summarize: 0.003
+    code_review: 0.004
+    vision: 0.010
+    data_process: 0.002
+
+dashboard:
+  port: 7777
+  host: "0.0.0.0"
+  refresh_interval: 2

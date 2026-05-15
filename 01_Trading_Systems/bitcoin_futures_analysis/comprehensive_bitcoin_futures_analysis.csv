@@ -1,0 +1,9 @@
+exchange,symbol,min_quantity,min_usd_value,contract_size,leverage,maker_fee,taker_fee,margin_at_100x,notes
+Bybit,BTCUSDT,0.0001,6.5,1.0,Up to 100x,0.0001,0.0006,0.065,"Lowest minimum, excellent for micro trading"
+Bitget,BTCUSDT,0.0001,6.5,1.0,Up to 125x,0.0001,0.0004,0.065,"Very competitive fees, low minimum"
+MEXC,BTCUSDT,0.0001,6.5,1.0,Up to 200x,0.0002,0.0004,0.065,"Highest leverage, good for micro positions"
+KuCoin,BTCUSDTM,0.0001,6.5,1.0,Up to 100x,0.0002,0.0006,0.065,Good for micro futures trading
+Binance,BTCUSDT,0.001,65.0,1.0,Up to 125x,0.0002,0.0004,0.65,"Higher minimum, but very liquid"
+OKX,BTC-USDT-SWAP,0.001,65.0,1.0,Up to 125x,0.0002,0.0005,0.65,"Perpetual swaps, good liquidity"
+Gate.io,BTC_USDT,0.001,65.0,0.01,Up to 100x,0.0002,0.0005,0.65,"Quanto contracts, different sizing"
+Huobi,BTC-USDT,0.001,65.0,1.0,Up to 100x,0.0002,0.0004,0.65,"Standard futures, reliable"

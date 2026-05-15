@@ -1,0 +1,19 @@
+{
+  "name": "decentralized-trader",
+  "version": "1.0.0",
+  "description": "Decentralized trading system with no registration required",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "dev": "python -m http.server 8080"
+  },
+  "dependencies": {
+    "ethers": "^6.8.0",
+    "@solana/web3.js": "^1.87.0",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

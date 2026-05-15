@@ -1,0 +1,24 @@
+{
+  "system": ".git",
+  "files": 1374,
+  "size_bytes": 8402552,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    "",
+    ".sample"
+  ],
+  "sample_files": [
+    ".git/COMMIT_EDITMSG",
+    ".git/HEAD",
+    ".git/config",
+    ".git/description",
+    ".git/hooks/applypatch-msg.sample",
+    ".git/hooks/commit-msg.sample",
+    ".git/hooks/fsmonitor-watchman.sample",
+    ".git/hooks/post-update.sample",
+    ".git/hooks/pre-applypatch.sample",
+    ".git/hooks/pre-commit.sample"
+  ]
+}

@@ -1,0 +1,30 @@
+# ============================================================
+# CLEANSTAT INFRASTRUCTURE - PRODUCTION DEPENDENCIES
+# ============================================================
+# Minimal production dependencies only
+
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+sqlalchemy==2.0.25
+alembic==1.13.1
+psycopg2-binary==2.9.9
+redis==5.0.1
+celery==5.3.6
+pydantic==2.5.3
+pydantic-settings==2.1.0
+python-jose[cryptography]==3.3.0
+PyJWT==2.8.0
+eth-account==0.10.0
+httpx==0.26.0
+Pillow==10.2.0
+pinatapy==1.0.0
+web3==6.11.3
+python-dotenv==1.0.0
+structlog==24.1.0
+sentry-sdk[fastapi]==1.40.0
+prometheus-client==0.19.0
+prometheus-fastapi-instrumentator==6.0.0
+slowapi==0.1.9
+apscheduler==3.10.4
+gradio==4.0.0

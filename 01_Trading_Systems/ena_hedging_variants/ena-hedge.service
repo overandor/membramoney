@@ -1,0 +1,22 @@
+[Unit]
+Description=ENA Hedging Bot - Profit-Only Position Manager
+After=network.target ollama.service
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/Users/alep/Downloads/01_Trading_Systems/ena_hedging_variants
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=/Users/alep/Downloads/01_Trading_Systems/ena_hedging_variants/.env
+ExecStart=/usr/bin/python3 /Users/alep/Downloads/01_Trading_Systems/ena_hedging_variants/ena.py
+Restart=always
+RestartSec=5
+StandardOutput=append:/Users/alep/Downloads/01_Trading_Systems/ena_hedging_variants/ena_hedge.log
+StandardError=append:/Users/alep/Downloads/01_Trading_Systems/ena_hedging_variants/ena_hedge.log
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

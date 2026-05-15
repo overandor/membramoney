@@ -1,0 +1,14 @@
+{
+  "system": "micro_spot_trader.log",
+  "files": 1,
+  "size_bytes": 1512,
+  "categories": [
+    "other"
+  ],
+  "extensions": [
+    ".log"
+  ],
+  "sample_files": [
+    "micro_spot_trader.log"
+  ]
+}

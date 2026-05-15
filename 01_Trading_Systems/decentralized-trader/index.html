@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentralized Trader - No Registration Required</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.8.0/ethers.umd.min.js"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .protocol-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .protocol-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        .connected {
+            border-color: #10b981 !important;
+            background: rgba(16, 185, 129, 0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold mb-4">
+                <i class="fas fa-coins mr-3"></i>Decentralized Trader
+            </h1>
+            <p class="text-xl opacity-90">Trade on Multiple DEX Protocols • No Registration Required • Wallet Only</p>
+            <div class="mt-4 flex justify-center gap-4">
+                <span class="glass-effect px-4 py-2 rounded-full">
+                    <i class="fas fa-shield-alt mr-2"></i>Non-Custodial
+                </span>
+                <span class="glass-effect px-4 py-2 rounded-full">
+                    <i class="fas fa-globe mr-2"></i>Global Access
+                </span>
+                <span class="glass-effect px-4 py-2 rounded-full">
+                    <i class="fas fa-key mr-2"></i>API Key Based
+                </span>
+            </div>
+        </header>
+
+        <!-- Wallet Connection Section -->
+        <section class="mb-10">
+            <div class="glass-effect rounded-xl p-6 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-wallet mr-2"></i>Connect Your Wallet
+                </h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Ethereum Wallet -->
+                    <div id="eth-wallet-card" class="protocol-card bg-white/10 rounded-lg p-4">
+                        <h3 class="font-bold mb-3">
+                            <i class="fab fa-ethereum mr-2"></i>Ethereum Wallet
+                        </h3>
+                        <button id="connect-eth" onclick="connectEthereumWallet()" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition">
+                            Connect MetaMask
+                        </button>
+                        <div id="eth-status" class="mt-3 text-sm"></div>
+                    </div>
+
+                    <!-- Solana Wallet -->
+                    <div id="sol-wallet-card" class="protocol-card bg-white/10 rounded-lg p-4">
+                        <h3 class="font-bold mb-3">
+                            <i class="fas fa-circle-nodes mr-2"></i>Solana Wallet
+                            <span class="text-xs text-yellow-300 ml-2">(Auto-Creation Available)</span>
+                        </h3>
+                        <button id="connect-sol" onclick="connectSolanaWallet()" 
+                                class="w-full bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition">
+                            Connect / Auto-Create
+                        </button>
+                        <div id="sol-status" class="mt-3 text-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Configuration Section -->
+        <section class="mb-10">
+            <div class="glass-effect rounded-xl p-6 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-cog mr-2"></i>API Configuration
+                </h2>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">1inch API Key</label>
+                        <input type="password" id="1inch-key" placeholder="Enter API key" 
+                               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg focus:outline-none focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Hyperliquid API Key</label>
+                        <input type="password" id="hyperliquid-key" placeholder="Enter API key" 
+                               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg focus:outline-none focus:border-blue-400">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Drift API Key</label>
+                        <input type="password" id="drift-key" placeholder="Enter API key" 
+                               class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg focus:outline-none focus:border-blue-400">
+                    </div>
+                </div>
+                <button onclick="saveApiKeys()" class="mt-4 bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg transition">
+                    <i class="fas fa-save mr-2"></i>Save API Keys
+                </button>
+            </div>
+        </section>
+
+        <!-- Protocol Selection -->
+        <section class="mb-10">
+            <div class="glass-effect rounded-xl p-6 max-w-6xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-exchange-alt mr-2"></i>Select Trading Protocol
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- 1inch Card -->
+                    <div class="protocol-card bg-white/10 rounded-lg p-6 cursor-pointer" onclick="selectProtocol('1inch')">
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">🔄</div>
+                            <h3 class="text-xl font-bold mb-2">1inch</h3>
+                            <p class="text-sm opacity-80 mb-4">DEX Aggregator</p>
+                            <div class="text-xs">
+                                <span class="block">Ethereum, BSC, Polygon</span>
+                                <span class="block">Token Swaps</span>
+                                <span class="block">Best Rates</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hyperliquid Card -->
+                    <div class="protocol-card bg-white/10 rounded-lg p-6 cursor-pointer" onclick="selectProtocol('hyperliquid')">
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">⚡</div>
+                            <h3 class="text-xl font-bold mb-2">Hyperliquid</h3>
+                            <p class="text-sm opacity-80 mb-4">Perpetual Trading</p>
+                            <div class="text-xs">
+                                <span class="block">High Leverage</span>
+                                <span class="block">Low Fees</span>
+                                <span class="block">Fast Execution</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drift Protocol Card -->
+                    <div class="protocol-card bg-white/10 rounded-lg p-6 cursor-pointer" onclick="selectProtocol('drift')">
+                        <div class="text-center">
+                            <div class="text-4xl mb-4">🚀</div>
+                            <h3 class="text-xl font-bold mb-2">Drift Protocol</h3>
+                            <p class="text-sm opacity-80 mb-4">Solana Perps</p>
+                            <div class="text-xs">
+                                <span class="block">Solana Ecosystem</span>
+                                <span class="block">Up to 101x Leverage</span>
+                                <span class="block">Cross-Margin</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trading Interface -->
+        <section id="trading-interface" class="mb-10 hidden">
+            <div class="glass-effect rounded-xl p-6 max-w-6xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-chart-line mr-2"></i>Trading Interface - <span id="selected-protocol"></span>
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Trade Form -->
+                    <div class="bg-white/10 rounded-lg p-6">
+                        <h3 class="text-lg font-bold mb-4">Place Trade</h3>
+                        <form id="trade-form" onsubmit="executeTrade(event)">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2">From Token</label>
+                                <select id="from-token" class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                                    <option value="ETH">ETH</option>
+                                    <option value="USDC">USDC</option>
+                                    <option value="USDT">USDT</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2">To Token</label>
+                                <select id="to-token" class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                                    <option value="USDC">USDC</option>
+                                    <option value="ETH">ETH</option>
+                                    <option value="USDT">USDT</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium mb-2">Amount</label>
+                                <input type="number" id="trade-amount" step="0.001" min="0" required
+                                       class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                            </div>
+                            <div class="mb-4" id="leverage-section" style="display:none;">
+                                <label class="block text-sm font-medium mb-2">Leverage</label>
+                                <input type="range" id="leverage" min="1" max="100" value="1" 
+                                       class="w-full" oninput="updateLeverageDisplay(this.value)">
+                                <span id="leverage-display">1x</span>
+                            </div>
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 px-4 py-3 rounded-lg font-bold transition">
+                                <i class="fas fa-exchange-alt mr-2"></i>Execute Trade
+                            </button>
+                            <button type="button" onclick="executeZeroBalanceTrade()" 
+                                    class="w-full bg-purple-600 hover:bg-purple-700 px-4 py-3 rounded-lg font-bold transition mt-2">
+                                <i class="fas fa-microchip mr-2"></i>Execute Zero-Balance Trade
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Market Info -->
+                    <div class="bg-white/10 rounded-lg p-6">
+                        <h3 class="text-lg font-bold mb-4">Market Information</h3>
+                        <div id="market-info" class="space-y-3">
+                            <div class="flex justify-between">
+                                <span>Current Price:</span>
+                                <span id="current-price">Loading...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>24h Volume:</span>
+                                <span id="volume-24h">Loading...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Gas Fee:</span>
+                                <span id="gas-fee">Loading...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Estimated Return:</span>
+                                <span id="estimated-return">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="mt-6 bg-white/10 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">Recent Transactions</h3>
+                    <div id="transaction-history" class="space-y-2">
+                        <p class="text-center opacity-60">No transactions yet</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mining & Stress Testing Section -->
+        <section class="mb-10">
+            <div class="glass-effect rounded-xl p-6 max-w-6xl mx-auto">
+                <h2 class="text-2xl font-bold mb-6">
+                    <i class="fas fa-microchip mr-2"></i>Computational Mining & Stress Testing
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Mining Controls -->
+                    <div class="bg-white/10 rounded-lg p-6">
+                        <h3 class="text-lg font-bold mb-4">
+                            <i class="fas fa-hammer mr-2"></i>Computational Mining
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Mining Threads</label>
+                                <input type="number" id="mining-threads" value="4" min="1" max="16"
+                                       class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="startMining()" 
+                                        class="flex-1 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition">
+                                    <i class="fas fa-play mr-2"></i>Start Mining
+                                </button>
+                                <button onclick="stopMining()" 
+                                        class="flex-1 bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition">
+                                    <i class="fas fa-stop mr-2"></i>Stop Mining
+                                </button>
+                            </div>
+                            <div id="mining-stats" class="text-sm space-y-1">
+                                <div>Generated Lamports: <span id="generated-lamports">0</span></div>
+                                <div>Puzzles Solved: <span id="puzzles-solved">0</span></div>
+                                <div>Active Threads: <span id="active-threads">0</span></div>
+                                <div>Difficulty: <span id="mining-difficulty">4</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stress Testing -->
+                    <div class="bg-white/10 rounded-lg p-6">
+                        <h3 class="text-lg font-bold mb-4">
+                            <i class="fas fa-tachometer-alt mr-2"></i>Drift SDK Stress Test
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Duration (seconds)</label>
+                                <input type="number" id="stress-duration" value="60" min="10" max="300"
+                                       class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Concurrent Trades</label>
+                                <input type="number" id="concurrent-trades" value="10" min="1" max="50"
+                                       class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                            </div>
+                            <button onclick="startStressTest()" 
+                                    class="w-full bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-rocket mr-2"></i>Start Stress Test
+                            </button>
+                            <div id="stress-results" class="text-sm space-y-1 hidden">
+                                <div>Trades/Second: <span id="trades-per-second">-</span></div>
+                                <div>Success Rate: <span id="success-rate">-</span></div>
+                                <div>Total Trades: <span id="total-trades">-</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Production Market Maker -->
+                <div class="mt-6 bg-white/10 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-robot mr-2"></i>Production Market Maker
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="text-sm opacity-80">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            High-frequency market maker with Jito bundles
+                        </div>
+                        <button onclick="startProductionMM()" 
+                                class="w-full bg-orange-600 hover:bg-orange-700 px-4 py-2 rounded-lg transition">
+                            <i class="fas fa-play mr-2"></i>Start Production MM
+                        </button>
+                        <div id="production-mm-stats" class="text-sm space-y-1 hidden">
+                            <div>Bundles Sent: <span id="bundles-sent">0</span></div>
+                            <div>Success Rate: <span id="bundle-success-rate">0%</span></div>
+                            <div>Realized PnL: <span id="realized-pnl">$0.00</span></div>
+                            <div>Position: <span id="mm-position">0.000 SOL</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ultimate Stress Test -->
+                <div class="mt-6 bg-white/10 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-rocket mr-2"></i>Ultimate Stress Test
+                        <span class="text-xs text-yellow-300 ml-2">(Mining + Zero-Balance + Production MM)</span>
+                    </h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Duration (seconds)</label>
+                            <input type="number" id="ultimate-duration" value="120" min="30" max="600"
+                                   class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Concurrent Trades</label>
+                            <input type="number" id="ultimate-concurrent" value="20" min="5" max="100"
+                                   class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Enable Production MM</label>
+                            <select id="enable-production-mm" 
+                                    class="w-full px-3 py-2 bg-white/20 border border-white/30 rounded-lg">
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="startUltimateStressTest()" 
+                            class="w-full bg-red-600 hover:bg-red-700 px-4 py-3 rounded-lg font-bold transition mt-4">
+                        <i class="fas fa-fire mr-2"></i>Start Ultimate Stress Test
+                    </button>
+                    <div id="ultimate-results" class="text-sm space-y-1 hidden mt-4">
+                        <div>Total Ops/Sec: <span id="ultimate-ops-per-sec">-</span></div>
+                        <div>Net Lamports: <span id="net-lamports">-</span></div>
+                        <div>Efficiency: <span id="ultimate-efficiency">-</span></div>
+                    </div>
+                </div>
+
+                <!-- Performance Monitor -->
+                <div class="mt-6 bg-white/10 rounded-lg p-6">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-chart-line mr-2"></i>Performance Monitor
+                    </h3>
+                    <div class="grid md:grid-cols-4 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-green-400" id="perf-trades-per-sec">0</div>
+                            <div class="text-sm opacity-60">Trades/Sec</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-blue-400" id="perf-success-rate">0%</div>
+                            <div class="text-sm opacity-60">Success Rate</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-purple-400" id="perf-lamports-per-sec">0</div>
+                            <div class="text-sm opacity-60">Lamports/Sec</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-400" id="perf-avg-execution">0ms</div>
+                            <div class="text-sm opacity-60">Avg Execution</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- IP Geolocation Check -->
+        <section class="mb-10">
+            <div class="glass-effect rounded-xl p-6 max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-globe-americas mr-2"></i>Geolocation Status
+                </h2>
+                <div id="geo-status" class="flex items-center justify-between">
+                    <span>Checking your location...</span>
+                    <div id="geo-loading" class="animate-spin">
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                </div>
+                <div id="geo-details" class="mt-4 text-sm"></div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

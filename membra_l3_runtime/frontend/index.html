@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEMBRA L3 — Proof-of-Proof Consensus</title>
+<style>
+:root {
+    --bg: #0a0a0f;
+    --card: #12121a;
+    --accent: #00ff88;
+    --accent2: #ff00ff;
+    --text: #e0e0e0;
+    --muted: #666;
+    --border: #222;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', monospace;
+    min-height: 100vh;
+}
+header {
+    background: var(--card);
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header h1 {
+    font-size: 24px;
+    color: var(--accent);
+    letter-spacing: 2px;
+}
+.status {
+    padding: 4px 12px;
+    border-radius: 4px;
+    background: #333;
+    font-size: 12px;
+}
+.status.live {
+    background: #004d2a;
+    color: var(--accent);
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+}
+.card.wide {
+    grid-column: 1 / -1;
+}
+.card h2 {
+    font-size: 14px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.big-number {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+}
+.label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 5px;
+}
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+.metric-row:last-child { border: none; }
+.metric-row .label { color: var(--muted); }
+.metric-row .value { color: var(--text); font-family: monospace; }
+
+#prompt-input {
+    width: 100%;
+    height: 80px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+#prompt-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+#submit-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+#submit-btn:hover { opacity: 0.9; }
+#submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+#tx-log {
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+.tx-entry {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: monospace;
+}
+.tx-entry:last-child { border: none; }
+.tx-type { font-weight: 600; width: 100px; }
+.tx-hash { color: var(--muted); flex: 1; }
+.tx-amount { color: var(--accent); }
+
+.success { color: var(--accent); padding: 10px; background: #004d2a33; border-radius: 8px; margin-top: 10px; }
+.error { color: #ff4444; padding: 10px; background: #ff444433; border-radius: 8px; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div id="app">
+    <div style="padding:40px; text-align:center; color:var(--muted)">Loading Membra L3...</div>
+</div>
+<script src="src/main.js"></script>
+</body>
+</html>

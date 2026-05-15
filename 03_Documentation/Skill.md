@@ -1,0 +1,411 @@
+---
+name: pm-workspace-wizard
+description: Generate a complete project management workspace with structured templates and files from user input.
+---
+
+# PM Workspace Wizard
+
+## Purpose
+
+This skill generates a complete, ready-to-use project management workspace.
+
+Use it when the user wants to:
+- start a new project workspace
+- organize a product or project plan
+- create structured documentation for execution and tracking
+
+The output is a deterministic folder structure with Markdown templates populated using user input.
+
+---
+
+## Key Concepts
+
+A high-quality PM workspace includes:
+
+- Project Overview (context and goals)
+- PRD (product requirements)
+- Task Board (execution tracking)
+- Milestones (delivery checkpoints)
+- Meeting Notes (decision capture)
+- Risk Register (risk management)
+- Status Updates (communication)
+- Prioritization (RICE or similar)
+- Team Handoff (continuity)
+
+The goal is usability, clarity, and immediate execution — not theoretical documentation.
+
+---
+
+## Application
+
+### Step 1 — Collect Input
+
+Ask the user for:
+
+1. Project name
+2. Project goal
+3. Deadline
+4. Team members
+5. Stakeholders
+6. Initial tasks
+7. Milestones
+8. Risks or blockers
+9. Next check-in date
+10. Workflow style: agile, waterfall, startup, lightweight, or enterprise
+
+If any information is missing:
+- ask follow-up questions, or
+- proceed with `TBD` placeholders when the user wants fast generation
+
+---
+
+### Step 2 — Generate Workspace Structure
+
+Create:
+
+```text
+pm-workspace/
+├── 01-Overview/
+│   └── project-overview.md
+├── 02-PRD/
+│   └── prd.md
+├── 03-Tasks/
+│   └── task-board.md
+├── 04-Milestones/
+│   └── milestones.md
+├── 05-Meetings/
+│   └── meeting-notes.md
+├── 06-Risks-Issues/
+│   └── risk-register.md
+├── 07-Status-Updates/
+│   └── weekly-status.md
+├── 08-Prioritization/
+│   └── rice-planning.md
+├── 09-Team-Handoff/
+│   └── handoff.md
+└── README.md
+```
+
+---
+
+## File Templates
+
+### 01-Overview/project-overview.md
+
+```md
+# Project Overview
+
+**Project Name:** TBD  
+**Goal:** TBD  
+**Deadline:** TBD  
+**Workflow Style:** TBD  
+
+## Owner
+TBD
+
+## Team
+- TBD
+
+## Stakeholders
+- TBD
+
+## Summary
+TBD
+
+## Success Criteria
+- TBD
+
+## Key Links
+- TBD
+```
+
+---
+
+### 02-PRD/prd.md
+
+```md
+# Product Requirements Document
+
+## Problem Statement
+TBD
+
+## Target Users
+TBD
+
+## User Needs
+- TBD
+
+## Proposed Solution
+TBD
+
+## Core Features
+- TBD
+
+## Non-Goals
+- TBD
+
+## Assumptions
+- TBD
+
+## Acceptance Criteria
+- TBD
+
+## Open Questions
+- TBD
+```
+
+---
+
+### 03-Tasks/task-board.md
+
+```md
+# Task Board
+
+## Backlog
+- [ ] TBD
+
+## Next
+- [ ] TBD
+
+## In Progress
+- [ ] TBD
+
+## Blocked
+- [ ] TBD
+
+## Done
+- [x] Workspace created
+
+## Task Format
+- **Task:** TBD
+- **Owner:** TBD
+- **Priority:** Low / Medium / High
+- **Due Date:** TBD
+- **Status:** Backlog / Next / In Progress / Blocked / Done
+```
+
+---
+
+### 04-Milestones/milestones.md
+
+```md
+# Milestones
+
+| Milestone | Target Date | Owner | Deliverables | Success Criteria | Status |
+|---|---|---|---|---|---|
+| TBD | TBD | TBD | TBD | TBD | Not Started |
+```
+
+---
+
+### 05-Meetings/meeting-notes.md
+
+```md
+# Meeting Notes
+
+## Meeting Template
+
+**Date:** TBD  
+**Attendees:** TBD  
+**Facilitator:** TBD  
+
+## Agenda
+- TBD
+
+## Notes
+TBD
+
+## Decisions
+- TBD
+
+## Action Items
+| Action | Owner | Due Date | Status |
+|---|---|---|---|
+| TBD | TBD | TBD | Open |
+
+## Next Meeting
+TBD
+```
+
+---
+
+### 06-Risks-Issues/risk-register.md
+
+```md
+# Risk Register
+
+| Risk / Issue | Type | Likelihood | Impact | Owner | Mitigation | Status |
+|---|---|---|---|---|---|---|
+| TBD | Risk | Medium | Medium | TBD | TBD | Open |
+
+## Escalation Rules
+- High-impact risks should be reviewed during weekly status updates.
+- Blockers should be assigned an owner immediately.
+- Repeated unresolved blockers should be escalated to stakeholders.
+```
+
+---
+
+### 07-Status-Updates/weekly-status.md
+
+```md
+# Weekly Status Update
+
+**Week Of:** TBD  
+**Overall Status:** Green / Yellow / Red  
+
+## Completed This Week
+- TBD
+
+## Planned Next Week
+- TBD
+
+## Blockers
+- TBD
+
+## Risks
+- TBD
+
+## Decisions Needed
+- TBD
+
+## Notes for Stakeholders
+TBD
+```
+
+---
+
+### 08-Prioritization/rice-planning.md
+
+```md
+# RICE Prioritization
+
+| Initiative | Reach | Impact | Confidence | Effort | Score | Notes |
+|---|---:|---:|---:|---:|---:|---|
+| TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+
+## RICE Formula
+
+`Score = (Reach × Impact × Confidence) / Effort`
+
+## Scoring Guidance
+
+- Reach: How many users or stakeholders are affected?
+- Impact: How much value does this create?
+- Confidence: How certain is the estimate?
+- Effort: How much work is required?
+```
+
+---
+
+### 09-Team-Handoff/handoff.md
+
+```md
+# Team Handoff
+
+## Project Summary
+TBD
+
+## Current State
+TBD
+
+## Active Work
+- TBD
+
+## Decisions Made
+- TBD
+
+## Known Risks
+- TBD
+
+## Key Links
+- TBD
+
+## Next Actions
+- TBD
+
+## Handoff Notes
+TBD
+```
+
+---
+
+### README.md
+
+```md
+# PM Workspace
+
+This workspace was generated by the PM Workspace Wizard.
+
+## Structure
+
+- `01-Overview/` — project context and goals
+- `02-PRD/` — product requirements
+- `03-Tasks/` — execution tracking
+- `04-Milestones/` — delivery checkpoints
+- `05-Meetings/` — meeting notes and decisions
+- `06-Risks-Issues/` — risks, issues, blockers
+- `07-Status-Updates/` — weekly reporting
+- `08-Prioritization/` — RICE planning
+- `09-Team-Handoff/` — continuity and transfer notes
+
+## Usage
+
+Update each file as the project evolves. Keep decisions, risks, tasks, and status updates current.
+```
+
+---
+
+## Behavior Rules
+
+- Ask clarifying questions before generating files.
+- Use provided data where available.
+- Use `TBD` where information is missing.
+- Keep outputs concise, practical, and execution-focused.
+- Do not use external APIs.
+- Do not include sensitive or fabricated data.
+- Do not invent fake stakeholders, links, or team members.
+- Ensure deterministic output.
+- Prefer Markdown unless the user asks for another format.
+
+---
+
+## Example
+
+User:
+
+> Create a PM workspace for a SaaS product launch in 8 weeks. Team is Alex, Maria, and Sam. Main risks are App Store review and backend API delays.
+
+Expected behavior:
+
+1. Ask for missing inputs such as stakeholders, milestones, workflow style, and next check-in date.
+2. Generate the full folder structure.
+3. Populate files with provided details.
+4. Mark unknowns as `TBD`.
+
+---
+
+## Anti-Patterns
+
+Do NOT:
+
+- generate empty files with no structure
+- add unnecessary corporate filler
+- overcomplicate templates
+- skip PRD or risk tracking
+- invent detailed fake data
+- include secrets, keys, or private credentials
+- use external links unless provided by the user
+
+---
+
+## References
+
+Use standard PM concepts:
+
+- PRD structure
+- RICE prioritization
+- Agile and milestone planning
+- risk management
+- weekly status reporting
+- team handoff notes

@@ -1,0 +1,19 @@
+{
+  "system": "08_Data_Files",
+  "files": 4,
+  "size_bytes": 394299,
+  "categories": [
+    "data_files"
+  ],
+  "extensions": [
+    ".txt",
+    ".log",
+    ".jsonl"
+  ],
+  "sample_files": [
+    "08_Data_Files/DEMO_LOG_SUCCESSFUL_RUN.txt",
+    "08_Data_Files/trades.jsonl",
+    "08_Data_Files/windsurf.history.txt",
+    "08_Data_Files/windsurf_automation.log"
+  ]
+}

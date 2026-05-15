@@ -1,0 +1,14 @@
+{
+  "system": "membra_supervisor.py",
+  "files": 1,
+  "size_bytes": 15158,
+  "categories": [
+    "membra_core"
+  ],
+  "extensions": [
+    ".py"
+  ],
+  "sample_files": [
+    "membra_supervisor.py"
+  ]
+}
