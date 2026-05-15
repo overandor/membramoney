@@ -12,7 +12,7 @@ from pathlib import Path
 # Ensure our package modules are importable
 sys.path.insert(0, str(Path(__file__).parent))
 
-from operator import MembraOperator
+from coordinator import MembraOperator
 
 BG = "#060914"
 FG = "#c9d1d9"
