@@ -116,19 +116,57 @@ All endpoints are prefixed with `/v1`.
 
 ## Production Boundaries
 
-- No fake payments
-- No custody
-- No guaranteed profit
-- Owner confirmation before visibility
-- External settlement rails only
-- Proof and governance required for real-world execution
+MEMBRA CompanyOS is an orchestration and governance layer. It does not replace legal, financial, or regulatory obligations.
+
+- **MEMBRA does not guarantee income.** All projections are estimates.
+- **MEMBRA does not custody funds.** Settlement happens through external rails (Stripe, Solana, Ethereum).
+- **Owner confirmation is required** before any asset becomes visible on a marketplace.
+- **Governance approval is required** for high-risk actions (payouts, production deployments, data sharing).
+- **AI agents recommend and prepare** — they do not bypass human or policy gates.
+- **All ProofBook entries are demonstrations** of audit-trail capability, not legal evidence.
+
+## Deployment
+
+### Local Development (SQLite)
+
+```bash
+cd membra-companyos/backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+export SECRET_KEY="dev-secret-key-must-be-at-least-32-characters-long"
+export DATABASE_URL="sqlite:///./tmp_companyos.db"
+python seed.py
+uvicorn app.main:app --reload
+```
+
+### Docker Compose
+
+```bash
+cd membra-companyos
+docker-compose up --build
+```
+
+### Render (Backend)
+
+1. Push code to GitHub.
+2. Create a new Web Service on Render, pointing to the `backend` folder.
+3. Add environment variables: `DATABASE_URL`, `SECRET_KEY`, `GROQ_API_KEY`, `OPENAI_API_KEY`.
+4. Deploy. Render auto-detects `render.yaml`.
+
+### Vercel (Frontend)
+
+1. Push code to GitHub.
+2. Create a new project on Vercel, pointing to the `frontend` folder.
+3. Set `API_BASE_URL` environment variable to your Render backend URL.
+4. Deploy.
 
 ## Environment Variables
 
 See `backend/.env.example` for the full list of configuration options.
 
 Key variables:
-- `DATABASE_URL` — PostgreSQL connection string
+- `DATABASE_URL` — PostgreSQL or SQLite connection string
 - `SECRET_KEY` — JWT signing secret (min 32 chars)
 - `GROQ_API_KEY` / `OPENAI_API_KEY` — LLM provider keys
 - `STRIPE_SECRET_KEY` — External settlement via Stripe

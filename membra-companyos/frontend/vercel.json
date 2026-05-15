@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "name": "membra-companyos-dashboard",
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "membra-dashboard.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "membra-dashboard.js",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "API_BASE_URL": "https://membra-companyos-api.onrender.com/v1"
+  }
+}
