@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: membra-api
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: membra-postgres
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: membra-redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: SOLANA_RPC_URL
+        value: https://api.devnet.solana.com
+      - key: PIN_PEPPER
+        generateValue: true
+      - key: CLAIM_LINK_SECRET
+        generateValue: true
+      - key: MIN_RESERVE_RATIO_BPS
+        value: "10000"
+      - key: FRONTEND_BASE_URL
+        value: https://membra-money.vercel.app
+      - key: CORS_ORIGINS
+        value: https://membra-money.vercel.app
+
+databases:
+  - name: membra-postgres
+    databaseName: membra
+    user: membra
+    plan: standard
+
+redis:
+  - name: membra-redis
+    plan: standard

@@ -11,7 +11,6 @@ OPTIONS = {
     "packages": ["requests", "speech_recognition"],
     "includes": ["tkinter", "sqlite3", "uuid", "json", "subprocess", "pathlib", "threading", "datetime"],
     "excludes": ["matplotlib", "numpy", "pandas", "scipy", "PIL", "pytest", "mypy"],
-    "iconfile": "icon.icns",
     "plist": {
         "CFBundleName": "MEMBRA Operator",
         "CFBundleShortVersionString": "0.1.0",

@@ -1,0 +1,54 @@
+# Rust
+programs/**/target/
+**/*.rs.bk
+Cargo.lock
+
+# Node
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+
+# Environment
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Anchor
+target/
+.anchor/
+
+# Tests
+coverage/
+.nyc_output/
+
+# Docker
+postgres_data/
+redis_data/
