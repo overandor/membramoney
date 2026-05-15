@@ -2,6 +2,7 @@ import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { BitcoinBearerNotes } from "../target/types/bitcoin_bearer_notes";
 import { expect } from "chai";
+import * as crypto from "crypto";
 
 describe("bitcoin-bearer-notes", () => {
   const provider = anchor.AnchorProvider.env();
@@ -121,7 +122,7 @@ describe("bitcoin-bearer-notes", () => {
         .signers([wrongHolder])
         .rpc();
       expect.fail("Should have thrown");
-    } catch (e) {
+    } catch (e: any) {
       expect(e.toString()).to.include("NotNoteHolder");
     }
   });
@@ -138,7 +139,9 @@ describe("bitcoin-bearer-notes", () => {
       .transferNote(new anchor.BN(serial))
       .accounts({
         note: notePDA,
+        vault: vaultPDA,
         newHolder: authority.publicKey,
+        holder: authority.publicKey,
         systemProgram: anchor.web3.SystemProgram.programId,
       })
       .rpc();
@@ -179,14 +182,13 @@ describe("bitcoin-bearer-notes", () => {
         })
         .rpc();
       expect.fail("Should have thrown");
-    } catch (e) {
+    } catch (e: any) {
       expect(e.toString()).to.include("NoteAlreadyRedeemed");
     }
   });
 
   it("Creates and claims a CoinPack bundle", async () => {
-    const claimId = Buffer.alloc(32);
-    crypto.getRandomValues(claimId);
+    const claimId = crypto.randomBytes(32);
     const pinHash = anchor.web3.sha256(Buffer.from("123456"));
 
     const [claimPDA] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -238,8 +240,7 @@ describe("bitcoin-bearer-notes", () => {
   });
 
   it("Fails to claim with wrong PIN", async () => {
-    const claimId = Buffer.alloc(32);
-    crypto.getRandomValues(claimId);
+    const claimId = crypto.randomBytes(32);
     const pinHash = anchor.web3.sha256(Buffer.from("999999"));
 
     const [claimPDA] = anchor.web3.PublicKey.findProgramAddressSync(
@@ -280,7 +281,7 @@ describe("bitcoin-bearer-notes", () => {
         .signers([claimer])
         .rpc();
       expect.fail("Should have thrown");
-    } catch (e) {
+    } catch (e: any) {
       expect(e.toString()).to.include("InvalidPin");
     }
   });
