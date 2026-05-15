@@ -66,31 +66,40 @@ async function submitIntent() {
   if (!text) return;
   result.innerHTML = '<div class="loading">Orchestrating...</div>';
   try {
-    const res = await fetch(`${API_BASE}/concierge/chat`, {
+    const res = await fetch(`${API_BASE}/orchestrate/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({ intent_text: text }),
     });
     const data = await res.json();
-    const reply = data.data?.reply || data.data?.orchestration_result ? formatOrchestration(data.data) : JSON.stringify(data, null, 2);
-    result.innerHTML = `<div class="terminal"><div class="cmd">> orchestrate("${text.slice(0,60)}...")</div><pre style="white-space:pre-wrap">${reply}</pre></div>`;
+    const r = data.data || {};
+    result.innerHTML = formatOrchestration(r, text);
+    loadStats();
   } catch (e) {
     result.innerHTML = `<div class="terminal"><div class="cmd">Error:</div>${e.message}</div>`;
   }
 }
 
-function formatOrchestration(data) {
-  if (!data.orchestration_result) return data.reply || '';
-  const r = data.orchestration_result;
+function formatOrchestration(r, text) {
+  const objectives = (r.objectives || []).map(o => `<li>${o.title}</li>`).join('') || '<li>None</li>';
+  const tasks = (r.tasks || []).map(t => `<li>${t.title} <span class="badge badge-${t.status === 'completed' ? 'active' : 'pending'}">${t.status}</span></li>`).join('') || '<li>None</li>';
+  const jobs = (r.jobs || []).map(j => `<li>${j.title} <span class="badge badge-pending">${j.type}</span></li>`).join('') || '<li>None</li>';
+  const gates = (r.gates || []).map(g => `<li>${g.type} <span class="badge badge-${g.status === 'approved' ? 'active' : 'pending'}">${g.status}</span></li>`).join('') || '<li>None</li>';
   return `
-${data.reply || ''}
-
-OBJECTIVES: ${r.objectives.length}
-TASKS: ${r.tasks.length}
-JOBS: ${r.jobs.length}
-GATES: ${r.gates.length}
-PROOF HASH: ${r.proof_hash}
-  `;
+<div class="terminal">
+  <div class="cmd">> orchestrate("${escapeHtml(text.slice(0,60))}...")</div>
+  <div style="margin-top:8px;"><b>Intent ID:</b> ${r.intent_id || '--'}</div>
+  <div><b>Proof Hash:</b> <code>${r.proof_hash ? r.proof_hash.slice(0,24)+'...' : '--'}</code></div>
+  <div style="margin-top:12px;"><b>Objectives (${r.objectives?.length || 0})</b></div>
+  <ul>${objectives}</ul>
+  <div style="margin-top:8px;"><b>Tasks (${r.tasks?.length || 0})</b></div>
+  <ul>${tasks}</ul>
+  <div style="margin-top:8px;"><b>Jobs (${r.jobs?.length || 0})</b></div>
+  <ul>${jobs}</ul>
+  <div style="margin-top:8px;"><b>Governance Gates (${r.gates?.length || 0})</b></div>
+  <ul>${gates}</ul>
+  <div class="disclaimer">AI recommendation only. Human confirmation required for real-world execution.</div>
+</div>`;
 }
 
 // ===== AGENTS TAB =====
@@ -201,8 +210,26 @@ async function renderCompany(container) {
         <div class="label">KPI Records</div>
         <div class="value accent" id="kpiCount">--</div>
       </div>
+      <div class="card wide">
+        <button class="chat-send" onclick="seedDemoData()">Seed Default Agents &amp; Data</button>
+        <div id="seedResult" style="margin-top:8px;"></div>
+      </div>
     </div>
   `;
+  loadStats();
+}
+
+async function seedDemoData() {
+  const result = document.getElementById('seedResult');
+  result.innerHTML = '<div class="loading">Seeding...</div>';
+  try {
+    const res = await fetch(`${API_BASE}/agents/registry/seed`, { method: 'POST' });
+    const data = await res.json();
+    result.innerHTML = `<div class="terminal">Seeded ${data.data?.created || 0} agents. Skipped ${data.data?.skipped || 0}.</div>`;
+    loadStats();
+  } catch (e) {
+    result.innerHTML = `<div class="terminal">Error: ${e.message}</div>`;
+  }
 }
 
 // ===== GOVERNANCE TAB =====
@@ -304,7 +331,15 @@ function renderConcierge(container) {
               Welcome to MEMBRA CompanyOS. I am the Concierge.
               <br><br>
               Tell me what you have (window, car, tool, time, skills) and what you want to turn it into.
-              <div class="disclaimer">AI recommendation only. No guaranteed outcomes. Real-world execution requires proof and human confirmation.</div>
+              <div class="disclaimer">
+                <b>Production Boundaries:</b><br>
+                MEMBRA does not guarantee income.<br>
+                MEMBRA does not custody funds.<br>
+                Settlement happens through external rails.<br>
+                Owner confirmation is required before marketplace visibility.<br>
+                Governance approval is required for high-risk actions.<br>
+                AI agents recommend and prepare; they do not bypass human/policy gates.
+              </div>
             </div>
           </div>
           <div class="chat-input-row">
@@ -364,5 +399,20 @@ async function loadStats() {
     document.querySelectorAll('.status-pill').forEach(el => el.textContent = `SYSTEM: ${health.status.toUpperCase()}`);
   } catch (e) {
     console.error('Health check failed', e);
+  }
+  try {
+    const dash = await fetch(`${API_BASE}/dashboard/`).then(r => r.json());
+    const counts = dash.data?.counts || {};
+    document.getElementById('orchCount').textContent = counts.intents || 0;
+    const compCount = document.getElementById('compCount');
+    if (compCount) compCount.textContent = counts.companies || 0;
+    const deptCount = document.getElementById('deptCount');
+    if (deptCount) deptCount.textContent = '--';
+    const initCount = document.getElementById('initCount');
+    if (initCount) initCount.textContent = '--';
+    const kpiCount = document.getElementById('kpiCount');
+    if (kpiCount) kpiCount.textContent = '--';
+  } catch (e) {
+    console.error('Dashboard load failed', e);
   }
 }
