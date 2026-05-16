@@ -1,7 +1,12 @@
 """Canonical BTC note denominations.
 
-All values are satoshis. The protocol intentionally supports micro denominations
-for retail-like bearer payments while preserving larger treasury denominations.
+All values are satoshis. The protocol intentionally supports native 1-sat
+internal bearer denominations for microcash use-cases while preserving larger
+standard and treasury denominations.
+
+Operational note: tiny denominations are valid inside the protocol, but direct
+on-chain BTC redemption should aggregate below the configured dust-safe payout
+threshold or route through Lightning/Fedimint-style settlement.
 """
 from __future__ import annotations
 
@@ -17,6 +22,17 @@ class Denomination:
     label: str
     tier: str
 
+
+NATIVE_MICRO_DENOMINATIONS: tuple[Denomination, ...] = (
+    Denomination("SAT_1", 1, "1 sat", "native-micro"),
+    Denomination("SAT_5", 5, "5 sats", "native-micro"),
+    Denomination("SAT_10", 10, "10 sats", "native-micro"),
+    Denomination("SAT_25", 25, "25 sats", "native-micro"),
+    Denomination("SAT_50", 50, "50 sats", "native-micro"),
+    Denomination("SAT_100", 100, "100 sats", "native-micro"),
+    Denomination("SAT_250", 250, "250 sats", "native-micro"),
+    Denomination("SAT_500", 500, "500 sats", "native-micro"),
+)
 
 MICRO_DENOMINATIONS: tuple[Denomination, ...] = (
     Denomination("SAT_1K", 1_000, "1,000 sats", "micro"),
@@ -42,7 +58,9 @@ TREASURY_DENOMINATIONS: tuple[Denomination, ...] = (
     Denomination("BTC_500", 500 * SATS_PER_BTC, "500 BTC", "treasury"),
 )
 
-ALL_DENOMINATIONS: tuple[Denomination, ...] = MICRO_DENOMINATIONS + TREASURY_DENOMINATIONS
+ALL_DENOMINATIONS: tuple[Denomination, ...] = (
+    NATIVE_MICRO_DENOMINATIONS + MICRO_DENOMINATIONS + TREASURY_DENOMINATIONS
+)
 VALID_DENOMINATION_SATS: frozenset[int] = frozenset(d.sats for d in ALL_DENOMINATIONS)
 
 
