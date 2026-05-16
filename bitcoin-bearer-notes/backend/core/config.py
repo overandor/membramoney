@@ -3,6 +3,13 @@ from pydantic import Field, ConfigDict
 from typing import Optional
 
 
+_PLACEHOLDER_VALUES = {
+    "change-me-in-production-32-char-key",
+    "change-me-pepper-32-char-long!!!",
+    "change-me-claim-secret-32chars!!",
+}
+
+
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
@@ -38,6 +45,7 @@ class Settings(BaseSettings):
     CLAIM_EXPIRATION_HOURS: int = 24
     PIN_PEPPER: str = Field(default="change-me-pepper-32-char-long!!!", min_length=32)
     CLAIM_LINK_SECRET: str = Field(default="change-me-claim-secret-32chars!!", min_length=32)
+    ADMIN_API_TOKEN: Optional[str] = Field(default=None, min_length=32)
     ENCRYPTION_KEY: Optional[str] = None
 
     # Reserve
@@ -46,7 +54,7 @@ class Settings(BaseSettings):
 
     # Frontend
     FRONTEND_BASE_URL: str = "http://localhost:3000"
-    CORS_ORIGINS: str = "*"  # Comma-separated in production
+    CORS_ORIGINS: str = "http://localhost:3000"  # Comma-separated; never use * in production
 
     # Delivery providers
     TWILIO_ACCOUNT_SID: Optional[str] = None
@@ -68,6 +76,40 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @property
+    def is_production(self) -> bool:
+        return self.ENV.lower() in {"prod", "production", "mainnet"}
+
+    def cors_origins_list(self) -> list[str]:
+        origins = [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        if not origins:
+            raise ValueError("CORS_ORIGINS must contain at least one explicit origin")
+        if self.is_production and "*" in origins:
+            raise ValueError("Wildcard CORS is forbidden in production")
+        return origins
+
+    def validate_production_security(self) -> None:
+        """Fail fast when production-like deployments still use unsafe defaults."""
+        if not self.is_production:
+            return
+
+        unsafe = []
+        for name in ("SECRET_KEY", "PIN_PEPPER", "CLAIM_LINK_SECRET"):
+            value = getattr(self, name)
+            if value in _PLACEHOLDER_VALUES or value.startswith("change-me"):
+                unsafe.append(name)
+
+        if not self.ADMIN_API_TOKEN or self.ADMIN_API_TOKEN in _PLACEHOLDER_VALUES:
+            unsafe.append("ADMIN_API_TOKEN")
+
+        if "coinpack:coinpack@" in self.DATABASE_URL:
+            unsafe.append("DATABASE_URL")
+
+        if unsafe:
+            raise ValueError(
+                "Unsafe production configuration values: " + ", ".join(sorted(set(unsafe)))
+            )
 
 
 settings = Settings()
