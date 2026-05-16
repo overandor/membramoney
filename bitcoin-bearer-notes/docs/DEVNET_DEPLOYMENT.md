@@ -11,7 +11,8 @@
 ### 1.1 Install Toolchain
 
 ```bash
-cd ~/Downloads/bitcoin-bearer-notes
+git clone https://github.com/overandor/membramoney.git
+cd membramoney/bitcoin-bearer-notes
 bash scripts/install_solana.sh
 ```
 
@@ -87,7 +88,7 @@ solana program show <DEPLOYED_PROGRAM_ID>
 ### 2.1 Option A — Docker Compose on VPS (Fastest)
 
 ```bash
-cd ~/Downloads/bitcoin-bearer-notes
+cd membramoney/bitcoin-bearer-notes
 
 # Create production env
 cp backend/.env.example .env
@@ -175,7 +176,7 @@ Or connect GitHub repo `overandor/membramoney-frontend` to Vercel dashboard. `ve
 After all three stages are deployed:
 
 ```bash
-cd ~/Downloads/bitcoin-bearer-notes
+cd membramoney/bitcoin-bearer-notes
 npm install
 npx ts-node scripts/devnet_smoke_test.ts
 ```
