@@ -92,6 +92,12 @@ def get_client_ip(request: Request) -> str:
     return request.client.host if request.client else "127.0.0.1"
 
 
+def require_signed_holder(request: Request, holder: str) -> None:
+    signed_wallet = request.headers.get("X-Wallet-Address")
+    if signed_wallet != holder:
+        raise HTTPException(status_code=403, detail="Signed wallet does not match requested holder")
+
+
 # ============== HEALTH ==============
 
 @router.get("/health")
@@ -181,7 +187,9 @@ async def transfer_note(
     request: Request,
     db: AsyncSession = Depends(get_db),
 ):
-    """Transfer a note to a new holder (requires holder signature)."""
+    """Transfer a note to a new holder (requires current holder signature)."""
+    require_signed_holder(request, req.holder)
+
     result = await db.execute(
         select(NoteRecord).where(
             and_(
@@ -202,7 +210,6 @@ async def transfer_note(
     note.current_holder = req.new_holder
     await db.commit()
 
-    # Audit log
     audit = AuditLog(
         event_type="note_transferred",
         wallet_address=req.holder,
@@ -211,6 +218,7 @@ async def transfer_note(
             "serial_number": serial_number,
             "from": previous_holder,
             "to": req.new_holder,
+            "signed_by": request.headers.get("X-Wallet-Address"),
         },
     )
     db.add(audit)
@@ -234,6 +242,8 @@ async def burn_to_redeem(
     db: AsyncSession = Depends(get_db),
 ):
     """Burn a note and queue BTC redemption."""
+    require_signed_holder(request, req.holder)
+
     if not req.accepted_risk_disclosure:
         raise HTTPException(status_code=400, detail="Risk disclosure must be accepted")
 
@@ -252,20 +262,17 @@ async def burn_to_redeem(
     if not await redemption_processor.validate_btc_address(req.btc_address):
         raise HTTPException(status_code=400, detail="Invalid BTC address")
 
-    # Mark as redeemed
     note.redeemed = True
     note.redeemed_at = datetime.now(timezone.utc)
     note.btc_receiving_address = req.btc_address
     await db.commit()
 
-    # Queue redemption
     queue_info = await redemption_processor.queue_redemption(
         serial_number,
         req.btc_address,
         note.denomination,
     )
 
-    # Create redemption record
     redemption = RedemptionRequest(
         serial_number=serial_number,
         holder=req.holder,
@@ -278,7 +285,6 @@ async def burn_to_redeem(
     await db.commit()
     await db.refresh(redemption)
 
-    # Audit log
     audit = AuditLog(
         event_type="note_redeemed",
         wallet_address=req.holder,
@@ -288,6 +294,7 @@ async def burn_to_redeem(
             "btc_address": req.btc_address,
             "denomination": note.denomination,
             "queue_position": queue_info["queue_position"],
+            "signed_by": request.headers.get("X-Wallet-Address"),
         },
     )
     db.add(audit)
@@ -348,7 +355,6 @@ async def create_claim(
         user_agent=request.headers.get("User-Agent"),
     )
 
-    # Attempt delivery if address provided
     if req.delivery_address:
         await delivery_provider.send_claim_link(
             destination=req.delivery_address,
@@ -425,7 +431,6 @@ async def claim_coinpack(
     if not req.accepted_risk_disclosure:
         raise HTTPException(status_code=400, detail="Risk disclosure must be accepted")
 
-    # Record disclosure acceptance
     if req.wallet_address:
         has_accepted = await risk_service.has_accepted(db, req.wallet_address, claim_id)
         if not has_accepted:
@@ -460,7 +465,7 @@ async def claim_coinpack(
 
 @router.post("/coinpacks/{claim_id}/expire")
 async def expire_claim(claim_id: str, db: AsyncSession = Depends(get_db)):
-    """Manually expire a claim (admin or creator only)."""
+    """Manually expire a claim (admin only; gated in main.py middleware)."""
     claim = await claim_service.get_claim(db, claim_id)
     if not claim:
         raise HTTPException(status_code=404, detail="Claim not found")
