@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoinPack Micro Notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #101827;
+      --surface: #172238;
+      --surface2: #1d2a43;
+      --inset: #0b1220;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --faint: #64748b;
+      --amber: #f59e0b;
+      --orange: #f97316;
+      --green: #34d399;
+      --red: #fb7185;
+      --dark-shadow: rgba(2, 6, 23, 0.78);
+      --light-shadow: rgba(148, 163, 184, 0.13);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(245, 158, 11, .18), transparent 28rem),
+        radial-gradient(circle at 80% 18%, rgba(52, 211, 153, .10), transparent 26rem),
+        linear-gradient(145deg, #0b1220, #111827 52%, #0d1424);
+    }
+    body:before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at 50% 10%, black, transparent 78%);
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 34px 18px 80px; position: relative; }
+    header { display: flex; justify-content: space-between; gap: 18px; align-items: center; margin-bottom: 28px; }
+    .brand { display: flex; gap: 14px; align-items: center; }
+    .coin {
+      width: 54px; height: 54px; border-radius: 18px;
+      display: grid; place-items: center; color: #111827; font-weight: 900; font-size: 26px;
+      background: linear-gradient(145deg, #fbbf24, #f97316);
+      box-shadow: 12px 12px 26px var(--dark-shadow), -9px -9px 22px var(--light-shadow), inset 1px 1px 0 rgba(255,255,255,.45);
+    }
+    h1 { margin: 0; font-size: clamp(28px, 4vw, 52px); letter-spacing: -.04em; }
+    p { color: var(--muted); line-height: 1.55; }
+    .pill { padding: 10px 14px; border-radius: 999px; background: linear-gradient(145deg, var(--surface2), var(--inset)); color: var(--muted); font-size: 12px; font-weight: 800; box-shadow: inset 6px 6px 14px rgba(2,6,23,.55), inset -5px -5px 12px rgba(148,163,184,.07); }
+    .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; margin-bottom: 18px; }
+    .card {
+      position: relative; overflow: hidden; border-radius: 28px; padding: 24px;
+      background: linear-gradient(145deg, rgba(32,47,73,.96), rgba(14,23,40,.96));
+      border: 1px solid rgba(255,255,255,.07);
+      box-shadow: 18px 18px 38px var(--dark-shadow), -14px -14px 30px var(--light-shadow), inset 1px 1px 0 rgba(255,255,255,.055);
+    }
+    .card:before { content:""; position:absolute; inset:0; pointer-events:none; background: radial-gradient(circle at top left, rgba(255,255,255,.11), transparent 35%); }
+    .card > * { position: relative; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .gradient { background: linear-gradient(135deg, #fde68a, var(--amber), var(--orange)); -webkit-background-clip: text; color: transparent; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+    .note {
+      border: 1px solid rgba(245,158,11,.13); cursor: pointer; min-height: 174px;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .note:hover { transform: translateY(-3px); border-color: rgba(245,158,11,.38); }
+    .note.selected { border-color: rgba(245,158,11,.85); box-shadow: 0 0 0 1px rgba(245,158,11,.34), 20px 20px 42px var(--dark-shadow), -14px -14px 30px var(--light-shadow); }
+    .tier { color: var(--green); font-size: 11px; text-transform: uppercase; font-weight: 900; letter-spacing: .11em; }
+    .amount { font-size: 28px; font-weight: 900; margin-top: 14px; letter-spacing: -.04em; }
+    .btc { color: var(--muted); margin-top: 6px; font-size: 12px; }
+    .row { display:flex; justify-content:space-between; gap:16px; align-items:center; border-top: 1px solid rgba(255,255,255,.08); padding-top: 14px; margin-top: 16px; }
+    button, input, select {
+      font: inherit; color: var(--text); border: 1px solid rgba(255,255,255,.07); border-radius: 18px;
+    }
+    button {
+      cursor: pointer; font-weight: 900; padding: 14px 18px; background: linear-gradient(145deg, #fbbf24, #f97316); color: #111827;
+      box-shadow: 10px 10px 24px var(--dark-shadow), -7px -7px 18px rgba(255,255,255,.08), inset 1px 1px 0 rgba(255,255,255,.45);
+    }
+    input, select {
+      width: 100%; padding: 14px 15px; background: linear-gradient(145deg, var(--inset), #172238);
+      box-shadow: inset 7px 7px 16px rgba(2,6,23,.72), inset -6px -6px 14px rgba(148,163,184,.075);
+    }
+    label { display:block; color: var(--muted); font-size: 12px; font-weight: 800; margin-bottom: 7px; }
+    .form { display:grid; gap:14px; }
+    .output { white-space: pre-wrap; background: linear-gradient(145deg, var(--inset), #172238); border-radius: 20px; padding: 16px; color: var(--muted); font-size: 12px; overflow:auto; box-shadow: inset 7px 7px 16px rgba(2,6,23,.72), inset -6px -6px 14px rgba(148,163,184,.075); }
+    .links { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+    a { color: #fbbf24; text-decoration:none; font-weight:800; }
+    @media (max-width: 880px) { .hero { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } header { align-items:flex-start; flex-direction:column; } }
+    @media (max-width: 520px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><div class="coin">₿</div><div><h1>Micro CoinPack Notes</h1><p>Neomorphic retail-denomination console for sats-scale bearer instruments.</p></div></div>
+      <div class="pill">branch: repair-bearer-note-security-hardening</div>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <div class="tier">Selected denomination</div>
+        <div class="amount gradient mono" id="selectedAmount">1,000 sats</div>
+        <p id="selectedDesc">Tiny bearer note for testing QR, NFC, link, and claim flows without huge treasury units.</p>
+        <div class="row"><span class="mono" id="selectedBtc">0.00001000 BTC</span><span id="selectedTier" class="pill">micro</span></div>
+      </div>
+      <div class="card">
+        <h2 style="margin-top:0">Signed issue preview</h2>
+        <div class="form">
+          <div><label>Holder wallet</label><input id="holder" placeholder="Solana base58 wallet address" /></div>
+          <div><label>Metadata URI</label><input id="metadata" value="ipfs://micro-note" /></div>
+          <button id="build">Build issue payload</button>
+          <div class="output mono" id="payload">Select a denomination and build a payload.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" id="grid"></section>
+
+    <div class="links">
+      <a href="./index.html">Open main signed UI</a>
+      <a href="../backend/core/denominations.py">Backend denomination registry</a>
+      <a href="../programs/bitcoin-bearer-notes/src/lib.rs">Anchor program</a>
+    </div>
+  </div>
+
+  <script>
+    const SATS_PER_BTC = 100000000;
+    const denoms = [
+      ['SAT_1K', 1000, '1,000 sats', 'micro'],
+      ['SAT_5K', 5000, '5,000 sats', 'micro'],
+      ['SAT_10K', 10000, '10,000 sats', 'micro'],
+      ['SAT_25K', 25000, '25,000 sats', 'micro'],
+      ['SAT_50K', 50000, '50,000 sats', 'micro'],
+      ['SAT_100K', 100000, '100,000 sats', 'micro'],
+      ['SAT_250K', 250000, '250,000 sats', 'micro'],
+      ['SAT_500K', 500000, '500,000 sats', 'micro'],
+      ['BTC_0_01', 1000000, '0.01 BTC', 'standard'],
+      ['BTC_0_05', 5000000, '0.05 BTC', 'standard'],
+      ['BTC_0_10', 10000000, '0.10 BTC', 'standard'],
+      ['BTC_0_25', 25000000, '0.25 BTC', 'standard'],
+      ['BTC_0_50', 50000000, '0.50 BTC', 'standard'],
+      ['BTC_1', 100000000, '1 BTC', 'standard'],
+      ['BTC_10', 1000000000, '10 BTC', 'treasury'],
+      ['BTC_50', 5000000000, '50 BTC', 'treasury'],
+      ['BTC_100', 10000000000, '100 BTC', 'treasury'],
+      ['BTC_500', 50000000000, '500 BTC', 'treasury']
+    ];
+    let selected = denoms[0];
+    const btc = sats => (sats / SATS_PER_BTC).toFixed(8) + ' BTC';
+    const update = () => {
+      document.querySelectorAll('.note').forEach(n => n.classList.toggle('selected', n.dataset.code === selected[0]));
+      document.getElementById('selectedAmount').textContent = selected[2];
+      document.getElementById('selectedBtc').textContent = btc(selected[1]);
+      document.getElementById('selectedTier').textContent = selected[3];
+      document.getElementById('selectedDesc').textContent = selected[3] === 'micro'
+        ? 'Tiny bearer note for testing QR, NFC, link, and claim flows without huge treasury units.'
+        : selected[3] === 'standard'
+        ? 'Standard wallet-scale note for everyday transfer and redemption testing.'
+        : 'Large treasury note. Require elevated controls, reserve checks, and multi-sig policy.';
+    };
+    document.getElementById('grid').innerHTML = denoms.map(d => `
+      <div class="card note" data-code="${d[0]}">
+        <div class="tier">${d[3]}</div>
+        <div class="amount mono">${d[2]}</div>
+        <div class="btc mono">${btc(d[1])}</div>
+        <div class="row"><span>${d[0]}</span><span>${d[1].toLocaleString()} sats</span></div>
+      </div>`).join('');
+    document.querySelectorAll('.note').forEach(n => n.onclick = () => { selected = denoms.find(d => d[0] === n.dataset.code); update(); });
+    document.getElementById('build').onclick = () => {
+      const payload = {
+        action: 'mint_note',
+        denomination_code: selected[0],
+        denomination_sats: selected[1],
+        denomination_btc: selected[1] / SATS_PER_BTC,
+        holder: document.getElementById('holder').value || '<wallet-required>',
+        metadata_uri: document.getElementById('metadata').value,
+        timestamp: Math.floor(Date.now() / 1000),
+        warning: 'Preview only. Production minting must be signed by configured Anchor mint authority.'
+      };
+      document.getElementById('payload').textContent = JSON.stringify(payload, null, 2);
+    };
+    update();
+  </script>
+</body>
+</html>
