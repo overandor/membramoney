@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api import auth, intents, tasks, agents, jobs, companies, governance, proofbook, settlements, worldbridge, concierge, health, orchestrate, dashboard
+from app.api import auth, intents, tasks, agents, jobs, companies, governance, proofbook, settlements, worldbridge, concierge, health, orchestrate, dashboard, workforce
 
 api_router = APIRouter(prefix="/v1")
 
@@ -17,3 +17,4 @@ api_router.include_router(concierge.router, prefix="/concierge", tags=["LLM Conc
 api_router.include_router(orchestrate.router, prefix="/orchestrate", tags=["Orchestration"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 api_router.include_router(health.router, prefix="/health", tags=["Health"])
+api_router.include_router(workforce.router, prefix="/workforce", tags=["Workforce"])

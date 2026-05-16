@@ -14,6 +14,7 @@ from app.models.governance import ApprovalGate
 from app.models.proofbook import ProofBookEntry
 from app.models.settlement import SettlementRecord
 from app.models.worldbridge import WorldAsset
+from app.models.workforce import WorkforceEmployee, WorkforceContribution
 
 router = APIRouter()
 
@@ -31,6 +32,9 @@ def dashboard(db: Session = Depends(get_db)):
         "proofbook_entries": db.query(ProofBookEntry).count(),
         "settlement_records": db.query(SettlementRecord).count(),
         "world_assets": db.query(WorldAsset).count(),
+        "workforce_employees": db.query(WorkforceEmployee).count(),
+        "workforce_contributions": db.query(WorkforceContribution).count(),
+        "workforce_running": db.query(WorkforceEmployee).filter(WorkforceEmployee.status == "running").count(),
     }
 
     recent_activity = []

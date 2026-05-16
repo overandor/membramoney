@@ -9,6 +9,7 @@ from app.models.proofbook import ProofBookEntry, ProofChain, DecisionEvent, Sett
 from app.models.settlement import SettlementRecord, PayoutInstruction, ExternalRailLog
 from app.models.worldbridge import WorldAsset, AssetListing, AssetReservation, AssetProof, Vendor, Person, Route
 from app.models.user import User, UserRole, Session, AuditLog
+from app.models.workforce import WorkforceEmployee, WorkforceContribution, WorkforceTask
 
 __all__ = [
     "Base",
@@ -22,4 +23,5 @@ __all__ = [
     "SettlementRecord", "PayoutInstruction", "ExternalRailLog",
     "WorldAsset", "AssetListing", "AssetReservation", "AssetProof", "Vendor", "Person", "Route",
     "User", "UserRole", "Session", "AuditLog",
+    "WorkforceEmployee", "WorkforceContribution", "WorkforceTask",
 ]

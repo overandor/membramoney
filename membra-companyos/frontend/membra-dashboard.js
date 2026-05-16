@@ -11,6 +11,7 @@ const TABS = {
   proofbook: renderProofBook,
   worldbridge: renderWorldBridge,
   concierge: renderConcierge,
+  workforce: renderWorkforce,
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -412,7 +413,138 @@ async function loadStats() {
     if (initCount) initCount.textContent = '--';
     const kpiCount = document.getElementById('kpiCount');
     if (kpiCount) kpiCount.textContent = '--';
+    const wfCount = document.getElementById('wfCount');
+    if (wfCount) wfCount.textContent = counts.workforce_employees || 0;
   } catch (e) {
     console.error('Dashboard load failed', e);
+  }
+}
+
+// ===== WORKFORCE TAB =====
+async function renderWorkforce(container) {
+  container.innerHTML = `
+    <div class="grid">
+      <div class="card"><div class="label">Workforce Size</div><div class="value gold" id="wfCount">--</div></div>
+      <div class="card"><div class="label">Running</div><div class="value" id="wfRunning">--</div></div>
+      <div class="card"><div class="label">Contributions</div><div class="value accent" id="wfContrib">--</div></div>
+      <div class="card"><div class="label">Departments</div><div class="value">12</div></div>
+      <div class="card wide">
+        <button class="chat-send" onclick="seedWorkforce()">Seed 60-Employee Workforce</button>
+        <button class="chat-send" onclick="runAllWorkforce()">Run All Employees</button>
+        <div id="wfSeedResult" style="margin-top:8px;"></div>
+      </div>
+    </div>
+    <div id="wfDepartments"></div>
+    <div id="wfEmployees" style="margin-top:16px;"></div>
+  `;
+  await loadWorkforceStats();
+  await loadDepartments();
+  await loadWorkforceEmployees();
+}
+
+async function loadWorkforceStats() {
+  try {
+    const res = await fetch(`${API_BASE}/workforce/stats`);
+    const data = await res.json();
+    const s = data;
+    const wfCount = document.getElementById('wfCount');
+    if (wfCount) wfCount.textContent = s.total_employees || 0;
+    const wfRunning = document.getElementById('wfRunning');
+    if (wfRunning) wfRunning.textContent = s.running || 0;
+    const wfContrib = document.getElementById('wfContrib');
+    if (wfContrib) wfContrib.textContent = s.total_contributions || 0;
+  } catch (e) {
+    console.error('Workforce stats failed', e);
+  }
+}
+
+async function seedWorkforce() {
+  const result = document.getElementById('wfSeedResult');
+  result.innerHTML = '<div class="loading">Seeding workforce...</div>';
+  try {
+    const res = await fetch(`${API_BASE}/workforce/seed`, { method: 'POST' });
+    const data = await res.json();
+    result.innerHTML = `<div class="terminal">Seeded ${data.data?.created || 0} employees. Skipped ${data.data?.skipped || 0}.</div>`;
+    await loadWorkforceStats();
+    await loadWorkforceEmployees();
+  } catch (e) {
+    result.innerHTML = `<div class="terminal">Error: ${e.message}</div>`;
+  }
+}
+
+async function runAllWorkforce() {
+  const result = document.getElementById('wfSeedResult');
+  result.innerHTML = '<div class="loading">Triggering all 60 employees via Ollama...</div>';
+  try {
+    const listRes = await fetch(`${API_BASE}/workforce/employees?limit=200`);
+    const listData = await listRes.json();
+    const employees = listData || [];
+    let completed = 0;
+    for (const emp of employees) {
+      try {
+        await fetch(`${API_BASE}/workforce/employees/${emp.employee_id}/run`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+        completed++;
+      } catch (e) {
+        console.error('Failed to run ' + emp.employee_id + ':', e);
+      }
+    }
+    result.innerHTML = `<div class="terminal">Triggered ${completed}/${employees.length} employees. Check contributions below.</div>`;
+    await loadWorkforceStats();
+    await loadWorkforceEmployees();
+  } catch (e) {
+    result.innerHTML = `<div class="terminal">Error: ${e.message}</div>`;
+  }
+}
+
+async function loadDepartments() {
+  const container = document.getElementById('wfDepartments');
+  if (!container) return;
+  try {
+    const res = await fetch(`${API_BASE}/workforce/departments`);
+    const data = await res.json();
+    const depts = data || [];
+    container.innerHTML = '<div class="grid" style="margin-top:16px;">' + depts.map(d => `
+      <div class="card">
+        <div class="label">${escapeHtml(d.name)}</div>
+        <div class="value">${d.employee_count || 0} employees</div>
+        <div class="disclaimer">${escapeHtml(d.mission || '')}</div>
+      </div>
+    `).join('') + '</div>';
+  } catch (e) {
+    container.innerHTML = `<div class="terminal">Error: ${e.message}</div>`;
+  }
+}
+
+async function loadWorkforceEmployees() {
+  const container = document.getElementById('wfEmployees');
+  if (!container) return;
+  try {
+    const res = await fetch(`${API_BASE}/workforce/employees?limit=200`);
+    const data = await res.json();
+    const employees = data || [];
+    container.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">' + employees.map(e => `
+      <div class="card" style="flex:1 1 280px;min-width:260px;">
+        <div style="font-weight:700;color:#fbbf24;">${escapeHtml(e.name)}</div>
+        <div class="label">${escapeHtml(e.title)} | ${escapeHtml(e.department)}</div>
+        <div class="disclaimer">Status: <strong>${e.status}</strong> | Runs: ${e.total_runs} | Contributions: ${e.total_contributions}</div>
+        <div class="disclaimer">Model: ${e.model}</div>
+        <div class="disclaimer">Resp: ${(e.responsibilities || []).slice(0,2).join(', ')}${(e.responsibilities || []).length > 2 ? '...' : ''}</div>
+        <button class="chat-send" style="margin-top:8px;" onclick="runEmployee('${e.employee_id}')">Run Employee</button>
+        ${e.last_error ? `<div class="terminal" style="margin-top:6px;">Last error: ${escapeHtml(e.last_error.substring(0,120))}</div>` : ''}
+        ${e.last_output ? `<div class="disclaimer" style="margin-top:6px;">Last output: ${escapeHtml(e.last_output.substring(0,120))}...</div>` : ''}
+      </div>
+    `).join('') + '</div>';
+  } catch (e) {
+    container.innerHTML = `<div class="terminal">Error: ${e.message}</div>`;
+  }
+}
+
+async function runEmployee(employeeId) {
+  try {
+    await fetch(`${API_BASE}/workforce/employees/${employeeId}/run`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) });
+    await loadWorkforceStats();
+    await loadWorkforceEmployees();
+  } catch (e) {
+    alert('Error running employee: ' + e.message);
   }
 }
