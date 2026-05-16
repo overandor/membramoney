@@ -2,8 +2,6 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, Integer, BigInteger, Boolean, DateTime, Text, JSON, ForeignKey, Index
 from sqlalchemy.sql import func
-from datetime import datetime
-from typing import Optional
 
 from core.config import settings
 
@@ -214,6 +212,23 @@ class RiskDisclosureAcceptance(Base):
     )
 
 
+class RequestNonce(Base):
+    __tablename__ = "request_nonces"
+
+    id = Column(Integer, primary_key=True)
+    wallet_address = Column(String(44), nullable=False, index=True)
+    nonce = Column(String(96), nullable=False, unique=True, index=True)
+    method = Column(String(10), nullable=False)
+    path = Column(String(255), nullable=False)
+    message_hash = Column(String(64), nullable=False, index=True)
+    used_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    expires_at = Column(DateTime(timezone=True), nullable=False, index=True)
+
+    __table_args__ = (
+        Index('idx_nonce_wallet_path', 'wallet_address', 'path', 'used_at'),
+    )
+
+
 class AuditLog(Base):
     __tablename__ = "audit_logs"
 
@@ -223,10 +238,31 @@ class AuditLog(Base):
     ip_address = Column(String(45), nullable=True)
     user_agent = Column(String(255), nullable=True)
     details = Column(JSON, nullable=True)
+    previous_hash = Column(String(64), nullable=True)
+    event_hash = Column(String(64), nullable=True, index=True)
+    signer = Column(String(128), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
         Index('idx_audit_wallet_time', 'wallet_address', 'created_at'),
+    )
+
+
+class AdminOperation(Base):
+    __tablename__ = "admin_operations"
+
+    id = Column(Integer, primary_key=True)
+    operation_type = Column(String(64), nullable=False, index=True)
+    status = Column(String(24), nullable=False, default="pending")
+    requested_by = Column(String(128), nullable=False)
+    approvals = Column(JSON, nullable=False, default=list)
+    threshold = Column(Integer, nullable=False, default=2)
+    payload = Column(JSON, nullable=False)
+    executed_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index('idx_admin_ops_status', 'status', 'operation_type'),
     )
 
 
